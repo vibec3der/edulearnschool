@@ -4,229 +4,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edulearn | Ultimate Stash</title>
+    <title>Ultimate Stash</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- IMPORTED THEME SYSTEM FROM EDULEARN LITE --- */
         :root {
-            /* Default: Midnight Indigo */
-            --bg-color: #09090b;
-            --bg-toolbar: rgba(18, 18, 23, 0.85);
+            /* Clean Dark Theme */
+            --bg-color: #0f0f11;
+            --topbar-bg: #151518;
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
+            --card-bg: #141417;
+            --card-hover: #1e1e24;
+            --border-color: #27272a;
+            --border-hover: #3f3f46;
             --accent: #6366f1;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --accent-glow: rgba(99, 102, 241, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.03);
-        }
-
-        body.theme-mocha {
-            --bg-color: #1e1e2e;
-            --bg-toolbar: rgba(30, 30, 46, 0.85);
-            --text-main: #cdd6f4;
-            --text-muted: #a6adc8;
-            --accent: #cba6f7;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --accent-glow: rgba(203, 166, 247, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.04);
-        }
-
-        body.theme-inverted {
-            --bg-color: #f4f4f5;
-            --bg-toolbar: rgba(244, 244, 245, 0.85);
-            --text-main: #18181b;
-            --text-muted: #52525b;
-            --accent: #4f46e5;
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --accent-glow: rgba(79, 70, 229, 0.15);
-            --grid-color: rgba(0, 0, 0, 0.04);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            
-            /* The Static Background Grid */
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
+            overflow-x: hidden;
         }
 
-        /* --- SQUARE PARTICLES --- */
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        /* --- GAME LIST VIEW --- */
-        #library-view {
-            padding: 40px;
-            overflow-y: auto;
-            height: 100%;
-            animation: fadeIn 0.4s ease;
-            position: relative;
-            z-index: 10;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        header {
-            margin-bottom: 30px;
+        /* --- TOP BAR --- */
+        .topbar {
+            background-color: var(--topbar-bg);
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
+        .topbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            background: #1a1a1f;
+            border: 1px solid var(--border-color);
             color: var(--text-main);
-            margin-bottom: 5px;
+            padding: 8px 15px 8px 35px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            width: 250px;
+            transition: border-color 0.2s;
+            font-family: inherit;
         }
 
-        h1 i {
-            color: var(--accent);
-            margin-right: 10px;
+        .search-input:focus {
+            outline: none;
+            border-color: var(--border-hover);
         }
 
-        .subtitle {
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 0.85rem;
         }
 
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            padding: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        .category-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+
+        .category-header span {
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        /* --- GRID --- */
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 40px;
         }
 
         .game-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .game-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px -10px var(--accent-glow);
-            background: var(--accent-glow);
-        }
-
-        .card-body {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        .game-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-            flex: 1;
-            margin-bottom: 15px;
-        }
-
-        .game-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: auto;
-        }
-
-        .tag {
-            font-size: 10px;
-            background: var(--bg-toolbar);
-            border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            border-radius: 4px;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .play-btn-overlay {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: var(--accent);
-            color: var(--bg-color);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+            border-radius: 8px;
+            padding: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: 0.2s;
-            box-shadow: 0 4px 15px var(--accent-glow);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 55px;
         }
 
-        .game-card:hover .play-btn-overlay {
-            opacity: 1;
-            transform: scale(1);
+        .game-card:hover {
+            background: var(--card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
         }
 
-        /* --- GAMEPLAY VIEW --- */
-        #game-view {
-            display: none;
-            flex-direction: column;
+        .game-card:active {
+            transform: scale(0.98);
+        }
+
+        .game-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* --- GAMEPLAY OVERLAY (IFRAME VIEW) --- */
+        .game-view-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
             background: var(--bg-color);
-            position: relative;
-            z-index: 20;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
         }
 
-        .toolbar {
+        .game-view-overlay.active {
+            display: flex;
+        }
+
+        .game-header-bar {
             height: 50px;
-            background: var(--bg-toolbar);
+            background: var(--topbar-bg);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            padding: 0 20px;
             justify-content: space-between;
+            padding: 0 20px;
         }
 
         .toolbar-left {
@@ -238,31 +186,29 @@
         .btn-back {
             background: transparent;
             border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 6px 12px;
-            border-radius: 6px;
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            transition: 0.2s;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
         }
 
         .btn-back:hover {
-            background: var(--card-bg);
-            border-color: var(--accent);
-            color: var(--text-main);
+            background: var(--card-hover);
         }
 
-        .current-game-title {
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--text-main);
+        .game-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .controls-hint {
-            font-size: 12px;
+            font-size: 0.8rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
@@ -278,258 +224,135 @@
             color: var(--text-muted);
         }
 
-        iframe {
+        .game-frame {
             flex: 1;
-            border: none;
             width: 100%;
-            height: 100%;
+            border: none;
             background: #000;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
     </style>
 </head>
 
 <body>
 
-    <canvas id="particles-js"></canvas>
-
-    <div id="library-view">
-        <div class="container">
-            <header>
-                <h1><i class="fa-solid fa-gamepad"></i>Ultimate Stash</h1>
-                <p class="subtitle">Premium games. Hosted locally. Play instantly.</p>
-            </header>
-            <div id="game-container" class="game-grid">
-            </div>
+    <div class="topbar">
+        <div class="topbar-brand">Ultimate Stash</div>
+        <div class="search-container">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
         </div>
     </div>
 
-    <div id="game-view">
-        <div class="toolbar">
+    <div class="main-container" id="libraryView">
+        <div class="category-header">
+            ▼ All Games <span id="gameCount">(0)</span>
+        </div>
+        
+        <div class="game-grid" id="gameGrid"></div>
+    </div>
+
+    <div id="gameOverlay" class="game-view-overlay">
+        <div class="game-header-bar">
             <div class="toolbar-left">
                 <button class="btn-back" onclick="closeGame()">
-                    <i class="fa-solid fa-arrow-left"></i> Library
+                    <i class="fa-solid fa-arrow-left"></i> Back
                 </button>
-                <span id="active-title" class="current-game-title">Game Title</span>
+                <div class="game-title" id="activeTitle">Game Title</div>
             </div>
-            <div class="controls-hint" id="active-controls">
-            </div>
+            <div class="controls-hint" id="activeControls"></div>
         </div>
-        <iframe id="game-frame" src="about:blank"></iframe>
+        <iframe id="gameFrame" class="game-frame" src="about:blank"></iframe>
     </div>
 
     <script>
-        // --- COOL SPINNING SQUARES ANIMATION ---
-        const canvas = document.getElementById('particles-js');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class SquareParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 8 + 3;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.opacity = Math.random() * 0.4 + 0.05;
-                this.angle = Math.random() * 360;
-                this.spin = Math.random() * 0.02 - 0.01;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.angle += this.spin;
-                
-                if (this.x < -20) this.x = canvas.width + 20;
-                if (this.x > canvas.width + 20) this.x = -20;
-                if (this.y < -20) this.y = canvas.height + 20;
-                if (this.y > canvas.height + 20) this.y = -20;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                ctx.globalAlpha = this.opacity;
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted').trim() || '#ffffff';
-                ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2);
-                ctx.restore();
-            }
-        }
-
-        function initParticles() {
-            particlesArray = [];
-            const count = 45;
-            for (let i = 0; i < count; i++) {
-                particlesArray.push(new SquareParticle());
-            }
-            animateParticles();
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-
-
-        // --- CONFIGURATION: UNIQUE PREMIUM GAMES ---
+        // Data Configuration
         const gamesList = [
             {
                 title: "Hover Drive",
                 url: "./g2games/clhoverracerdrive.html",
-                desc: "High-speed anti-gravity racing. Navigate the neon tracks and beat the clock.",
-                controls: "Arrow Keys or WASD to Drive",
-                tags: ["Racing", "3D", "Action"]
+                controls: "Arrow Keys or WASD to Drive"
             },
             {
                 title: "Astra client",
                 url: "./g2games/astraclientbeta.html", 
-                desc: "One of the best and most popular eaglercraft clients out there!",
-                controls: "WASD to Move, Space to Jump, Shift to Crouch, Mouse to look, etc",
-                tags: ["Minecraft", "Classic", "Fun"]
+                controls: "WASD to Move, Space to Jump"
             },
             {
                 title: "Tuff client",
                 url: "./g2games/tuffclientwasm.html", 
-                desc: "A direct version of eaglercraft with advanced item support and more!",
-                controls: "WASD to Move, Space to Jump, Shift to Crouch, Mouse to look, etc",
-                tags: ["Eaglercraft", "Tuff", "1.12"]
+                controls: "WASD to Move, Space to Jump"
             },
              {
                 title: "Dragon X V3",
                 url: "./g2games/dragonxv3.html", 
-                desc: "The most latest (but laggy) version of eaglercraft hacks!",
-                controls: "WASD to Move, Space to Jump, Shift to Crouch, Mouse to look, etc",
-                tags: ["Eaglercraft", "Hack client", "1.12"]
-            },
-           
-           
-            
-           
+                controls: "WASD to Move, Space to Jump"
+            }
         ];
 
-        // --- SYSTEM LOGIC ---
+        const grid = document.getElementById('gameGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countLabel = document.getElementById('gameCount');
 
-        const container = document.getElementById('game-container');
-        const libraryView = document.getElementById('library-view');
-        const gameView = document.getElementById('game-view');
-        const gameFrame = document.getElementById('game-frame');
-        const activeTitle = document.getElementById('active-title');
-        const activeControls = document.getElementById('active-controls');
+        // Render Games
+        function renderGames(filter = "") {
+            grid.innerHTML = "";
+            const filtered = gamesList.filter(g => 
+                g.title.toLowerCase().includes(filter.toLowerCase())
+            );
 
-        // 1. Render Games
-        function renderLibrary() {
-            container.innerHTML = '';
-            gamesList.forEach(game => {
+            countLabel.innerText = `(${filtered.length})`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px 0;">No games found.</div>`;
+                return;
+            }
+
+            filtered.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
                 card.onclick = () => launchGame(game);
-
-                // Generate Tags HTML
-                const tagsHtml = game.tags.map(t => `<span class="tag">${t}</span>`).join('');
-
-                card.innerHTML = `
-                    <div class="card-body">
-                        <div class="game-title">${game.title}</div>
-                        <div class="game-desc">${game.desc}</div>
-                        <div class="game-tags">${tagsHtml}</div>
-                    </div>
-                    <div class="play-btn-overlay"><i class="fa-solid fa-play"></i></div>
-                `;
-                container.appendChild(card);
+                card.title = 'Click to play';
+                
+                card.innerHTML = `<div class="game-name">${game.title}</div>`;
+                grid.appendChild(card);
             });
         }
 
-        // 2. Launch Game
+        // Launch Game
         function launchGame(game) {
-            libraryView.style.display = 'none';
-            gameView.style.display = 'flex';
+            const overlay = document.getElementById('gameOverlay');
+            const frame = document.getElementById('gameFrame');
+            const activeTitle = document.getElementById('activeTitle');
+            const activeControls = document.getElementById('activeControls');
             
             activeTitle.innerText = game.title;
-            gameFrame.src = game.url;
+            frame.src = game.url;
             
-            // Format controls display
-            if(game.controls) {
+            if (game.controls) {
                 activeControls.innerHTML = `<i class="fa-solid fa-keyboard"></i> <span class="key-badge">${game.controls}</span>`;
             } else {
                 activeControls.innerHTML = '';
             }
 
-            // Hide the particles
-            canvas.style.display = 'none';
+            overlay.classList.add('active');
         }
 
-        // 3. Close Game
+        // Close Game
         function closeGame() {
-            gameFrame.src = 'about:blank'; 
-            gameView.style.display = 'none';
-            libraryView.style.display = 'block';
+            const overlay = document.getElementById('gameOverlay');
+            const frame = document.getElementById('gameFrame');
             
-            // Bring back the particles
-            canvas.style.display = 'block';
+            overlay.classList.remove('active');
+            frame.src = "about:blank"; // Stop game instances/audio
         }
 
-        // Initialize Library on Load
-        window.onload = renderLibrary;
-
-        // --- EDULEARN THEME SYNC ---
-        function syncEdulearnTheme() {
-            try {
-                const savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
-                const theme = savedSettings.theme || 'default';
-                const bgUrl = savedSettings.bgUrl || '';
-
-                document.body.className = theme === 'default' ? '' : `theme-${theme}`;
-
-                if (bgUrl) {
-                    document.body.style.backgroundImage = `url('${bgUrl}')`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
-                } else {
-                    document.body.style.backgroundImage = `
-                        linear-gradient(var(--grid-color) 1px, transparent 1px),
-                        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)
-                    `;
-                    document.body.style.backgroundSize = '30px 30px';
-                }
-            } catch (err) {
-                console.error("Theme sync failed:", err);
-            }
-        }
-
-        syncEdulearnTheme();
-
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'el_settings') {
-                syncEdulearnTheme();
-            }
+        // Search Listener
+        searchInput.addEventListener('input', (e) => {
+            renderGames(e.target.value);
         });
 
+        // Initial Load
+        renderGames();
     </script>
 </body>
-
 </html>
