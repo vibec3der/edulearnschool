@@ -26,7 +26,7 @@ export async function getUV(input) {
     throw err;
   }
 
-  let url = search(input, "https://html.duckduckgo.com/html?t=h_&q=%s");
+  let url = search(input, "https://search.brave.com/search?q=%s");
 
   let wispUrl = "wss://scienceislife.bostoncareercounselor.com/wisp/";
   if ((await connection.getTransport()) !== "/active/prxy/epoxy/index.mjs") {

@@ -7,59 +7,20 @@
     <title>System Tools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- IMPORTED THEME SYSTEM FROM EDULEARN LITE --- */
         :root {
-            /* Default: Midnight Indigo */
-            --bg-color: #09090b;
-            --bg-sidebar: rgba(18, 18, 23, 0.85);
+            /* Clean Dark Theme */
+            --bg-color: #0f0f11;
+            --topbar-bg: #151518;
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
+            --card-bg: #141417;
+            --card-hover: #1e1e24;
+            --border-color: #27272a;
+            --border-hover: #3f3f46;
             --accent: #6366f1;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.08);
             
-            /* Glows based on Default Accent */
-            --accent-glow: rgba(99, 102, 241, 0.4);
-            --glow-text: 0 0 10px rgba(99, 102, 241, 0.3);
-            --glow-strong: 0 0 20px rgba(99, 102, 241, 0.5);
-
             --danger: #ef4444;
             --success: #10b981;
-            --grid-color: rgba(255, 255, 255, 0.03);
-        }
-
-        body.theme-mocha {
-            --bg-color: #1e1e2e;
-            --bg-sidebar: rgba(30, 30, 46, 0.85);
-            --text-main: #cdd6f4;
-            --text-muted: #a6adc8;
-            --accent: #cba6f7;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            
-            /* Glows based on Mocha Accent */
-            --accent-glow: rgba(203, 166, 247, 0.4);
-            --glow-text: 0 0 10px rgba(203, 166, 247, 0.3);
-            --glow-strong: 0 0 20px rgba(203, 166, 247, 0.5);
-            
-            --grid-color: rgba(255, 255, 255, 0.04);
-        }
-
-        body.theme-inverted {
-            --bg-color: #f4f4f5;
-            --bg-sidebar: rgba(244, 244, 245, 0.85);
-            --text-main: #18181b;
-            --text-muted: #52525b;
-            --accent: #4f46e5;
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --border-color: rgba(0, 0, 0, 0.08);
-            
-            /* Glows based on Inverted Accent */
-            --accent-glow: rgba(79, 70, 229, 0.4);
-            --glow-text: 0 0 10px rgba(79, 70, 229, 0.3);
-            --glow-strong: 0 0 20px rgba(79, 70, 229, 0.5);
-            
-            --grid-color: rgba(0, 0, 0, 0.04);
         }
 
         * {
@@ -69,195 +30,128 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            position: relative;
             overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            
-            /* The Static Background Grid */
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
         }
 
-        /* --- SQUARE PARTICLES --- */
-        #particles-js {
-            position: absolute;
+        /* --- TOP BAR --- */
+        .topbar {
+            background-color: var(--topbar-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.6;
+            z-index: 100;
         }
 
-        /* --- HEADER --- */
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            width: 100%;
-            max-width: 600px;
-            position: relative;
-            z-index: 10;
+        .topbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        .title {
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-            color: var(--text-main);
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); 
-        }
-        
-        .title span {
-            color: var(--accent);
-            text-shadow: var(--glow-text);
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-        }
-
-        /* --- SEARCH --- */
         .search-container {
             position: relative;
-            width: 100%;
         }
 
         .search-input {
-            width: 100%;
-            padding: 14px 20px 14px 45px;
-            background: var(--card-bg); 
+            background: #1a1a1f;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
             color: var(--text-main);
-            font-size: 1rem;
-            transition: all 0.2s;
+            padding: 8px 15px 8px 35px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            width: 250px;
+            transition: border-color 0.2s;
             font-family: inherit;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
         }
 
         .search-input:focus {
             outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent-glow);
-            background: var(--bg-sidebar);
+            border-color: var(--border-hover);
         }
 
         .search-icon {
             position: absolute;
-            left: 16px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            transition: color 0.2s;
+            font-size: 0.85rem;
         }
-        
-        .search-input:focus + .search-icon, 
-        .search-container:focus-within .search-icon {
-            color: var(--accent);
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            padding: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        .category-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+
+        .category-header span {
+            color: var(--text-muted);
+            font-weight: normal;
         }
 
         /* --- GRID --- */
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
-            position: relative;
-            z-index: 10;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 40px;
         }
 
         .tool-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 8px;
+            padding: 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: center;
             cursor: pointer;
             transition: all 0.2s ease;
+            text-align: center;
+            min-height: 55px;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
         }
 
         .tool-card:hover {
-            transform: translateY(-4px);
-            background: var(--bg-sidebar);
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
+            background: var(--card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
         }
 
         .tool-card:active {
             transform: scale(0.98);
         }
 
-        .icon-box {
-            width: 45px;
-            height: 45px;
-            border-radius: 8px;
-            background: rgba(128, 128, 128, 0.1); 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--accent);
-            border: 1px solid var(--border-color);
-            text-shadow: var(--glow-text);
-        }
-
-        .tool-info {
-            flex: 1;
-        }
-
         .tool-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 4px;
+            font-weight: 700;
+            font-size: 0.9rem;
             color: var(--text-main);
-        }
-
-        .tool-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .copy-hint {
-            opacity: 0;
-            position: absolute;
-            right: 20px;
-            background: var(--accent);
-            color: #ffffff;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: 0.2s;
-            transform: translateX(10px);
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        .tool-card:hover .copy-hint {
-            opacity: 1;
-            transform: translateX(0);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* --- TOOL OVERLAY (IFRAME VIEW) --- */
@@ -279,18 +173,17 @@
 
         .tool-header-bar {
             height: 50px;
-            background: var(--bg-sidebar);
+            background: var(--topbar-bg);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             padding: 0 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .btn-back {
             background: transparent;
             border: 1px solid var(--border-color);
-            color: var(--text-muted);
+            color: var(--text-main);
             padding: 6px 14px;
             border-radius: 4px;
             cursor: pointer;
@@ -298,13 +191,11 @@
             align-items: center;
             gap: 8px;
             font-size: 0.9rem;
-            transition: all 0.2s;
+            transition: background 0.2s;
         }
 
         .btn-back:hover {
-            background: var(--card-bg);
-            border-color: var(--accent);
-            color: var(--text-main);
+            background: var(--card-hover);
         }
 
         .tool-frame {
@@ -328,64 +219,54 @@
         }
 
         .toast {
-            background: var(--bg-sidebar);
+            background: var(--topbar-bg);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             padding: 12px 24px;
-            border-radius: 50px;
+            border-radius: 6px;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        .toast i {
-            color: var(--success);
-        }
+        .toast i { color: var(--success); }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
+            to { opacity: 0; transform: translateY(-10px); }
         }
     </style>
 </head>
 
 <body>
 
-    <canvas id="particles-js"></canvas>
-
-    <div class="header">
-        <div class="title">System <span>Tools</span></div>
-        <div class="subtitle">Click a card to copy the URL or open the tool.</div>
-
+    <div class="topbar">
+        <div class="topbar-brand">System Tools</div>
         <div class="search-container">
             <i class="fa-solid fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Find a utility...">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search tools...">
         </div>
     </div>
 
-    <div class="tools-grid" id="toolsGrid"></div>
+    <div class="main-container">
+        <div class="category-header">
+            ▼ All Tools <span id="toolCount">(0)</span>
+        </div>
+        
+        <div class="tools-grid" id="toolsGrid"></div>
+    </div>
 
     <div id="toolOverlay" class="tool-view-overlay">
         <div class="tool-header-bar">
             <button class="btn-back" onclick="closeTool()">
-                <i class="fa-solid fa-arrow-left"></i> Back to Tools
+                <i class="fa-solid fa-arrow-left"></i> Back
             </button>
         </div>
         <iframe id="toolFrame" class="tool-frame" src=""></iframe>
@@ -396,98 +277,41 @@
     <script>
         // Tool Data Configuration
         const tools = [
-            {
-                name: "E2E v2",
-                desc: "Basically Uncrackable encryption for any social media platform!",
-                url: "./e2ev2.html",
-                icon: "fa-eye",
-                action: "open"
-            },
-            {
-                name: "WebRetro",
-                desc: "Browser-based retro game emulator, allows you to run ROMS!",
-                url: "./webretro-standalone.html",
-                icon: "fa-gamepad",
-                action: "open"
-            },
-            {
-                name: "ROM files",
-                desc: "Roms to run with webretro!",
-                url: "./roms.html",
-                icon: "fa-gamepad",
-                action: "open"
-            },
-            {
-                name: "Sh1mmer",
-                desc: "Enrollment modification utility",
-                url: "https://sh1mmer.me",
-                icon: "fa-microchip",
-                action: "copy"
-            },
-            {
-                name: "ExtPrint3r",
-                desc: "Extension manipulation & management",
-                url: "https://extprint3r.github.io/",
-                icon: "fa-puzzle-piece",
-                action: "copy"
-            },
-            {
-                name: "Versioner",
-                desc: "Check ChromeOS version details",
-                url: "https://vibec3der.github.io/chromeos-versioner",
-                icon: "fa-code-branch",
-                action: "copy"
-            },
-            {
-                name: "Old Bypasses",
-                desc: "Legacy unblocking methods collection",
-                url: "https://chessisfornerds.netlify.app",
-                icon: "fa-ghost",
-                action: "copy"
-            },
-            {
-                name: "Ingot",
-                desc: "Bookmarklet execution simplified",
-                url: "https://ingot.k12.lol",
-                icon: "fa-terminal",
-                action: "copy"
-            }
+            { name: "E2E v2", url: "./e2ev2.html", action: "open" },
+            { name: "WebRetro", url: "./webretro-standalone.html", action: "open" },
+            { name: "ROM files", url: "./roms.html", action: "open" },
+            { name: "Sh1mmer", url: "https://sh1mmer.me", action: "copy" },
+            { name: "ExtPrint3r", url: "https://extprint3r.github.io/", action: "copy" },
+            { name: "Versioner", url: "https://vibec3der.github.io/chromeos-versioner", action: "copy" },
+            { name: "Old Bypasses", url: "https://chessisfornerds.netlify.app", action: "copy" },
+            { name: "Ingot", url: "https://ingot.k12.lol", action: "copy" }
         ];
 
         const grid = document.getElementById('toolsGrid');
         const searchInput = document.getElementById('searchInput');
+        const toolCountLabel = document.getElementById('toolCount');
 
         // Render Cards
         function renderTools(filter = "") {
             grid.innerHTML = "";
             const filtered = tools.filter(t => 
-                t.name.toLowerCase().includes(filter.toLowerCase()) || 
-                t.desc.toLowerCase().includes(filter.toLowerCase())
+                t.name.toLowerCase().includes(filter.toLowerCase())
             );
 
+            toolCountLabel.innerText = `(${filtered.length})`;
+
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 20px;">No tools found matching "${filter}"</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px 0;">No tools found.</div>`;
                 return;
             }
 
             filtered.forEach(tool => {
                 const card = document.createElement('div');
                 card.className = 'tool-card';
-                // Decide click action based on tool property
                 card.onclick = () => handleToolClick(tool);
+                card.title = tool.action === 'open' ? 'Click to open' : 'Click to copy link';
                 
-                const badgeText = tool.action === 'open' ? 'OPEN' : 'COPY';
-
-                card.innerHTML = `
-                    <div class="icon-box">
-                        <i class="fa-solid ${tool.icon}"></i>
-                    </div>
-                    <div class="tool-info">
-                        <div class="tool-name">${tool.name}</div>
-                        <div class="tool-desc">${tool.desc}</div>
-                    </div>
-                    <div class="copy-hint">${badgeText}</div>
-                `;
+                card.innerHTML = `<div class="tool-name">${tool.name}</div>`;
                 grid.appendChild(card);
             });
         }
@@ -505,24 +329,16 @@
         function openToolView(url) {
             const overlay = document.getElementById('toolOverlay');
             const frame = document.getElementById('toolFrame');
-            
             frame.src = url;
             overlay.classList.add('active');
-            
-            // Hide the particles
-            document.getElementById('particles-js').style.display = 'none';
         }
 
         // Close Tool Logic (Back Button)
         function closeTool() {
             const overlay = document.getElementById('toolOverlay');
             const frame = document.getElementById('toolFrame');
-            
             overlay.classList.remove('active');
             frame.src = "about:blank"; // Stop any media/scripts running
-            
-            // Bring back the particles
-            document.getElementById('particles-js').style.display = 'block';
         }
 
         // Copy Logic
@@ -545,10 +361,8 @@
             const color = isError ? 'var(--danger)' : 'var(--success)';
             
             toast.innerHTML = `<i class="fa-solid ${icon}" style="color: ${color}"></i> ${msg}`;
-            
             container.appendChild(toast);
 
-            // Remove after 3 seconds
             setTimeout(() => {
                 toast.style.animation = 'fadeOut 0.3s forwards';
                 setTimeout(() => toast.remove(), 300);
@@ -562,114 +376,6 @@
 
         // Initial Load
         renderTools();
-
-        // --- COOL SPINNING SQUARES ANIMATION ---
-        const canvas = document.getElementById('particles-js');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class SquareParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 8 + 3; // Random sizes
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.opacity = Math.random() * 0.4 + 0.05;
-                this.angle = Math.random() * 360;
-                this.spin = Math.random() * 0.02 - 0.01; // Rotation speed
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.angle += this.spin;
-                
-                // Wrap around edges seamlessly
-                if (this.x < -20) this.x = canvas.width + 20;
-                if (this.x > canvas.width + 20) this.x = -20;
-                if (this.y < -20) this.y = canvas.height + 20;
-                if (this.y > canvas.height + 20) this.y = -20;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                ctx.globalAlpha = this.opacity;
-                // Grab the current text-muted color for the squares so it matches themes
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted').trim() || '#ffffff';
-                // Draw square centered on coordinates
-                ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2);
-                ctx.restore();
-            }
-        }
-
-        function initParticles() {
-            particlesArray = [];
-            const count = 45; // Amount of squares floating
-            for (let i = 0; i < count; i++) {
-                particlesArray.push(new SquareParticle());
-            }
-            animateParticles();
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-
-        // --- EDULEARN THEME SYNC ---
-        function syncEdulearnTheme() {
-            try {
-                // Fetch settings from local storage
-                const savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
-                const theme = savedSettings.theme || 'default';
-                const bgUrl = savedSettings.bgUrl || '';
-
-                // Apply correct theme class
-                document.body.className = theme === 'default' ? '' : `theme-${theme}`;
-
-                // Apply custom background image if set
-                if (bgUrl) {
-                    document.body.style.backgroundImage = `url('${bgUrl}')`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
-                } else {
-                    // Reset to grid pattern if no custom background is applied
-                    document.body.style.backgroundImage = `
-                        linear-gradient(var(--grid-color) 1px, transparent 1px),
-                        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)
-                    `;
-                    document.body.style.backgroundSize = '30px 30px';
-                }
-            } catch (err) {
-                console.error("Theme sync failed:", err);
-            }
-        }
-
-        // Run on initial load
-        syncEdulearnTheme();
-
-        // Listen for changes across other pages/frames
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'el_settings') {
-                syncEdulearnTheme();
-            }
-        });
     </script>
 </body>
-
 </html>

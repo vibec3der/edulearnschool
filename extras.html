@@ -4,215 +4,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edulearn | Extras</title>
+    <title>Extras</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- IMPORTED THEME SYSTEM FROM EDULEARN LITE --- */
         :root {
-            /* Default: Midnight Indigo */
-            --bg-color: #09090b;
-            --bg-toolbar: rgba(18, 18, 23, 0.85);
+            /* Clean Dark Theme */
+            --bg-color: #0f0f11;
+            --topbar-bg: #151518;
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
+            --card-bg: #141417;
+            --card-hover: #1e1e24;
+            --border-color: #27272a;
+            --border-hover: #3f3f46;
             --accent: #6366f1;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --accent-glow: rgba(99, 102, 241, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.03);
-        }
-
-        body.theme-mocha {
-            --bg-color: #1e1e2e;
-            --bg-toolbar: rgba(30, 30, 46, 0.85);
-            --text-main: #cdd6f4;
-            --text-muted: #a6adc8;
-            --accent: #cba6f7;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --accent-glow: rgba(203, 166, 247, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.04);
-        }
-
-        body.theme-inverted {
-            --bg-color: #f4f4f5;
-            --bg-toolbar: rgba(244, 244, 245, 0.85);
-            --text-main: #18181b;
-            --text-muted: #52525b;
-            --accent: #4f46e5;
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --accent-glow: rgba(79, 70, 229, 0.15);
-            --grid-color: rgba(0, 0, 0, 0.04);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            
-            /* The Static Background Grid */
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
+            overflow-x: hidden;
         }
 
-        /* --- SQUARE PARTICLES --- */
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        /* --- MENU VIEW --- */
-        #menu-view {
-            padding: 40px;
-            overflow-y: auto;
-            height: 100%;
-            animation: fadeIn 0.4s ease;
-            position: relative;
-            z-index: 10;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        header {
-            margin-bottom: 40px;
-            display: flex;
-            flex-direction: column;
+        /* --- TOP BAR --- */
+        .topbar {
+            background-color: var(--topbar-bg);
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(180deg, var(--text-main), var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
+        .topbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
+        .search-container {
+            position: relative;
         }
 
-        /* --- BUTTONS --- */
-        .btn-nav {
-            background: var(--card-bg);
+        .search-input {
+            background: #1a1a1f;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
+            padding: 8px 15px 8px 35px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            width: 250px;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--border-hover);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            padding: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            transition: opacity 0.3s;
+        }
+
+        .category-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: 0.2s;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            user-select: none;
         }
 
-        .btn-nav:hover {
-            background: var(--accent-glow);
-            border-color: var(--accent);
+        .category-header span {
+            color: var(--text-muted);
+            font-weight: normal;
         }
 
         /* --- GRID --- */
         .extras-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 40px;
         }
 
         .extra-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 24px;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 8px;
+            padding: 16px;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: relative;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 55px;
         }
 
         .extra-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px -10px var(--accent-glow);
-            background: var(--accent-glow);
+            background: var(--card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
         }
 
-        .extra-card i {
-            font-size: 28px;
-            color: var(--accent);
+        .extra-card:active {
+            transform: scale(0.98);
         }
 
-        .extra-card h3 {
-            font-size: 18px;
+        .extra-name {
             font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .extra-card p {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 10px;
-            text-transform: uppercase;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 3px 10px;
-            border-radius: 5px;
-            font-weight: 800;
-        }
-
-        /* --- APP VIEW (Hidden by default) --- */
-        #app-view {
-            display: none;
-            flex-direction: column;
+        /* --- APP OVERLAY (IFRAME VIEW) --- */
+        .app-view-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
             background: var(--bg-color);
-            position: relative;
-            z-index: 20;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
         }
 
-        .app-toolbar {
+        .app-view-overlay.active {
+            display: flex;
+        }
+
+        .app-header-bar {
             height: 50px;
-            background: var(--bg-toolbar);
+            background: var(--topbar-bg);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
@@ -220,225 +178,132 @@
             gap: 15px;
         }
 
+        .btn-back {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-back:hover {
+            background: var(--card-hover);
+        }
+
         .app-title {
-            font-weight: 700;
-            font-size: 14px;
             color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
-        iframe.app-frame {
+        .app-frame {
             flex: 1;
-            border: none;
             width: 100%;
-            height: 100%;
-            background: #fff;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            border: none;
+            background: #fff; /* Keep white for external apps if needed, or change to #000 */
         }
     </style>
 </head>
 
 <body>
 
-    <canvas id="particles-js"></canvas>
-
-    <div id="menu-view">
-        <div class="container">
-            <header>
-                <div>
-                    <h1>Extras</h1>
-                    <p class="subtitle">Launch tools without leaving the dashboard.</p>
-                </div>
-            </header>
-
-            <div class="extras-grid">
-                
-
-                <div class="extra-card" onclick="openApp('./musicplayer.html', 'Music Player')">
-                    <span class="badge">Media</span>
-                    <i class="fa-solid fa-music"></i>
-                    <h3>Music Player</h3>
-                    <p>Lofi beats.</p>
-                </div>
-
-                <div class="extra-card" onclick="openApp('./images.html', 'Image Gallery')">
-                    <span class="badge">Visual</span>
-                    <i class="fa-solid fa-image"></i>
-                    <h3>Image Gallery</h3>
-                    <p> Exposed</p>
-                </div>
-
-                <div class="extra-card" onclick="openApp('./aigames.html', 'AI Games')">
-                    <span class="badge">Game</span>
-                    <i class="fa-solid fa-robot"></i>
-                    <h3>AI Games</h3>
-                    <p> Games made by AI, fun classics, and more!</p>
-                    <p> Challenge the Machine. </p>
-                </div>
-                <div class="extra-card" onclick="openApp('easteregglist.txt', 'Easter egg list for the login page..!')">
-                    <span class="badge">Easter egg</span>
-                    <i class="fa-solid fa-egg"></i>
-                    <h3>Easter Egg List</h3>
-                    <p> Find hidden features in the login page!</p>
-                </div>
-            </div>
+    <div class="topbar">
+        <div class="topbar-brand">Extras</div>
+        <div class="search-container">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search extras...">
         </div>
     </div>
 
-    <div id="app-view">
-        <div class="app-toolbar">
-            <button class="btn-nav" onclick="closeApp()">
-                <i class="fa-solid fa-arrow-left"></i> Back to Extras
-            </button>
-            <span class="app-title" id="current-app-title">Application</span>
+    <div class="main-container" id="mainContainer">
+        <div class="category-header">
+            ▼ All Extras <span id="extraCount">(0)</span>
         </div>
-        <iframe id="content-frame" class="app-frame" src="about:blank"></iframe>
+        
+        <div class="extras-grid" id="extrasGrid"></div>
+    </div>
+
+    <div id="appOverlay" class="app-view-overlay">
+        <div class="app-header-bar">
+            <button class="btn-back" onclick="closeApp()">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <div class="app-title" id="appTitle">Application</div>
+        </div>
+        <iframe id="appFrame" class="app-frame" src=""></iframe>
     </div>
 
     <script>
-        // --- COOL SPINNING SQUARES ANIMATION ---
-        const canvas = document.getElementById('particles-js');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        // Data Configuration
+        const extras = [
+            { name: "Music Player", url: "./musicplayer.html" },
+            { name: "Image Gallery", url: "./images.html" },
+            { name: "AI Games", url: "./aigames.html" },
+            { name: "Easter Egg List", url: "easteregglist.txt" }
+        ];
 
-        class SquareParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 8 + 3; // Random sizes
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.opacity = Math.random() * 0.4 + 0.05;
-                this.angle = Math.random() * 360;
-                this.spin = Math.random() * 0.02 - 0.01; // Rotation speed
+        const grid = document.getElementById('extrasGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countLabel = document.getElementById('extraCount');
+
+        // Render Cards
+        function renderExtras(filter = "") {
+            grid.innerHTML = "";
+            const filtered = extras.filter(e => 
+                e.name.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            countLabel.innerText = `(${filtered.length})`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px 0;">No extras found.</div>`;
+                return;
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.angle += this.spin;
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'extra-card';
+                card.onclick = () => openApp(item.url, item.name);
+                card.title = 'Click to open';
                 
-                // Wrap around edges seamlessly
-                if (this.x < -20) this.x = canvas.width + 20;
-                if (this.x > canvas.width + 20) this.x = -20;
-                if (this.y < -20) this.y = canvas.height + 20;
-                if (this.y > canvas.height + 20) this.y = -20;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                ctx.globalAlpha = this.opacity;
-                // Grab the current text-muted color for the squares so it matches themes
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted').trim() || '#ffffff';
-                // Draw square centered on coordinates
-                ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2);
-                ctx.restore();
-            }
+                card.innerHTML = `<div class="extra-name">${item.name}</div>`;
+                grid.appendChild(card);
+            });
         }
 
-        function initParticles() {
-            particlesArray = [];
-            const count = 45; // Amount of squares floating
-            for (let i = 0; i < count; i++) {
-                particlesArray.push(new SquareParticle());
-            }
-            animateParticles();
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-
-        // --- NAVIGATION LOGIC ---
-
-        const menuView = document.getElementById('menu-view');
-        const appView = document.getElementById('app-view');
-        const iframe = document.getElementById('content-frame');
-        const titleLabel = document.getElementById('current-app-title');
-
-        // Open a standard URL
+        // Open App Logic
         function openApp(url, title) {
-            menuView.style.display = 'none';
-            appView.style.display = 'flex';
-            titleLabel.innerText = title;
-            iframe.src = url;
-            canvas.style.display = 'none'; // Hide squares while in an app
-        }
-
-        // Close the app and return to grid
-        function closeApp() {
-            // Reset iframe to stop audio/scripts from running in background
-            iframe.src = 'about:blank';
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
+            const appTitle = document.getElementById('appTitle');
             
-            appView.style.display = 'none';
-            menuView.style.display = 'block';
-            canvas.style.display = 'block'; // Bring back the squares
+            appTitle.innerText = title;
+            frame.src = url;
+            overlay.classList.add('active');
         }
 
-        // --- EDULEARN THEME SYNC ---
-        function syncEdulearnTheme() {
-            try {
-                // Fetch settings from local storage
-                const savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
-                const theme = savedSettings.theme || 'default';
-                const bgUrl = savedSettings.bgUrl || '';
-
-                // Apply correct theme class
-                document.body.className = theme === 'default' ? '' : `theme-${theme}`;
-
-                // Apply custom background image if set
-                if (bgUrl) {
-                    document.body.style.backgroundImage = `url('${bgUrl}')`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
-                } else {
-                    // Reset to grid pattern if no custom background is applied
-                    document.body.style.backgroundImage = `
-                        linear-gradient(var(--grid-color) 1px, transparent 1px),
-                        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)
-                    `;
-                    document.body.style.backgroundSize = '30px 30px';
-                }
-            } catch (err) {
-                console.error("Theme sync failed:", err);
-            }
+        // Close App Logic
+        function closeApp() {
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
+            
+            overlay.classList.remove('active');
+            frame.src = "about:blank"; // Stop background scripts/audio
         }
 
-        // Run on initial load
-        syncEdulearnTheme();
-
-        // Listen for changes across other pages/frames
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'el_settings') {
-                syncEdulearnTheme();
-            }
+        // Search Listener
+        searchInput.addEventListener('input', (e) => {
+            renderExtras(e.target.value);
         });
+
+        // Initial Load
+        renderExtras();
     </script>
 </body>
-
 </html>

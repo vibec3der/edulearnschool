@@ -185,6 +185,7 @@ Developed by technonyte0
     <div class="option" id="devtools-option">Developer Tools</div>
     <div class="option" id="abc-option">Open in about:blank</div>
     <div class="option" id="git-option">GitHub</div>
+    <div class="option" id="export-option">Export / Import</div>
   </div>
 
   <script>
@@ -193,6 +194,9 @@ Developed by technonyte0
     optionsBtn.addEventListener("click", () => {
       overlay.classList.toggle("active");
     });
+
+    const exportOption = document.getElementById('export-option');
+    if (exportOption) exportOption.addEventListener('click', ()=>{ window.location.href = '/export_import.html'; });
   </script>
 
   <!-- ===== Loader Logic ===== -->
