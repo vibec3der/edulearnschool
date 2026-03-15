@@ -9,58 +9,52 @@
 		href="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 		/* --- THEME SYSTEM --- */
 		:root {
-			/* Default: Midnight Indigo */
 			--bg-color: #09090b;
-			--grid-color: rgba(255, 255, 255, 0.03);
-			--nav-bg: rgba(18, 18, 23, 0.85);
-			--nav-border: rgba(255, 255, 255, 0.08);
-			--nav-hover: rgba(255, 255, 255, 0.05);
+			--grid-color: rgba(255, 255, 255, 0.02);
+			--nav-bg: transparent;
+			--nav-border: transparent;
+			--pill-hover: rgba(255, 255, 255, 0.05);
+			--pill-active: #27272a;
 			--text-main: #ffffff;
 			--text-muted: #a1a1aa;
-			--accent: #6366f1;
-			--accent-glow: rgba(99, 102, 241, 0.4);
-
-			/* Modal specific dark theme (matching screenshot) */
-			--modal-bg: #0f0f11;
+			--modal-bg: #121214;
 			--modal-border: #27272a;
-			--input-bg: #18181b;
+			--input-bg: #09090b;
 			--input-border: #3f3f46;
+			--toggle-track-off: #3f3f46;
+			--toggle-track-on: #ffffff;
+			--toggle-knob-off: #ffffff;
+			--toggle-knob-on: #000000;
 		}
 
-		/* Catppuccin Mocha */
 		body.theme-mocha {
 			--bg-color: #1e1e2e;
-			--grid-color: rgba(205, 214, 244, 0.03);
-			--nav-bg: rgba(24, 24, 37, 0.85);
-			--nav-border: #313244;
-			--nav-hover: #313244;
+			--pill-active: #313244;
 			--text-main: #cdd6f4;
 			--text-muted: #a6adc8;
-			--accent: #cba6f7;
 			--modal-bg: #11111b;
 			--modal-border: #313244;
 			--input-bg: #1e1e2e;
 			--input-border: #45475a;
 		}
 
-		/* Inverted (Light Mode) */
 		body.theme-inverted {
 			--bg-color: #f4f4f5;
-			--grid-color: rgba(0, 0, 0, 0.05);
-			--nav-bg: rgba(255, 255, 255, 0.85);
-			--nav-border: rgba(0, 0, 0, 0.1);
-			--nav-hover: rgba(0, 0, 0, 0.05);
+			--pill-active: #e4e4e7;
 			--text-main: #18181b;
 			--text-muted: #52525b;
-			--accent: #4f46e5;
 			--modal-bg: #ffffff;
 			--modal-border: #e4e4e7;
 			--input-bg: #f4f4f5;
 			--input-border: #d4d4d8;
+			--toggle-track-off: #d4d4d8;
+			--toggle-track-on: #18181b;
+			--toggle-knob-off: #ffffff;
+			--toggle-knob-on: #ffffff;
 		}
 
 		* {
@@ -72,9 +66,6 @@
 		body {
 			font-family: 'Inter', system-ui, sans-serif;
 			background-color: var(--bg-color);
-			background-size: cover;
-			background-position: center;
-			background-attachment: fixed;
 			color: var(--text-main);
 			overflow: hidden;
 			display: flex;
@@ -83,35 +74,28 @@
 			transition: background-color 0.3s ease;
 		}
 
-		/* --- BACKGROUND GRID & PARTICLES --- */
 		.grid-bg {
 			position: absolute;
 			inset: 0;
+			z-index: -2;
 			background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
 				linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
 			background-size: 40px 40px;
-			z-index: -2;
 		}
 
-		#particles-container {
+		#constellation-canvas {
 			position: absolute;
 			inset: 0;
 			z-index: -1;
 			pointer-events: none;
-			display: none;
 		}
 
-		/* --- TOP NAVIGATION BAR --- */
 		.topbar {
 			position: fixed;
 			top: 0;
 			left: 0;
 			width: 100%;
-			height: 70px;
-			background: var(--nav-bg);
-			backdrop-filter: blur(12px);
-			-webkit-backdrop-filter: blur(12px);
-			border-bottom: 1px solid var(--nav-border);
+			height: 80px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -120,47 +104,51 @@
 		}
 
 		.brand {
-			font-size: 20px;
-			font-weight: 700;
+			font-family: 'Dancing Script', cursive;
+			font-size: 32px;
 			color: var(--text-main);
+			text-decoration: none;
+			cursor: pointer;
+			transition: 0.2s ease;
 			display: flex;
 			align-items: center;
-			gap: 12px;
+			letter-spacing: 1px;
+			text-transform: lowercase;
 		}
 
-		.brand-icon {
-			color: var(--accent);
-			font-size: 24px;
-			filter: drop-shadow(0 0 8px var(--accent-glow));
+		.brand:hover {
+			transform: scale(1.05);
+			text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 		}
 
 		.nav-links {
 			display: flex;
-			gap: 8px;
+			gap: 12px;
 		}
 
 		.nav-link {
-			padding: 10px 18px;
-			border-radius: 8px;
+			padding: 10px 24px;
+			border-radius: 9999px;
 			color: var(--text-muted);
-			text-decoration: none;
 			cursor: pointer;
-			transition: all 0.2s ease;
+			transition: 0.2s ease;
 			display: flex;
 			align-items: center;
 			gap: 8px;
 			font-weight: 500;
-			font-size: 14px;
+			font-size: 15px;
+			border: 1px solid transparent;
+			text-decoration: none !important;
 		}
 
 		.nav-link:hover {
 			color: var(--text-main);
-			background: var(--nav-hover);
+			background: var(--pill-hover);
 		}
 
 		.nav-link.active {
-			color: var(--accent);
-			background: rgba(99, 102, 241, 0.1);
+			color: var(--text-main);
+			background: var(--pill-active);
 		}
 
 		.nav-actions {
@@ -171,33 +159,44 @@
 
 		.icon-btn {
 			background: transparent;
-			border: none;
-			color: var(--text-muted);
-			font-size: 18px;
+			border: none !important;
+			color: var(--text-main);
+			font-size: 20px;
 			cursor: pointer;
 			transition: 0.2s;
-			padding: 8px;
-			border-radius: 6px;
+			padding: 10px;
+			border-radius: 50%;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			position: relative;
+			text-decoration: none !important;
 		}
 
 		.icon-btn:hover {
-			color: var(--text-main);
-			background: var(--nav-hover);
+			background: var(--pill-hover);
 		}
 
-		/* --- MAIN CONTENT --- */
+		.notification-dot {
+			position: absolute;
+			top: 8px;
+			right: 10px;
+			width: 8px;
+			height: 8px;
+			background-color: #f87171;
+			border-radius: 50%;
+			display: block;
+		}
+
 		.main-content {
 			flex: 1;
-			margin-top: 70px;
+			margin-top: 80px;
 			position: relative;
 			z-index: 10;
 			display: flex;
 			flex-direction: column;
 			width: 100%;
-			height: calc(100vh - 70px);
+			height: calc(100vh - 80px);
 		}
 
 		.page {
@@ -234,22 +233,89 @@
 			padding: 40px;
 		}
 
-		h1 {
-			font-size: 56px;
+		/* --- FANCY ROTATING BORDER BOX --- */
+		.hero-title-box {
+			position: relative;
+			padding: 20px 60px;
+			background: transparent;
+			border-radius: 16px;
+			margin-bottom: 25px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+		}
+
+		.hero-title-box::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			left: -50%;
+			width: 200%;
+			height: 200%;
+			background: conic-gradient(transparent, rgba(134, 239, 172, 0.1), #86efac, transparent 30%);
+			animation: rotateGlow 3s linear infinite;
+			z-index: -2;
+		}
+
+		.hero-title-box::after {
+			content: '';
+			position: absolute;
+			inset: 2px;
+			background: var(--input-bg);
+			border-radius: 14px;
+			z-index: -1;
+		}
+
+		.hero-title {
+			font-family: 'Dancing Script', cursive;
+			font-size: 85px;
 			font-weight: 700;
-			margin-bottom: 20px;
+			margin: 0;
 			color: var(--text-main);
+			letter-spacing: 2px;
+			text-transform: lowercase;
 			text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+			line-height: 1;
+			z-index: 2;
+		}
+
+		@keyframes rotateGlow {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+		.hero-search-hint {
+			color: var(--text-muted);
+			font-size: 13px;
+			margin-bottom: 30px;
+			letter-spacing: 0.3px;
+		}
+
+		.hero-search-hint kbd {
+			background: var(--modal-bg);
+			border: 1px solid var(--modal-border);
+			padding: 3px 6px;
+			border-radius: 4px;
+			font-family: 'Inter', monospace;
+			font-size: 11px;
+			color: var(--text-main);
 		}
 
 		.hero-quote {
 			color: var(--text-muted);
-			font-size: 16px;
-			font-style: italic;
-			background: var(--nav-bg);
-			padding: 10px 20px;
-			border-radius: 20px;
-			border: 1px solid var(--nav-border);
+			font-size: 14px;
+			background: var(--modal-bg);
+			padding: 12px 24px;
+			border-radius: 9999px;
+			border: 1px solid var(--modal-border);
+			opacity: 0.7;
 		}
 
 		.iframe-wrapper {
@@ -264,11 +330,11 @@
 			border: none;
 		}
 
-		/* --- EXPANDED SETTINGS MODAL (REDESIGNED) --- */
+		/* --- MODALS --- */
 		.modal-overlay {
 			position: fixed;
 			inset: 0;
-			background: rgba(0, 0, 0, 0.7);
+			background: rgba(0, 0, 0, 0.5);
 			backdrop-filter: blur(8px);
 			z-index: 2000;
 			display: none;
@@ -284,17 +350,18 @@
 		}
 
 		.settings-box {
-			width: 680px;
+			width: 850px;
+			max-width: 95%;
 			max-height: 85vh;
 			background: var(--modal-bg);
 			border: 1px solid var(--modal-border);
-			border-radius: 12px;
-			box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+			border-radius: 16px;
 			display: flex;
 			flex-direction: column;
-			overflow: hidden;
-			transform: scale(0.95);
+			box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+			transform: scale(0.98);
 			transition: transform 0.2s ease;
+			overflow: hidden;
 		}
 
 		.modal-overlay.active .settings-box {
@@ -305,17 +372,15 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			padding: 24px 32px 20px 32px;
+			padding: 24px 32px;
 			border-bottom: 1px solid var(--modal-border);
 			background: var(--modal-bg);
-			flex-shrink: 0;
 		}
 
 		.settings-header-top h2 {
-			font-size: 22px;
+			font-size: 20px;
 			font-weight: 600;
 			color: var(--text-main);
-			letter-spacing: -0.5px;
 		}
 
 		.btn-close-icon {
@@ -329,17 +394,18 @@
 
 		.btn-close-icon:hover {
 			color: var(--text-main);
+			transform: scale(1.1);
 		}
 
 		.settings-content {
-			padding: 32px;
+			padding: 0 32px 32px 32px;
 			display: flex;
 			flex-direction: column;
 			overflow-y: auto;
 		}
 
 		.settings-content::-webkit-scrollbar {
-			width: 6px;
+			width: 8px;
 		}
 
 		.settings-content::-webkit-scrollbar-thumb {
@@ -349,87 +415,214 @@
 
 		.settings-section-title {
 			font-size: 13px;
+			font-weight: 600;
 			text-transform: uppercase;
-			letter-spacing: 1px;
-			color: var(--accent);
-			font-weight: 700;
-			margin-bottom: 24px;
-			margin-top: 16px;
+			color: var(--text-muted);
+			margin: 32px 0 8px 4px;
+			letter-spacing: 0.5px;
 		}
 
-		.settings-section-title:first-child {
-			margin-top: 0;
+		.settings-card {
+			background: rgba(255, 255, 255, 0.02);
+			border: 1px solid var(--modal-border);
+			border-radius: 12px;
+			display: flex;
+			flex-direction: column;
 		}
 
-		.setting-item {
-			margin-bottom: 36px;
-		}
-
-		.setting-item:last-child {
-			margin-bottom: 16px;
-		}
-
-		.setting-header {
+		.setting-row {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			margin-bottom: 6px;
+			padding: 20px;
+			border-bottom: 1px solid var(--modal-border);
+			gap: 20px;
 		}
 
-		.setting-header h3 {
-			font-size: 18px;
-			font-weight: 600;
+		.setting-row-column {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.setting-row:last-child {
+			border-bottom: none;
+		}
+
+		.setting-info {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			flex: 1;
+		}
+
+		.setting-info h3 {
+			font-size: 15px;
+			font-weight: 500;
 			color: var(--text-main);
 		}
 
-		.setting-desc {
-			font-size: 14px;
+		.setting-info p {
+			font-size: 13px;
 			color: var(--text-muted);
 			line-height: 1.5;
-			margin-bottom: 16px;
 		}
 
-		.control-label {
-			display: block;
-			font-size: 13px;
-			font-weight: 600;
+		.setting-action {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex-shrink: 0;
+		}
+
+		/* --- SPOTLIGHT COMPONENT --- */
+		.spotlight-box {
+			width: 600px;
+			max-width: 95%;
+			background: var(--modal-bg);
+			border: 1px solid var(--modal-border);
+			border-radius: 16px;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+			transform: scale(0.98);
+			transition: transform 0.2s ease;
+			overflow: hidden;
+			align-self: flex-start;
+			margin-top: 15vh;
+		}
+
+		.modal-overlay.active .spotlight-box {
+			transform: scale(1);
+		}
+
+		.spotlight-input-wrapper {
+			position: relative;
+			display: flex;
+			align-items: center;
+			padding: 0 24px;
+			border-bottom: 1px solid var(--modal-border);
+		}
+
+		.spotlight-input-wrapper i {
+			color: var(--text-muted);
+			font-size: 20px;
+			margin-right: 16px;
+		}
+
+		.spotlight-input {
+			width: 100%;
+			background: transparent;
+			border: none;
 			color: var(--text-main);
-			margin-bottom: 8px;
+			padding: 24px 0;
+			font-family: 'Inter', sans-serif;
+			font-size: 20px;
+			outline: none;
 		}
 
-		/* Inputs & Selects */
+		.spotlight-input::placeholder {
+			color: #52525b;
+		}
+
+		.spotlight-results {
+			max-height: 350px;
+			overflow-y: auto;
+			padding: 12px;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.spotlight-results::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		.spotlight-results::-webkit-scrollbar-thumb {
+			background: var(--modal-border);
+			border-radius: 3px;
+		}
+
+		.spotlight-item {
+			display: flex;
+			align-items: center;
+			padding: 12px 16px;
+			border-radius: 8px;
+			color: var(--text-main);
+			cursor: pointer;
+			transition: background 0.1s;
+			font-size: 15px;
+			font-weight: 500;
+			position: relative;
+		}
+
+		.spotlight-item i {
+			width: 24px;
+			color: var(--text-muted);
+			margin-right: 12px;
+			font-size: 16px;
+			text-align: center;
+		}
+
+		.spotlight-item:hover,
+		.spotlight-item.active {
+			background: var(--pill-hover);
+		}
+
+		.spotlight-item.active {
+			background: var(--pill-active);
+		}
+
+		.spotlight-shortcut {
+			font-size: 11px;
+			background: rgba(134, 239, 172, 0.15);
+			color: #86efac;
+			padding: 3px 6px;
+			border-radius: 4px;
+			font-family: monospace;
+			margin-left: 10px;
+		}
+
+		.spotlight-item-badge {
+			margin-left: auto;
+			font-size: 11px;
+			color: var(--text-muted);
+			background: rgba(255, 255, 255, 0.05);
+			padding: 4px 8px;
+			border-radius: 4px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+
+		/* UI ELEMENTS */
 		.dark-input,
 		.dark-select {
 			background: var(--input-bg);
 			border: 1px solid var(--input-border);
 			color: var(--text-main);
-			padding: 12px 16px;
+			padding: 10px 16px;
 			border-radius: 8px;
 			font-family: inherit;
 			font-size: 14px;
 			outline: none;
 			transition: 0.2s;
-			width: 100%;
-			margin-bottom: 16px;
 		}
 
 		.dark-input:focus,
 		.dark-select:focus {
-			border-color: var(--accent);
+			border-color: var(--text-main);
 		}
 
-		.dark-select option {
-			background: var(--modal-bg);
-			color: var(--text-main);
+		.dark-input.full-width {
+			width: 100%;
+			margin-bottom: 12px;
 		}
 
-		/* Mint Green specific style for Panic Key to match screenshot */
 		.mint-accent {
 			background: #a7f3d0 !important;
 			color: #064e3b !important;
 			border: none !important;
 			font-weight: 600;
-			max-width: 120px;
+			width: 100px;
 			text-align: center;
 		}
 
@@ -437,27 +630,30 @@
 			color: rgba(6, 78, 59, 0.6);
 		}
 
-		/* Buttons */
 		.clean-btn {
-			background: var(--input-bg);
+			background: transparent;
 			color: var(--text-main);
 			border: 1px solid var(--input-border);
-			padding: 10px 20px;
-			border-radius: 8px;
-			font-size: 14px;
+			padding: 8px 18px;
+			border-radius: 9999px;
+			font-size: 13px;
 			font-weight: 500;
 			cursor: pointer;
 			transition: 0.2s;
-			display: inline-block;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			height: 38px;
+			white-space: nowrap;
 		}
 
 		.clean-btn:hover {
-			background: var(--modal-border);
+			background: var(--pill-hover);
 		}
 
 		.btn-primary {
 			background: var(--text-main);
-			color: var(--modal-bg);
+			color: var(--bg-color);
 			border: none;
 			font-weight: 600;
 		}
@@ -466,17 +662,6 @@
 			background: var(--text-muted);
 		}
 
-		.btn-danger {
-			color: #ef4444;
-			border: 1px solid rgba(239, 68, 68, 0.3);
-			background: rgba(239, 68, 68, 0.05);
-		}
-
-		.btn-danger:hover {
-			background: rgba(239, 68, 68, 0.15);
-		}
-
-		/* Toggle Switch */
 		.switch {
 			position: relative;
 			display: inline-block;
@@ -497,265 +682,412 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background-color: var(--input-bg);
-			border: 1px solid var(--input-border);
+			background-color: var(--toggle-track-off);
 			transition: .3s;
-			border-radius: 24px;
+			border-radius: 9999px;
 		}
 
 		.slider:before {
 			position: absolute;
 			content: "";
-			height: 16px;
-			width: 16px;
+			height: 18px;
+			width: 18px;
 			left: 3px;
 			bottom: 3px;
-			background-color: var(--text-muted);
+			background-color: var(--toggle-knob-off);
 			transition: .3s;
 			border-radius: 50%;
 		}
 
 		input:checked+.slider {
-			background-color: var(--text-main);
-			border-color: var(--text-main);
+			background-color: var(--toggle-track-on);
 		}
 
 		input:checked+.slider:before {
 			transform: translateX(20px);
-			background-color: var(--modal-bg);
+			background-color: var(--toggle-knob-on);
 		}
 
-		.info-footer {
+		.prompt-modal-box {
+			width: 420px;
+			padding: 32px;
 			text-align: center;
-			color: var(--text-muted);
-			font-size: 13px;
-			margin-top: 20px;
-			padding-top: 20px;
-			border-top: 1px solid var(--modal-border);
-			line-height: 1.6;
+			border-radius: 16px;
 		}
 
-		.info-footer a {
+		/* Cloak Tabs */
+		.segmented-control {
+			display: flex;
+			background: var(--input-bg);
+			border: 1px solid var(--input-border);
+			border-radius: 8px;
+			padding: 4px;
+			margin-bottom: 16px;
+			width: 100%;
+		}
+
+		.segmented-btn {
+			flex: 1;
+			background: transparent;
+			border: none;
+			color: var(--text-muted);
+			padding: 8px 0;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: 500;
+			transition: 0.2s;
+			font-size: 14px;
+		}
+
+		.segmented-btn.active {
+			background: var(--modal-border);
 			color: var(--text-main);
-			text-decoration: none;
+		}
+
+		.cloak-view {
+			display: none;
+			width: 100%;
+		}
+
+		.cloak-view.active {
+			display: block;
+			animation: fadeIn 0.2s ease;
+		}
+
+		.preset-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+			gap: 10px;
+		}
+
+		.preset-btn {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			background: var(--input-bg);
+			border: 1px solid var(--input-border);
+			color: var(--text-main);
+			padding: 10px 14px;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: 0.2s;
+			font-size: 13px;
 			font-weight: 500;
 		}
 
-		.flex-row-gap {
-			display: flex;
-			gap: 12px;
+		.preset-btn img {
+			width: 18px;
+			height: 18px;
+			border-radius: 2px;
+		}
+
+		.preset-btn:hover {
+			background: var(--pill-hover);
+		}
+
+		.preset-btn.active {
+			border-color: #a7f3d0;
+			background: rgba(167, 243, 208, 0.05);
+		}
+
+		.preview-box {
+			display: inline-flex;
 			align-items: center;
+			gap: 10px;
+			background: var(--input-bg);
+			border: 1px solid var(--input-border);
+			padding: 10px 16px;
+			border-radius: 8px;
+			margin-bottom: 16px;
+			font-size: 14px;
+			color: var(--text-main);
+		}
+
+		.preview-box img {
+			width: 16px;
+			height: 16px;
 		}
 	</style>
 </head>
 
 <body>
 	<div class="grid-bg"></div>
-	<div id="particles-container"></div>
+	<canvas id="constellation-canvas"></canvas>
+
 	<nav class="topbar">
-		<div class="brand">
-			<i class="fa-solid fa-layer-group brand-icon"></i>
-			Edulearn
-		</div>
+		<a class="brand" onclick="switchPage('home', this)">edulearn</a>
 
 		<div class="nav-links">
 			<a class="nav-link active" onclick="switchPage('home', this)"><i class="fa-solid fa-house"></i> Home</a>
-			<a class="nav-link" onclick="switchPage('games-page', this)"><i class="fa-solid fa-gamepad"></i> G</a>
-			<a class="nav-link" onclick="switchPage('gamez-page', this)"><i class="fas fa-gamepad"></i> G2</a>
-		
+			<a class="nav-link" onclick="switchPage('games-page', this)"><i class="fa-solid fa-gamepad"></i> Games</a>
 			<a class="nav-link" onclick="switchPage('search-page', this)"><i class="fa-solid fa-globe"></i> Browser</a>
 			<a class="nav-link" onclick="switchPage('tools-page', this)"><i class="fa-solid fa-wrench"></i> Tools</a>
-			<a class="nav-link" onclick="switchPage('extras-page', this)"><i class="fa-solid fa-shapes"></i> Extras</a>
+			<a class="nav-link" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
 		</div>
 
 		<div class="nav-actions">
-			<a href="https://discord.gg/EPm5qnKkYN" target="_blank" class="icon-btn"
-				title="Join our Discord"><i class="fa-brands fa-discord"></i></a>
-			<button class="icon-btn" onclick="openSettings()" title="Settings"><i class="fa-solid fa-gear"></i></button>
-			
+			<button class="icon-btn" onclick="openAnnouncement()" title="Announcements">
+                <i class="fa-solid fa-bell"></i>
+                <div class="notification-dot" id="bell-dot"></div>
+            </button>
+			<a href="https://discord.gg/EPm5qnKkYN" target="_blank" class="icon-btn" title="Join our Discord">
+				<i class="fa-brands fa-discord"></i>
+			</a>
 		</div>
 	</nav>
 
 	<main class="main-content">
 		<section id="home" class="page active">
 			<div class="home-container">
-				<h1>Welcome back.</h1>
-				<div class="hero-quote" id="random-quote">Loading... (If you see this, it's a bug. Please Report. )</div>
+				<div class="hero-title-box">
+					<h1 class="hero-title">edulearn</h1>
+				</div>
+
+				<div class="hero-search-hint">Press <kbd>Ctrl+Y</kbd> to open command palette</div>
+				<div class="hero-quote" id="random-quote">Loading...</div>
 			</div>
 		</section>
 
 		<section id="games-page" class="page">
 			<div class="iframe-wrapper"><iframe data-src="./math/gn-math.html"></iframe></div>
 		</section>
-		<section id="gamez-page" class="page">
-			<div class="iframe-wrapper"><iframe data-src="./g2.html"></iframe></div>
-		</section>
-		
 		<section id="search-page" class="page">
 			<div class="iframe-wrapper"><iframe data-src="./active/index.html"></iframe></div>
 		</section>
 		<section id="tools-page" class="page">
 			<div class="iframe-wrapper"><iframe data-src="./tools.html"></iframe></div>
 		</section>
-		<section id="extras-page" class="page">
-			<div class="iframe-wrapper"><iframe data-src="./extras.html"></iframe></div>
+
+		<section id="dynamic-iframe-page" class="page">
+			<div class="iframe-wrapper"><iframe id="dynamic-frame" src=""></iframe></div>
 		</section>
 	</main>
 
-	<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
-		<div class="settings-box">
+	<div class="modal-overlay" id="announcement-modal" onclick="handleBackdropClick(event)">
+		<div class="settings-box prompt-modal-box" style="width: 500px; text-align: left;">
 			<div class="settings-header-top">
-				<h2>Settings</h2>
-				<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
+				<h2>Announcements</h2>
+				<button class="btn-close-icon" onclick="closeAnnouncement()"><i class="fa-solid fa-xmark"></i></button>
 			</div>
-
-			<div class="settings-content">
-
-				<div class="settings-section-title">Stealth & Privacy</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>Panic Button</h3>
-					</div>
-					<p class="setting-desc">Quickly redirect to another site by pressing a key. Works globally across
-						all pages. Separate multiple keys with a comma.</p>
-
-					<label class="control-label">Panic Key</label>
-					<input type="text" id="panic-key" class="dark-input mint-accent" placeholder="e.g. Escape,`">
-
-					<label class="control-label" style="margin-top: 4px;">Redirect URL</label>
-					<input type="text" id="panic-url" class="dark-input" placeholder="https://classroom.google.com" style="margin-bottom: 12px;">
-
-					<button class="clean-btn btn-primary" onclick="saveSettings(event)">Save Panic Settings</button>
-				</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>Tab Cloaker</h3>
-					</div>
-					<p class="setting-desc">Disguise the tab to hide the actual site. Changes the title and favicon.</p>
-
-					<div class="flex-row-gap">
-						<select id="tab-cloak-select" class="dark-select" style="margin-bottom: 0; flex: 1;">
-							<option value="default">Default</option>
-							<option value="google">Google</option>
-							<option value="drive">Google Drive</option>
-							<option value="classroom">Google Classroom</option>
-							<option value="docs">Google Docs</option>
-							<option value="canvas">Canvas</option>
-							<option value="clever">Clever</option>
-							<option value="kahoot">Kahoot!</option>
-							<option value="goguardian">GoGuardian Admin Block</option>
-							<option value="desmos">Desmos Graphing</option>
-							<option value="khan">Khan Academy</option>
-							<option value="powerschool">PowerSchool</option>
-							<option value="wiki">Wikipedia</option>
-						</select>
-						<button class="clean-btn" onclick="resetCloak()">Reset</button>
-						<button class="clean-btn btn-primary" onclick="applyCloak(null, false, event)">Save</button>
-					</div>
-				</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>About:Blank Cloak</h3>
-					</div>
-					<p class="setting-desc">Cloak the site in an about:blank iframe to hide the actual site address from
-						your history.</p>
-					<button class="clean-btn" onclick="openAboutBlank()">Open Cloaked Popup</button>
-				</div>
-
-				<div class="settings-section-title" style="margin-top: 8px;">Customization</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>Themes</h3>
-					</div>
-					<p class="setting-desc">Pick from a variety of themes to customize your experience.</p>
-					<div class="flex-row-gap">
-						<select id="theme-select" class="dark-select" style="margin-bottom: 0; flex: 1;" onchange="previewTheme()">
-							<optgroup label="Solid Themes">
-								<option value="default">Midnight Indigo (Default)</option>
-								<option value="inverted">Inverted (Light)</option>
-							</optgroup>
-							<optgroup label="Catppuccin">
-								<option value="mocha">Mocha</option>
-							</optgroup>
-						</select>
-						<button class="clean-btn btn-primary" onclick="saveSettings(event)">Apply</button>
-					</div>
-				</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>Set Background Image</h3>
-					</div>
-					<p class="setting-desc">Change the site's background image using an image URL.</p>
-
-					<input type="url" id="bg-url" class="dark-input" placeholder="https://example.com/img.png">
-					<div class="flex-row-gap">
-						<button class="clean-btn" onclick="resetBg()">Reset</button>
-						<button class="clean-btn btn-primary" onclick="applyBg(undefined, false, event)">Save Background</button>
-					</div>
-				</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>Particles</h3>
-						<label class="switch">
-							<input type="checkbox" id="particle-toggle" onchange="toggleParticles()">
-							<span class="slider"></span>
-						</label>
-					</div>
-					<p class="setting-desc">Add floating aesthetic particles to the background of the site.</p>
-				</div>
-
-				<div class="settings-section-title" style="margin-top: 8px;">System & Data</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>Data Management</h3>
-					</div>
-					<p class="setting-desc">Export your settings to move to another URL, or import an existing save
-						(Warning: Importing overwrites current saves!).</p>
-					<div class="flex-row-gap">
-						<button class="clean-btn" onclick="exportData()">Export Save</button>
-						<button class="clean-btn" onclick="importData()">Import Save</button>
-					</div>
-				</div>
-
-				<div class="setting-item">
-					<div class="setting-header">
-						<h3>Clear Data</h3>
-					</div>
-					<p class="setting-desc">Delete all locally saved settings and revert the site to its default values.
+			<div class="settings-content" style="padding-top: 24px;">
+				<div
+					style="background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; padding: 16px;">
+					<div
+						style="color: var(--text-muted); font-size: 12px; margin-bottom: 8px; font-weight: 600; text-transform: uppercase;">
+						Update: 3/14/2026</div>
+					<p style="color: var(--text-main); font-size: 14px; line-height: 1.6; margin: 0;">
+						hello everyone, it has come to my attention that someone has copied edulearn and is distributing
+						it around. The fake copy (so obv made with ai) is <a href="https://bebby.w3spaces.com"
+							target="_blank"
+							style="color: #86efac; text-decoration: none;">https://bebby.w3spaces.com</a>. if you ever
+						see the owner online hes a chungis for filling it with emojis and trying to copy edulearn 😂
 					</p>
-					<button class="clean-btn btn-danger" onclick="clearData()">Wipe All Data</button>
 				</div>
-
-				<div class="info-footer">
-					Version: v5.3.0 &nbsp;&middot;&nbsp; Last Updated: Feb 26th, 2026<br><br>
-					Questions? Join our <a href="#">Discord community</a> or email us.
-				</div>
-
 			</div>
 		</div>
 	</div>
 
-	<script>
-		// --- LAZY LOAD & PAGE SWITCHING ---
-		function switchPage(id, el) {
-			document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-			document.getElementById(id).classList.add('active');
-			if(el) {
-				document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-				el.classList.add('active');
-			}
-			const iframe = document.getElementById(id).querySelector('iframe');
-			if (iframe && !iframe.src && iframe.dataset.src) { iframe.src = iframe.dataset.src; }
-		}
+	<div class="modal-overlay" id="spotlight-modal" onclick="handleSpotlightBackdropClick(event)">
+		<div class="spotlight-box">
+			<div class="spotlight-input-wrapper">
+				<i class="fa-solid fa-magnifying-glass"></i>
+				<input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search commands, pages, and directories..." autocomplete="off">
+            </div>
+				<div id="spotlight-results" class="spotlight-results">
+				</div>
+			</div>
+		</div>
 
-		const quotes = [
+		<div class="modal-overlay" id="add-dir-modal" onclick="handleBackdropClick(event)">
+			<div class="settings-box prompt-modal-box">
+				<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--text-main);">Add Custom
+					Directory</h2>
+				<p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Create a quick link to any
+					URL or path.</p>
+				<input type="text" id="new-dir-name" class="dark-input full-width" placeholder="Name (e.g. Math Backup)">
+				<input type="text" id="new-dir-path" class="dark-input full-width" placeholder="Path/URL (e.g. ./math/)">
+				<div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
+					<button class="clean-btn" onclick="closeDirModal()">Cancel</button>
+					<button class="clean-btn btn-primary" onclick="addCustomDirectory()">Save Link</button>
+				</div>
+
+				<div id="dir-modal-list"
+					style="margin-top: 20px; text-align: left; display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto;">
+				</div>
+			</div>
+		</div>
+
+		<div class="modal-overlay" id="session-prompt-modal" onclick="handleBackdropClick(event)">
+			<div class="settings-box prompt-modal-box">
+				<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--text-main);">Is class
+					session active?</h2>
+				<p style="color: var(--text-muted); font-size: 14px; margin-bottom: 28px; line-height: 1.5;">
+					If yes, we strongly recommend using Blob URL Cloaking right now to securely hide this site from your
+					tab history.
+				</p>
+				<div style="display: flex; gap: 12px; justify-content: center;">
+					<button class="clean-btn" onclick="closeSessionPrompt()">No, skip</button>
+					<button class="clean-btn btn-primary" onclick="openBlob(); closeSessionPrompt();">Yes, use Blob Cloak</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
+			<div class="settings-box">
+				<div class="settings-header-top">
+					<h2>Settings</h2>
+					<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
+				</div>
+				<div class="settings-content">
+
+					<div class="settings-section-title">Cloaking Options</div>
+					<div class="settings-card">
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3>Auto-blank Mode</h3>
+								<p>Automatically open the site in about:blank upon visiting.</p>
+							</div>
+							<div class="setting-action">
+								<label class="switch"><input type="checkbox" id="auto-blank-toggle"><span class="slider"></span></label>
+							</div>
+						</div>
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3>One-time about:blank</h3>
+								<p>Open current instance in an about:blank popup.</p>
+							</div>
+							<div class="setting-action">
+								<button class="clean-btn btn-primary" onclick="openAboutBlank()">Open Window</button>
+							</div>
+						</div>
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3>One-time Blob Cloak</h3>
+								<p>Launch in a secure Blob URL to hide the origin link.</p>
+							</div>
+							<div class="setting-action">
+								<button class="clean-btn btn-primary" onclick="openBlob()">Launch Blob</button></div>
+						</div>
+					</div>
+
+					<div class="settings-section-title">Stealth & Privacy</div>
+					<div class="settings-card">
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3>Panic Button</h3>
+								<p>Quickly hide the screen. Separate multiple keys with commas.</p>
+							</div>
+							<div class="setting-action">
+								<input type="text" id="panic-key" class="dark-input mint-accent" placeholder="Key (e.g. `)">
+								<input type="text" id="panic-url" class="dark-input" placeholder="Redirect URL" style="width: 200px;">
+								<button class="clean-btn btn-primary" onclick="savePanic(event)">Save</button>
+							</div>
+						</div>
+
+						<div class="setting-row setting-row-column">
+							<div class="setting-info" style="width: 100%; margin-bottom: 12px;">
+								<h3>Tab Cloak</h3>
+								<p>Disguise the current tab title and icon immediately.</p>
+							</div>
+							<div class="segmented-control">
+								<button class="segmented-btn active" onclick="switchCloakTab('presets', this)"><i class="fa-solid fa-list"></i> Presets</button>
+								<button class="segmented-btn" onclick="switchCloakTab('custom', this)"><i class="fa-solid fa-pen"></i> Custom</button>
+							</div>
+							<div id="cloak-presets-view" class="cloak-view active">
+								<div class="preset-grid">
+									<button class="preset-btn" data-preset="default" onclick="applyCloakPreset('default', event)"><img src="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png"> Default</button>
+									<button class="preset-btn" data-preset="google" onclick="applyCloakPreset('google', event)"><img src="https://www.google.com/favicon.ico"> Google</button>
+									<button class="preset-btn" data-preset="drive" onclick="applyCloakPreset('drive', event)"><img src="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"> Drive</button>
+									<button class="preset-btn" data-preset="classroom" onclick="applyCloakPreset('classroom', event)"><img src="https://ssl.gstatic.com/classroom/ic_product_classroom_32.png"> Classroom</button>
+									<button class="preset-btn" data-preset="docs" onclick="applyCloakPreset('docs', event)"><img src="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico"> Docs</button>
+								</div>
+							</div>
+							<div id="cloak-custom-view" class="cloak-view">
+								<div
+									style="margin-bottom: 8px; font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">
+									Live Preview</div>
+								<div class="preview-box">
+									<img id="custom-preview-icon" src="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png"><span id="custom-preview-title">Login</span>
+								</div>
+								<input type="text" id="custom-cloak-title" class="dark-input full-width" placeholder="Page Title (e.g. My Drive)" oninput="updatePreview()">
+								<input type="text" id="custom-cloak-icon" class="dark-input full-width" placeholder="Icon URL (must be https://...)" oninput="updatePreview()">
+								<button class="clean-btn btn-primary" onclick="applyCustomCloak(event)" style="margin-top: 4px;">Apply Custom</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="settings-section-title">Customization</div>
+					<div class="settings-card">
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3>Theme preset</h3>
+								<p>Pick a theme to customize the overall visual style.</p>
+							</div>
+							<div class="setting-action">
+								<select id="theme-select" class="dark-select" style="width: 200px;" onchange="previewTheme()">
+                                <option value="default">Midnight Indigo (Default)</option>
+                                <option value="inverted">Inverted (Light)</option>
+                                <option value="mocha">Catppuccin Mocha</option>
+                            </select>
+								<button class="clean-btn btn-primary" onclick="saveTheme(event)">Apply</button>
+							</div>
+						</div>
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3>Constellations</h3>
+								<p>Toggle floating animated background network.</p>
+							</div>
+							<div class="setting-action">
+								<label class="switch"><input type="checkbox" id="particle-toggle" onchange="toggleParticles()"><span class="slider"></span></label>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// --- 1. GLOBALS & DATA ---
+        const cloaks = {
+            default: { title: "Login", icon: "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png" },
+            google: { title: "Google", icon: "https://www.google.com/favicon.ico" },
+            drive: { title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" },
+            classroom: { title: "Classes", icon: "https://ssl.gstatic.com/classroom/ic_product_classroom_32.png" },
+            docs: { title: "Google Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" }
+        };
+
+        let defaultSettings = {
+            panicKeys: 'Escape', panicUrl: './login.html',
+            cloakType: 'preset', cloakValue: 'default',
+            customTitle: '', customIcon: '', theme: 'default', 
+            particles: true, customDirs: []
+        };
+
+        let savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
+        let userSettings = { ...defaultSettings, ...savedSettings };
+        if(!Array.isArray(userSettings.customDirs)) userSettings.customDirs = [];
+
+        function saveState() { localStorage.setItem('el_settings', JSON.stringify(userSettings)); }
+
+        // --- 2. LAZY LOAD & PAGE SWITCHING ---
+        function switchPage(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            if(document.getElementById(id)) { document.getElementById(id).classList.add('active'); }
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if(el) { el.classList.add('active'); } 
+            else {
+                const match = Array.from(document.querySelectorAll('.nav-link')).find(nav => nav.getAttribute('onclick')?.includes(id));
+                if(match) match.classList.add('active');
+            }
+
+            const iframe = document.getElementById(id)?.querySelector('iframe');
+            if (iframe && !iframe.src && iframe.dataset.src) { iframe.src = iframe.dataset.src; }
+            closeSettings();
+        }
+
+        const quotes = [
   "coded by the skids, for the skids", 
   "Why Unenroll when you have this?",
   "Classroom.lol but it's actually good",
@@ -932,224 +1264,602 @@
   "I bet you're here for the geo grind.",
   "Hollow knight in the big 2026?",
   "Hey Vibec3der here, ~I think the other guy vibec3der is gooning at this very moment~ I think both of us are certified gooners.",
-  "most recent update: Added more quotes! 3/11/2026"
+  "most recent update: Added more quotes! 3/14/2026",
+    "the wifi knows what you did last night",
+  "this tab knows too much",
+  "if this loads your wifi is valid",
+  "404 motivation not found",
+  "someone somewhere is procrastinating harder than you",
+  "your teacher probably uses this site too",
+  "this page is watching you scroll",
+  "if you see this you owe me 5 dollars",
+  "every refresh creates a new timeline",
+  "your future self is judging this tab",
+  "ctrl+s your life bro",
+  "this site runs on hopes and bad javascript",
+  "another day another tab",
+  "if it works don't touch it",
+  "half the internet is duct tape and dreams",
+  "99% of coding is googling",
+  "the other 1% is suffering",
+  "your ram is crying right now",
+  "every bug has a developer somewhere crying",
+  "the server hamster is tired",
+  "please stop opening 400 tabs",
+  "this site runs on a potato",
+  "if this breaks pretend it didn't",
+  "congratulations you found another quote",
+  "somewhere someone is counting these",
+  "how long have you been scrolling",
+  "bro go drink water",
+  "touch grass challenge: impossible",
+  "achievement unlocked: reading random quotes",
+  "this message will self destruct eventually",
+  "the internet never forgets",
+  "except when the cache clears",
+  "history will remember this tab",
+  "or maybe not",
+  "loading existential crisis...",
+  "life is just a series of loading screens",
+  "respawning in 3... 2... 1...",
+  "main character energy",
+  "side quest detected",
+  "you have discovered a useless quote",
+  "the dev definitely forgot this existed",
+  "this line of text traveled thousands of miles to reach you",
+  "meanwhile you are still procrastinating",
+  "if you read this you are legally cool",
+  "your cpu approves",
+  "your gpu disagrees",
+  "your battery fears you",
+  "low battery anxiety moment",
+  "the scroll never ends",
+  "there are always more quotes",
+  "infinite quotes glitch",
+  "someone add a quote counter",
+  "someone else will fix the bugs",
+  "future me problem",
+  "ship it and pray",
+  "works on my machine",
+  "the code compiles so it's fine",
+  "do not question the code",
+  "the code questions you",
+  "if it breaks blame the intern",
+  "there is no intern",
+  "the intern is you",
+  "congrats you're hired",
+  "your salary is 0 dollars",
+  "paid in experience",
+  "experience not included",
+  "this message was typed at 3am",
+  "sleep is optional",
+  "debugging is just detective work",
+  "except the detective is stupid",
+  "every line of code is a gamble",
+  "we gambling with the production server",
+  "please dont ddos the quote generator",
+  "or do idk",
+  "this is definitely production code",
+  "totally not spaghetti",
+  "100% professional engineering",
+  "trust me bro it works",
+  "never test in production",
+  "unless you do",
+  "this quote generator has lore",
+  "someone write the lore",
+  "the lore is lost",
+  "the lore never existed",
+  "the lore is just vibes",
+  "vibes based development",
+  "powered by vibes",
+  "vibes > documentation",
+  "documentation coming soon",
+  "soon since 2022",
+  "still soon",
+  "maybe tomorrow",
+  "definitely tomorrow",
+  "ok maybe next update",
+  "update coming soon™",
+  "soon™",
+  "tm symbol intensifies",
+  "the scroll continues",
+  "you are still reading",
+  "why are you still reading",
+  "go do homework bro",
+  "seriously",
+  "close the tab",
+  "no actually close it",
+  "ok one more quote",
+  "just one more",
+  "this is the last one",
+  "just kidding",
+  "there are more",
+  "infinite scrolling technology",
+  "this quote escaped containment",
+  "if found return to developer",
+  "developer missing since last commit",
+  "last commit: 3am",
+  "commit message: fixed stuff",
+  "nothing was fixed",
+  "the bug is now a feature",
+  "feature not documented",
+  "users discovered it anyway",
+  "accidental innovation",
+  "this is peak engineering",
+  "this quote does nothing",
+  "but it looks cool",
+  "style over substance",
+  "but mostly chaos",
+  "chaos driven development",
+  "we vibecoding today",
+  "we vibecoding tomorrow",
+  "we vibecoding forever",
+  "vibecode never dies",
+  "the vibe is strong",
+  "the vibe is unstable",
+  "vibes detected",
+  "maximum vibes reached",
+  "vibe overload",
+  "too many vibes",
+  "calm the vibes",
+  "ok vibes restored",
+  "system stable",
+  "system unstable",
+  "system vibing",
+  "system confused",
+  "system thinking",
+  "system procrastinating",
+  "system scrolling",
+  "system reading quotes",
+  "system still reading quotes",
+  "bro seriously go do homework",
+  "this message is a distraction",
+  "and it worked",
+  "congrats",
+  "achievement unlocked: procrastination",
+  "new speedrun category: quote reading",
+  "wr pace",
+  "someone submit this to speedrun.com",
+  "quote percent any%",
+  "quote percent 100%",
+  "imagine reading all of these",
+  "someone probably will",
+  "that someone might be you",
+  "this quote believes in you",
+  "maybe",
+  "probably not",
+  "ok maybe a little",
+  "never give up",
+  "unless the wifi dies",
+  "then it's over",
+  "wifi down bad",
+  "router crying",
+  "packet lost",
+  "lag detected",
+  "ping 999",
+  "skill issue",
+  "massive skill issue",
+  "internet skill issue",
+  "coding skill issue",
+  "quote writing skill issue",
+  "ok that one was rude",
+  "sorry about that",
+  "anyways",
+  "back to quotes",
+  "the quotes never end",
+  "this might be the last one",
+  "or maybe not",
+  "ok now it's the last one",
+  "final quote maybe",
+  "ok actually final quote",
+  "this time fr",
+  "no more quotes after this",
+  "unless someone adds more",
+  "they probably will",
+  "and the cycle continues"
 ]
-		document.getElementById('random-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('random-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
 
-		// --- SETTINGS LOGIC ---
-		let defaultSettings = {
-			panicKeys: 'Escape',
-			panicUrl: 'https://classroom.google.com',
-			cloak: 'default',
-			theme: 'default',
-			bgUrl: '',
-			particles: false
-		};
+        // --- 3. MODALS, ANNOUNCEMENTS & SETTINGS INIT ---
+        function initSettings() {
+            document.getElementById('panic-key').value = userSettings.panicKeys;
+            document.getElementById('panic-url').value = userSettings.panicUrl;
+            document.getElementById('theme-select').value = userSettings.theme;
+            document.getElementById('particle-toggle').checked = userSettings.particles;
 
-		// Merge default settings with whatever is found in localStorage
-		let savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
-		let userSettings = { ...defaultSettings, ...savedSettings };
+            document.getElementById('custom-cloak-title').value = userSettings.customTitle;
+            document.getElementById('custom-cloak-icon').value = userSettings.customIcon;
+            
+            if(userSettings.cloakType === 'custom') {
+                document.querySelectorAll('.segmented-btn')[1].click(); updatePreview();
+            } else { updateActivePresetVisual(userSettings.cloakValue); }
 
-		// Initialize Settings on Load
-		function initSettings() {
-			document.getElementById('panic-key').value = userSettings.panicKeys;
-			document.getElementById('panic-url').value = userSettings.panicUrl;
-			document.getElementById('tab-cloak-select').value = userSettings.cloak;
-			document.getElementById('theme-select').value = userSettings.theme;
-			document.getElementById('bg-url').value = userSettings.bgUrl;
-			document.getElementById('particle-toggle').checked = userSettings.particles;
+            applyTheme(userSettings.theme); executeCloakApply(true);
+            
+            // Check Announcement State
+            if(localStorage.getItem('announcement_20260314')) {
+                document.getElementById('bell-dot').style.display = 'none';
+            }
+        }
 
-			applyTheme(userSettings.theme);
-			applyBg(userSettings.bgUrl, true);
-			applyCloak(userSettings.cloak, true);
-			toggleParticles(true);
-		}
+        function openSettings() { 
+            document.getElementById('settings-modal').classList.add('active'); 
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector('.nav-link:last-child').classList.add('active');
+            initSettings(); 
+        }
+        
+        function openAnnouncement() { 
+            document.getElementById('announcement-modal').classList.add('active'); 
+            localStorage.setItem('announcement_20260314', 'true');
+            document.getElementById('bell-dot').style.display = 'none';
+        }
+        function closeAnnouncement() { document.getElementById('announcement-modal').classList.remove('active'); }
+        
+        function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
+        function closeSessionPrompt() { 
+            document.getElementById('session-prompt-modal').classList.remove('active'); 
+            sessionStorage.setItem('classSessionPromptShown', 'true'); // Locks out after dismissal
+        }
+        
+        function handleBackdropClick(e) { 
+            if (e.target.id === 'settings-modal') closeSettings(); 
+            if (e.target.id === 'session-prompt-modal') closeSessionPrompt();
+            if (e.target.id === 'announcement-modal') closeAnnouncement();
+            if (e.target.id === 'add-dir-modal') closeDirModal();
+        }
 
-		function openSettings() { 
-			document.getElementById('settings-modal').classList.add('active'); 
-			initSettings(); // Refresh inputs
-		}
-		function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
-		function handleBackdropClick(e) { if (e.target.id === 'settings-modal') closeSettings(); }
+        // --- 4. CUSTOM DIRECTORIES (COMMAND PALETTE) ---
+        function openDirModal() {
+            document.getElementById('add-dir-modal').classList.add('active');
+            renderDirModalList();
+        }
+        function closeDirModal() { document.getElementById('add-dir-modal').classList.remove('active'); }
 
-		// Helper to provide button feedback
-		function buttonFeedback(btn) {
-		    if(!btn) return;
-		    const originalText = btn.innerText;
-		    const originalBg = btn.style.backgroundColor;
-		    const originalColor = btn.style.color;
-		    
-		    btn.innerText = "Saved!";
-		    btn.style.backgroundColor = "#a7f3d0"; // Mint green
-		    btn.style.color = "#064e3b"; // Dark green text
-		    
-		    setTimeout(() => { 
-		        btn.innerText = originalText; 
-		        btn.style.backgroundColor = originalBg; 
-		        btn.style.color = originalColor;
-		    }, 1000);
-		}
+        function renderDirModalList() {
+            const list = document.getElementById('dir-modal-list');
+            list.innerHTML = userSettings.customDirs.length === 0 ? '<div style="color:var(--text-muted); font-size:13px; text-align:center;">No custom presets added.</div>' : '';
+            userSettings.customDirs.forEach((dir, i) => {
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--input-bg); padding:10px; border-radius:8px; border:1px solid var(--input-border);">
+                        <div style="display:flex; flex-direction:column; gap:2px;">
+                            <span style="font-size:13px; font-weight:500; color:var(--text-main);">${dir.name}</span>
+                            <span style="font-size:11px; color:var(--text-muted);">${dir.path}</span>
+                        </div>
+                        <button class="btn-close-icon" style="font-size:14px; padding:4px;" onclick="removeCustomDirectory(${i})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
 
-		function saveSettings(event) {
-			userSettings.panicKeys = document.getElementById('panic-key').value || 'Escape';
-			userSettings.panicUrl = document.getElementById('panic-url').value || 'https://classroom.google.com';
-			userSettings.theme = document.getElementById('theme-select').value;
-			localStorage.setItem('el_settings', JSON.stringify(userSettings));
-			
-			applyTheme(userSettings.theme);
-			
-			if(event && event.target) {
-			    buttonFeedback(event.target);
-			}
-		}
+        function addCustomDirectory() {
+            const n = document.getElementById('new-dir-name').value.trim();
+            const p = document.getElementById('new-dir-path').value.trim();
+            if(!n || !p) return;
+            userSettings.customDirs.push({ name: n, path: p });
+            saveState(); renderDirModalList();
+            document.getElementById('new-dir-name').value = ''; document.getElementById('new-dir-path').value = '';
+        }
 
-		// --- PANIC BUTTON MULTI-KEY LOGIC ---
-		document.addEventListener('keydown', (e) => {
-			if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; 
-			
-			const safeKeys = userSettings.panicKeys || 'Escape'; 
-			const keys = safeKeys.split(',').map(k => k.trim().toLowerCase());
-			if(keys.includes(e.key.toLowerCase())) {
-				window.location.href = userSettings.panicUrl;
-			}
-		});
+        function removeCustomDirectory(i) {
+            userSettings.customDirs.splice(i, 1);
+            saveState(); renderDirModalList();
+        }
 
-		// --- TAB CLOAKER ---
-		const cloaks = {
-			default: { title: "Login", icon: "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png" },
-			google: { title: "Google", icon: "https://www.google.com/favicon.ico" },
-			drive: { title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" },
-			classroom: { title: "Classes", icon: "https://ssl.gstatic.com/classroom/ic_product_classroom_32.png" },
-			docs: { title: "Google Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
-			canvas: { title: "Dashboard", icon: "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" },
-			clever: { title: "Clever | Portal", icon: "https://assets.clever.com/favicons/clever-favicon-32x32.png" },
-			goguardian: { title: "GoGuardian Admin Block", icon: "https://www.goguardian.com/favicon.ico" },
-			wiki: { title: "Wikipedia, the free encyclopedia", icon: "https://en.wikipedia.org/static/favicon/wikipedia.ico" }
-		};
+        // --- 5. SPOTLIGHT / COMMAND PALETTE ---
+        const baseSpotlightData = [
+            { title: 'Home', type: 'page', target: 'home', icon: 'fa-house', badge: 'Menu' },
+            { title: 'Games', type: 'page', target: 'games-page', icon: 'fa-gamepad', badge: 'Menu' },
+            { title: 'Browser', type: 'page', target: 'search-page', icon: 'fa-globe', badge: 'Menu' },
+            { title: 'Tools', type: 'page', target: 'tools-page', icon: 'fa-wrench', badge: 'Menu' },
+            { title: 'Settings', type: 'action', target: 'settings', icon: 'fa-gear', badge: 'Action' },
+            { title: 'Add Custom Directory Preset', type: 'action', target: 'add-dir', icon: 'fa-plus', badge: 'Manager' },
+            { title: 'OS System', type: 'iframe', target: 'x4konkor3.html', icon: 'fa-desktop', badge: 'Local HTML' },
+            { title: 'Scramjet', type: 'iframe', target: './mnhy78kpljgyun/index.html', icon: 'fa-jet-fighter', badge: 'Experimental App' }
+        ];
 
-		function applyCloak(forceVal, initLoad = false, event = null) {
-			let val = forceVal || document.getElementById('tab-cloak-select').value;
-			if(!cloaks[val]) val = 'default';
-			
-			document.title = cloaks[val].title;
-			document.getElementById('dynamic-favicon').href = cloaks[val].icon;
-			
-			if(!initLoad) {
-				userSettings.cloak = val;
-				localStorage.setItem('el_settings', JSON.stringify(userSettings));
-				if(event && event.target) buttonFeedback(event.target);
-			}
-		}
-		function resetCloak() { document.getElementById('tab-cloak-select').value = 'default'; applyCloak(); }
+        function getSpotlightData() {
+            let data = [...baseSpotlightData];
+            userSettings.customDirs.forEach(dir => {
+                data.push({ title: dir.name, type: 'iframe', target: dir.path, icon: 'fa-folder-open', badge: 'Custom Preset' });
+            });
+            return data;
+        }
 
-		// --- BACKGROUND ---
-		function applyBg(forceUrl, initLoad = false, event = null) {
-			let url = forceUrl !== undefined ? forceUrl : document.getElementById('bg-url').value;
-			document.body.style.backgroundImage = url ? `url('${url}')` : 'none';
-			if(!initLoad) {
-				userSettings.bgUrl = url;
-				localStorage.setItem('el_settings', JSON.stringify(userSettings));
-				if(event && event.target) buttonFeedback(event.target);
-			}
-		}
-		function resetBg() { document.getElementById('bg-url').value = ''; applyBg(); }
+        const spotlightModal = document.getElementById('spotlight-modal');
+        const spotlightInput = document.getElementById('spotlight-input');
+        const spotlightResults = document.getElementById('spotlight-results');
+        let currentSpotlightIndex = 0;
+        let activeSpotlightItems = [];
 
-		// --- THEMES ---
-		function previewTheme() {
-			const t = document.getElementById('theme-select').value;
-			document.body.className = t === 'default' ? '' : `theme-${t}`;
-		}
-		function applyTheme(t) {
-			document.body.className = t === 'default' ? '' : `theme-${t}`;
-		}
+        function openSpotlight() {
+            spotlightModal.classList.add('active');
+            spotlightInput.value = ''; renderSpotlight('');
+            setTimeout(() => spotlightInput.focus(), 50);
+        }
 
-		// --- PARTICLES ---
-		function toggleParticles(initLoad = false) {
-			const isChecked = document.getElementById('particle-toggle').checked;
-			const container = document.getElementById('particles-container');
-			container.style.display = isChecked ? 'block' : 'none';
-			
-			if(isChecked && container.innerHTML === '') {
-				for(let i=0; i<30; i++) {
-					let dot = document.createElement('div');
-					dot.style.position = 'absolute'; dot.style.background = 'var(--text-muted)';
-					dot.style.borderRadius = '50%'; dot.style.opacity = Math.random() * 0.5;
-					dot.style.width = dot.style.height = (Math.random() * 4 + 1) + 'px';
-					dot.style.left = Math.random() * 100 + 'vw'; dot.style.top = Math.random() * 100 + 'vh';
-					container.appendChild(dot);
-				}
-			}
-			if(!initLoad) {
-				userSettings.particles = isChecked;
-				localStorage.setItem('el_settings', JSON.stringify(userSettings));
-			}
-		}
+        function closeSpotlight() { spotlightModal.classList.remove('active'); spotlightInput.blur(); }
+        function handleSpotlightBackdropClick(e) { if (e.target.id === 'spotlight-modal') closeSpotlight(); }
 
-		// --- SAVE DATA MANAGEMENT ---
-		function exportData() {
-			const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userSettings));
-			const downloadAnchorNode = document.createElement('a');
-			downloadAnchorNode.setAttribute("href", dataStr);
-			downloadAnchorNode.setAttribute("download", "edulearn_save_" + Date.now() + ".json");
-			document.body.appendChild(downloadAnchorNode);
-			downloadAnchorNode.click();
-			downloadAnchorNode.remove();
-		}
-		
-		function importData() {
-			const input = document.createElement('input');
-			input.type = 'file'; input.accept = 'application/json';
-			input.onchange = e => {
-				const file = e.target.files[0];
-				if (!file) return;
-				const reader = new FileReader();
-				reader.onload = function(e) {
-					try {
-						const imported = JSON.parse(e.target.result);
-						userSettings = {...defaultSettings, ...imported}; // Merge
-						localStorage.setItem('el_settings', JSON.stringify(userSettings));
-						initSettings();
-						alert("Save data imported successfully!");
-					} catch (err) { alert("Invalid save file."); }
-				};
-				reader.readAsText(file);
-			};
-			input.click();
-		}
+        function executeSpotlightItem(item) {
+            closeSpotlight();
+            setTimeout(() => {
+                if (item.type === 'page') {
+                    switchPage(item.target);
+                } else if (item.type === 'action' && item.target === 'settings') {
+                    openSettings();
+                } else if (item.type === 'action' && item.target === 'add-dir') {
+                    openDirModal();
+                } else if (item.type === 'iframe') {
+                    document.getElementById('dynamic-frame').src = item.target;
+                    switchPage('dynamic-iframe-page');
+                }
+            }, 100);
+        }
 
-		// --- CLEAR DATA ---
-		function clearData() {
-			if (confirm("Are you sure you want to completely wipe all saved settings? This cannot be undone.")) {
-				localStorage.removeItem('el_settings');
-				location.reload(); 
-			}
-		}
+        function renderSpotlight(query) {
+            spotlightResults.innerHTML = '';
+            let data = getSpotlightData();
+            let filtered = data.filter(item => item.title.toLowerCase().includes(query.toLowerCase()));
+            
+            if(query && (query.startsWith('http') || query.startsWith('./') || query.startsWith('/') || query.includes('.'))) {
+                filtered.unshift({ title: `Open: ${query}`, type: 'iframe', target: query, icon: 'fa-link', badge: 'Quick Link' });
+            }
 
-		// --- ABOUT:BLANK CLOAK ---
-		function openAboutBlank() {
-			const win = window.open('about:blank', '_blank');
-			if(!win) return alert("Popups Blocked! Allow popups to use this feature.");
-			
-			const iframe = win.document.createElement('iframe');
-			iframe.style.width = "100%"; iframe.style.height = "100%"; iframe.style.border = "none";
-			iframe.style.margin = "0"; iframe.style.padding = "0";
-			iframe.src = window.location.href;
-			
-			win.document.body.style.margin = "0";
-			win.document.body.appendChild(iframe);
-			
-			let cloakVal = userSettings.cloak;
-			if(!cloaks[cloakVal]) cloakVal = 'default';
-			win.document.title = cloaks[cloakVal].title; 
-			const link = win.document.createElement('link'); link.rel = "icon"; link.href = cloaks[cloakVal].icon;
-			win.document.head.appendChild(link);
-			
-			window.location.replace('https://classroom.google.com'); 
-		}
+            activeSpotlightItems = filtered; 
 
-		// Run on start
-		initSettings();
-	</script>
+            if(filtered.length === 0) {
+                spotlightResults.innerHTML = '<div style="padding: 16px; color: var(--text-muted); text-align: center; font-size: 14px;">No results found.</div>';
+                return;
+            }
+
+            if (currentSpotlightIndex >= filtered.length) currentSpotlightIndex = 0;
+            if (currentSpotlightIndex < 0) currentSpotlightIndex = filtered.length - 1;
+
+            filtered.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `spotlight-item ${index === currentSpotlightIndex ? 'active' : ''}`;
+                
+                let shortcut = index < 9 ? `<span class="spotlight-shortcut">[Y + ${index + 1}]</span>` : '';
+                
+                div.innerHTML = `<i class="fa-solid ${item.icon}"></i><span>${item.title}</span>${shortcut}<span class="spotlight-item-badge">${item.badge}</span>`;
+                div.onclick = () => executeSpotlightItem(item);
+                div.onmouseenter = () => {
+                    document.querySelectorAll('.spotlight-item').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active'); currentSpotlightIndex = index;
+                };
+                spotlightResults.appendChild(div);
+            });
+        }
+
+        spotlightInput.addEventListener('input', (e) => { currentSpotlightIndex = 0; renderSpotlight(e.target.value); });
+
+        spotlightInput.addEventListener('keydown', (e) => {
+            if (activeSpotlightItems.length === 0) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault(); currentSpotlightIndex++; renderSpotlight(spotlightInput.value);
+                const activeEl = spotlightResults.querySelector('.active'); if(activeEl) activeEl.scrollIntoView({ block: 'nearest' });
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault(); currentSpotlightIndex--; renderSpotlight(spotlightInput.value);
+                const activeEl = spotlightResults.querySelector('.active'); if(activeEl) activeEl.scrollIntoView({ block: 'nearest' });
+            } else if (e.key === 'Enter') {
+                e.preventDefault(); executeSpotlightItem(activeSpotlightItems[currentSpotlightIndex]);
+            }
+        });
+
+        // Global Shortcuts (Panic, Spotlight Trigger, Y+Number Quick Launch)
+        let yKeyHeld = false;
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'y') yKeyHeld = true;
+
+            // Global Y + [1-9] Quick Launch
+            if (yKeyHeld && e.key >= '1' && e.key <= '9') {
+                e.preventDefault();
+                let idx = parseInt(e.key) - 1;
+                
+                if (spotlightModal.classList.contains('active')) {
+                    if (activeSpotlightItems[idx]) executeSpotlightItem(activeSpotlightItems[idx]);
+                } else {
+                    let globalData = getSpotlightData();
+                    if (globalData[idx]) executeSpotlightItem(globalData[idx]);
+                }
+                return;
+            }
+
+            // Ctrl + Y Trigger
+            if (e.ctrlKey && e.key.toLowerCase() === 'y') {
+                e.preventDefault();
+                if(!spotlightModal.classList.contains('active')) openSpotlight();
+                else closeSpotlight();
+                return;
+            }
+
+            if (e.key === 'Escape' && spotlightModal.classList.contains('active')) { closeSpotlight(); return; }
+            if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; 
+            
+            const keys = (userSettings.panicKeys || 'Escape').split(',').map(k => k.trim().toLowerCase());
+            if(keys.includes(e.key.toLowerCase())) window.location.href = userSettings.panicUrl || './login.html';
+        });
+
+        document.addEventListener('keyup', (e) => { if (e.key.toLowerCase() === 'y') yKeyHeld = false; });
+
+
+        // --- 6. UI & CLOAKING LOGIC ---
+        function buttonFeedback(btn) {
+            if(!btn) return;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Saved!"; btn.style.borderColor = "#a7f3d0"; btn.style.color = "#064e3b";
+            if(btn.classList.contains('preset-btn') || btn.classList.contains('clean-btn')) btn.style.backgroundColor = "#a7f3d0";
+            setTimeout(() => { 
+                btn.innerHTML = originalText; btn.style.backgroundColor = ""; btn.style.borderColor = ""; btn.style.color = "";
+                if(btn.classList.contains('preset-btn') && btn.dataset.preset === userSettings.cloakValue) btn.classList.add('active');
+            }, 1000);
+        }
+
+        function switchCloakTab(tab, btn) {
+            document.querySelectorAll('.segmented-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            document.querySelectorAll('.cloak-view').forEach(v => v.classList.remove('active')); document.getElementById(`cloak-${tab}-view`).classList.add('active');
+        }
+
+        function updatePreview() {
+            let title = document.getElementById('custom-cloak-title').value || "Login";
+            let icon = document.getElementById('custom-cloak-icon').value || "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png";
+            document.getElementById('custom-preview-title').innerText = title; document.getElementById('custom-preview-icon').src = icon;
+            document.getElementById('custom-preview-icon').onerror = function() { this.src = "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png"; };
+        }
+
+        function updateActivePresetVisual(presetName) {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            let activeBtn = document.querySelector(`.preset-btn[data-preset="${presetName}"]`);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+
+        function applyCloakPreset(presetName, event) {
+            userSettings.cloakType = 'preset'; userSettings.cloakValue = presetName;
+            updateActivePresetVisual(presetName); executeCloakApply(); buttonFeedback(event.currentTarget);
+        }
+
+        function applyCustomCloak(event) {
+            userSettings.cloakType = 'custom';
+            userSettings.customTitle = document.getElementById('custom-cloak-title').value;
+            userSettings.customIcon = document.getElementById('custom-cloak-icon').value;
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            executeCloakApply(); buttonFeedback(event.target);
+        }
+
+        function executeCloakApply(initLoad = false) {
+            let title, icon;
+            if (userSettings.cloakType === 'custom') {
+                title = userSettings.customTitle || "Login"; icon = userSettings.customIcon || "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png";
+            } else {
+                let preset = cloaks[userSettings.cloakValue] || cloaks['default']; title = preset.title; icon = preset.icon;
+            }
+            document.title = title;
+            document.querySelectorAll("link[rel*='icon']").forEach(l => l.remove());
+            let newLink = document.createElement('link'); newLink.type = 'image/x-icon'; newLink.rel = 'icon'; newLink.href = icon;
+            document.getElementsByTagName('head')[0].appendChild(newLink);
+            if(!initLoad) saveState();
+        }
+
+        function savePanic(event) {
+            userSettings.panicKeys = document.getElementById('panic-key').value || 'Escape';
+            userSettings.panicUrl = document.getElementById('panic-url').value || './login.html';
+            saveState(); if(event && event.target) buttonFeedback(event.target);
+        }
+
+        function saveTheme(event) {
+            userSettings.theme = document.getElementById('theme-select').value;
+            saveState(); applyTheme(userSettings.theme);
+            if(event && event.target) buttonFeedback(event.target);
+        }
+
+        function previewTheme() { document.body.className = document.getElementById('theme-select').value === 'default' ? '' : `theme-${document.getElementById('theme-select').value}`; }
+        function applyTheme(t) { document.body.className = t === 'default' ? '' : `theme-${t}`; }
+
+        function getCloakDetailsForPopup() {
+            return userSettings.cloakType === 'custom' 
+                ? { title: userSettings.customTitle || "Login", icon: userSettings.customIcon || "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png" }
+                : (cloaks[userSettings.cloakValue] || cloaks['default']);
+        }
+
+        function openAboutBlank() {
+            const win = window.open('about:blank', '_blank');
+            if(!win) return alert("Popups Blocked! Allow popups to use this feature.");
+            const iframe = win.document.createElement('iframe'); iframe.style.width = "100%"; iframe.style.height = "100%"; iframe.style.border = "none"; iframe.style.margin = "0"; iframe.style.padding = "0"; iframe.src = window.location.href;
+            win.document.body.style.margin = "0"; win.document.body.appendChild(iframe);
+            let details = getCloakDetailsForPopup(); win.document.title = details.title; 
+            const link = win.document.createElement('link'); link.rel = "icon"; link.href = details.icon; win.document.head.appendChild(link);
+            window.location.replace(userSettings.panicUrl || './login.html'); 
+        }
+
+        function openBlob() {
+            let str = `<iframe src="${window.location.href}" style="position:fixed; top:0; left:0; width:100vw; height:100vh; border:none; margin:0; padding:0;"></iframe>`;
+            let win = window.open(URL.createObjectURL(new Blob([str], {type: 'text/html'})), '_blank');
+            if (win) {
+                let details = getCloakDetailsForPopup(); win.document.title = details.title; 
+                let link = win.document.createElement('link'); link.rel = "icon"; link.href = details.icon; win.document.head.appendChild(link);
+                window.location.replace(userSettings.panicUrl || './login.html');
+            } else alert("Popups Blocked! Allow popups to use this feature.");
+        }
+
+        // --- 7. CONSTELLATION CANVAS ---
+        const canvas = document.getElementById('constellation-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        
+        function resizeCanvas() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width; this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath(); ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(134, 239, 172, 0.5)'; ctx.fill();
+            }
+        }
+        for(let i=0; i<60; i++) particles.push(new Particle());
+
+        // Burst effect every 5 seconds
+        setInterval(() => {
+            if(!userSettings.particles) return;
+            particles.forEach(p => {
+                p.vx = (Math.random() - 0.5) * 3; p.vy = (Math.random() - 0.5) * 3;
+                setTimeout(() => { p.vx = (Math.random() - 0.5) * 0.5; p.vy = (Math.random() - 0.5) * 0.5; }, 800);
+            });
+        }, 5000);
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+            if(userSettings.particles) {
+                particles.forEach(p => { p.update(); p.draw(); });
+                for(let i=0; i<particles.length; i++) {
+                    for(let j=i+1; j<particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let dist = Math.sqrt(dx*dx + dy*dy);
+                        if(dist < 120) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(134, 239, 172, ${1 - dist/120})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+        function toggleParticles() {
+            userSettings.particles = document.getElementById('particle-toggle').checked;
+            saveState();
+        }
+
+        // --- 8. INITIALIZE & FOCUS ---
+        window.addEventListener('DOMContentLoaded', () => {
+            window.focus(); // Force browser focus so hotkeys work immediately
+            initSettings();
+            
+            // Check session prompt (Only shows if NOT previously dismissed)
+            if (window.self === window.top && !sessionStorage.getItem('classSessionPromptShown')) {
+                document.getElementById('session-prompt-modal').classList.add('active');
+            }
+        });
+        
+        window.onload = () => window.focus(); // Backup focus grab
+		</script>
 </body>
 
 </html>
