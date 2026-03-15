@@ -2,270 +2,302 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Stash</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            /* Clean Dark Theme */
-            --bg-color: #0f0f11;
-            --topbar-bg: #151518;
-            --text-main: #ffffff;
-            --text-muted: #a1a1aa;
-            --card-bg: #141417;
-            --card-hover: #1e1e24;
-            --border-color: #27272a;
-            --border-hover: #3f3f46;
-            --accent: #6366f1;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UGS + Extra games</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+		:root {
+			/* Edulearn Theme Colors */
+			--bg-color: #09090b;
+			--topbar-bg: rgba(9, 9, 11, 0.85);
+			--text-main: #ffffff;
+			--text-muted: #a1a1aa;
+			--card-bg: rgba(255, 255, 255, 0.02);
+			--card-hover: rgba(134, 239, 172, 0.05);
+			--border-color: #27272a;
+			--border-hover: #3f3f46;
+			--accent: #86efac;
+			--input-bg: #121214;
+		}
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
-        /* --- TOP BAR --- */
-        .topbar {
-            background-color: var(--topbar-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+		body {
+			font-family: 'Inter', system-ui, -apple-system, sans-serif;
+			background-color: var(--bg-color);
+			background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+				linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+			background-size: 40px 40px;
+			background-attachment: fixed;
+			color: var(--text-main);
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			overflow-x: hidden;
+		}
 
-        .topbar-brand {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+		/* --- TOP BAR --- */
+		.topbar {
+			background-color: var(--topbar-bg);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-bottom: 1px solid var(--border-color);
+			padding: 0 40px;
+			height: 80px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
 
-        .search-container {
-            position: relative;
-        }
+		.topbar-brand {
+			font-family: 'Dancing Script', cursive;
+			font-size: 32px;
+			font-weight: 700;
+			color: var(--text-main);
+			letter-spacing: 1px;
+			text-transform: lowercase;
+			cursor: default;
+			transition: 0.2s ease;
+		}
 
-        .search-input {
-            background: #1a1a1f;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 8px 15px 8px 35px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            width: 250px;
-            transition: border-color 0.2s;
-            font-family: inherit;
-        }
+		.topbar-brand:hover {
+			transform: scale(1.05);
+			text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+		}
 
-        .search-input:focus {
-            outline: none;
-            border-color: var(--border-hover);
-        }
+		.search-container {
+			position: relative;
+		}
 
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
+		.search-input {
+			background: var(--input-bg);
+			border: 1px solid var(--border-color);
+			color: var(--text-main);
+			padding: 10px 16px 10px 38px;
+			border-radius: 8px;
+			font-size: 14px;
+			width: 280px;
+			transition: 0.2s;
+			font-family: inherit;
+			outline: none;
+		}
 
-        /* --- MAIN CONTENT --- */
-        .main-container {
-            padding: 30px;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-            flex: 1;
-        }
+		.search-input:focus {
+			border-color: var(--text-main);
+		}
 
-        .category-header {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            user-select: none;
-        }
+		.search-icon {
+			position: absolute;
+			left: 14px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: var(--text-muted);
+			font-size: 14px;
+		}
 
-        .category-header span {
-            color: var(--text-muted);
-            font-weight: normal;
-        }
+		/* --- MAIN CONTENT --- */
+		.main-container {
+			padding: 40px;
+			max-width: 1600px;
+			margin: 0 auto;
+			width: 100%;
+			flex: 1;
+		}
 
-        /* --- GRID --- */
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-            margin-bottom: 40px;
-        }
+		.category-header {
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: var(--text-muted);
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			user-select: none;
+		}
 
-        .game-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-            min-height: 55px;
-        }
+		.category-header span {
+			color: var(--accent);
+			font-weight: 700;
+		}
 
-        .game-card:hover {
-            background: var(--card-hover);
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
+		/* --- GRID --- */
+		.game-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			gap: 16px;
+			margin-bottom: 40px;
+		}
 
-        .game-card:active {
-            transform: scale(0.98);
-        }
+		.game-card {
+			background: var(--card-bg);
+			border: 1px solid var(--border-color);
+			border-radius: 12px;
+			padding: 18px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			text-align: center;
+			min-height: 60px;
+		}
 
-        .game-name {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+		.game-card:hover {
+			background: var(--card-hover);
+			border-color: var(--accent);
+			transform: translateY(-4px);
+		}
 
-        /* --- GAMEPLAY OVERLAY (IFRAME VIEW) --- */
-        .game-view-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-color);
-            z-index: 2000;
-            display: none;
-            flex-direction: column;
-        }
+		.game-card:active {
+			transform: scale(0.98);
+		}
 
-        .game-view-overlay.active {
-            display: flex;
-        }
+		.game-name {
+			font-weight: 500;
+			font-size: 14px;
+			color: var(--text-main);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			transition: color 0.2s;
+		}
 
-        .game-header-bar {
-            height: 50px;
-            background: var(--topbar-bg);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
+		.game-card:hover .game-name {
+			color: var(--accent);
+		}
 
-        .toolbar-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+		/* --- GAMEPLAY OVERLAY (IFRAME VIEW) --- */
+		.game-view-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--bg-color);
+			z-index: 2000;
+			display: none;
+			flex-direction: column;
+		}
 
-        .btn-back {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 6px 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
+		.game-view-overlay.active {
+			display: flex;
+		}
 
-        .btn-back:hover {
-            background: var(--card-hover);
-        }
+		.game-header-bar {
+			height: 60px;
+			background: var(--topbar-bg);
+			border-bottom: 1px solid var(--border-color);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 30px;
+		}
 
-        .game-title {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
+		.toolbar-left {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+		}
 
-        .controls-hint {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+		.btn-back {
+			background: transparent;
+			border: 1px solid var(--border-hover);
+			color: var(--text-main);
+			padding: 8px 18px;
+			border-radius: 9999px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 13px;
+			font-weight: 500;
+			transition: background 0.2s;
+			font-family: inherit;
+		}
 
-        .key-badge {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: var(--text-muted);
-        }
+		.btn-back:hover {
+			background: rgba(255, 255, 255, 0.05);
+		}
 
-        .game-frame {
-            flex: 1;
-            width: 100%;
-            border: none;
-            background: #000;
-        }
-    </style>
+		.game-title {
+			color: var(--text-main);
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		.controls-hint {
+			font-size: 13px;
+			color: var(--text-muted);
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.key-badge {
+			background: var(--card-bg);
+			border: 1px solid var(--border-color);
+			padding: 3px 8px;
+			border-radius: 4px;
+			font-family: monospace;
+			color: var(--accent);
+			font-size: 11px;
+			background: rgba(134, 239, 172, 0.05);
+		}
+
+		.game-frame {
+			flex: 1;
+			width: 100%;
+			border: none;
+			background: #000;
+		}
+	</style>
 </head>
 
 <body>
 
-    <div class="topbar">
-        <div class="topbar-brand">Ultimate Stash</div>
-        <div class="search-container">
-            <i class="fa-solid fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+	<div class="topbar">
+		<div class="topbar-brand">UGS + extra games</div>
+		<div class="search-container">
+			<i class="fa-solid fa-search search-icon"></i>
+			<input type="text" id="searchInput" class="search-input" placeholder="Search games...">
         </div>
-    </div>
+		</div>
 
-    <div class="main-container" id="libraryView">
-        <div class="category-header">
-            ▼ All Games <span id="gameCount">(0)</span>
-        </div>
-        
-        <div class="game-grid" id="gameGrid"></div>
-    </div>
+		<div class="main-container" id="libraryView">
+			<div class="category-header">
+				<i class="fa-solid fa-gamepad" style="margin-right: 4px;"></i> All Games <span id="gameCount">(0)</span>
+			</div>
 
-    <div id="gameOverlay" class="game-view-overlay">
-        <div class="game-header-bar">
-            <div class="toolbar-left">
-                <button class="btn-back" onclick="closeGame()">
+			<div class="game-grid" id="gameGrid"></div>
+		</div>
+
+		<div id="gameOverlay" class="game-view-overlay">
+			<div class="game-header-bar">
+				<div class="toolbar-left">
+					<button class="btn-back" onclick="closeGame()">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </button>
-                <div class="game-title" id="activeTitle">Game Title</div>
-            </div>
-            <div class="controls-hint" id="activeControls"></div>
-        </div>
-        <iframe id="gameFrame" class="game-frame" src="about:blank"></iframe>
-    </div>
+					<div class="game-title" id="activeTitle">Game Title</div>
+				</div>
+				<div class="controls-hint" id="activeControls"></div>
+			</div>
+			<iframe id="gameFrame" class="game-frame" src="about:blank"></iframe>
+		</div>
 
-    <script>
-        // Data Configuration
+		<script>
+			// Data Configuration
         const gamesList = [
             {
                 title: "Hover Drive",
@@ -303,7 +335,7 @@
             countLabel.innerText = `(${filtered.length})`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px 0;">No games found.</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); font-size: 14px; text-align: center; padding: 40px 0;">No games found.</div>`;
                 return;
             }
 
@@ -353,6 +385,7 @@
 
         // Initial Load
         renderGames();
-    </script>
+		</script>
 </body>
+
 </html>

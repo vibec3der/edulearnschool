@@ -820,8 +820,10 @@
 		<div class="nav-links">
 			<a class="nav-link active" onclick="switchPage('home', this)"><i class="fa-solid fa-house"></i> Home</a>
 			<a class="nav-link" onclick="switchPage('games-page', this)"><i class="fa-solid fa-gamepad"></i> Games</a>
+			<a class="nav-link" onclick="switchPage('g2-page', this)"><i class="fa-solid fa-gamepad"></i> G2</a>
 			<a class="nav-link" onclick="switchPage('search-page', this)"><i class="fa-solid fa-globe"></i> Browser</a>
 			<a class="nav-link" onclick="switchPage('tools-page', this)"><i class="fa-solid fa-wrench"></i> Tools</a>
+			<a class="nav-link" onclick="switchPage('extras-page', this)"><i class="fa-solid fa-shapes"></i> Extras</a>
 			<a class="nav-link" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
 		</div>
 
@@ -851,11 +853,17 @@
 		<section id="games-page" class="page">
 			<div class="iframe-wrapper"><iframe data-src="./math/gn-math.html"></iframe></div>
 		</section>
+		<section id="g2-page" class="page">
+			<div class="iframe-wrapper"><iframe data-src="./g2.html"></iframe></div>
+		</section>
 		<section id="search-page" class="page">
 			<div class="iframe-wrapper"><iframe data-src="./active/index.html"></iframe></div>
 		</section>
 		<section id="tools-page" class="page">
 			<div class="iframe-wrapper"><iframe data-src="./tools.html"></iframe></div>
+		</section>
+		<section id="extras-page" class="page">
+			<div class="iframe-wrapper"><iframe data-src="./extras.html"></iframe></div>
 		</section>
 
 		<section id="dynamic-iframe-page" class="page">
@@ -1550,8 +1558,10 @@
         const baseSpotlightData = [
             { title: 'Home', type: 'page', target: 'home', icon: 'fa-house', badge: 'Menu' },
             { title: 'Games', type: 'page', target: 'games-page', icon: 'fa-gamepad', badge: 'Menu' },
+			{ title: 'G2', type: 'page', target: 'g2-page', icon: 'fa-gamepad', badge: 'Menu' },
             { title: 'Browser', type: 'page', target: 'search-page', icon: 'fa-globe', badge: 'Menu' },
             { title: 'Tools', type: 'page', target: 'tools-page', icon: 'fa-wrench', badge: 'Menu' },
+			{ title: 'Extras', type: 'page', target: 'extras-page', icon: 'fa-solid fa-shapes', badge: 'Menu' },
             { title: 'Settings', type: 'action', target: 'settings', icon: 'fa-gear', badge: 'Action' },
             { title: 'Add Custom Directory Preset', type: 'action', target: 'add-dir', icon: 'fa-plus', badge: 'Manager' },
             { title: 'OS System', type: 'iframe', target: 'x4konkor3.html', icon: 'fa-desktop', badge: 'Local HTML' },
@@ -1653,7 +1663,7 @@
             if (e.key.toLowerCase() === 'y') yKeyHeld = true;
 
             // Global Y + [1-9] Quick Launch
-            if (yKeyHeld && e.key >= '1' && e.key <= '9') {
+            if (yKeyHeld && e.key >= '0' && e.key <= '9') {
                 e.preventDefault();
                 let idx = parseInt(e.key) - 1;
                 
