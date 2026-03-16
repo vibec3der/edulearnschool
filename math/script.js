@@ -6,10 +6,8 @@ const sortOptions = document.getElementById('sortOptions');
 const filterOptions = document.getElementById('filterOptions');
 
 // --- SETTINGS STATE: Default OFF (False) for performance ---
-// Only becomes true if user specifically set it to 'true' in localStorage
 let showImages = localStorage.getItem('edulearn_images') === 'true';
 
-// https://www.jsdelivr.com/tools/purge
 const zonesurls = [
     "https://cdn.jsdelivr.net/%67%68/%67%6e%2d%6d%61%74%68/%61%73%73%65%74%73@%6d%61%69%6e/%7a%6f%6e%65%73%2e%6a%73%6f%6e",
     "https://cdn.jsdelivr.net/gh/gn-math/assets@latest/zones.json",
@@ -41,6 +39,15 @@ function toggleImages() {
     
     // Re-trigger settings click to update the button text
     document.getElementById('settings').click();
+}
+
+// --- AD SCRUBBER HELPER FUNCTION ---
+function cleanHtmlAds(htmlContent) {
+    // Removes AdSense scripts and ad insertion tags
+    let cleaned = htmlContent.replace(/<script[^>]*pagead2\.googlesyndication\.com[^>]*><\/script>/gi, '');
+    cleaned = cleaned.replace(/<ins[^>]*class=["']adsbygoogle["'][^>]*>.*?<\/ins>/gi, '');
+    cleaned = cleaned.replace(/\(adsbygoogle\s*=\s*window\.adsbygoogle\s*\|\|\s*\[\]\)\.push\({}\);/gi, '');
+    return cleaned;
 }
 
 async function listZones() {
@@ -88,33 +95,20 @@ async function listZones() {
                     } else {
                         const url = zone.url.replace("{COVER_URL}", coverURL).replace("{HTML_URL}", htmlURL);
                         fetch(url+"?t="+Date.now()).then(response => response.text()).then(html => {
-                            document.documentElement.innerHTML = html;
+                            
+                            // Scrub ads out of embedded content
+                            const cleanHtml = cleanHtmlAds(html);
+                            document.documentElement.innerHTML = cleanHtml;
+                            
+                            /* --- Commented out the gn-math popup to keep things clean ---
                             const popup = document.createElement("div");
                             popup.style.position = "fixed";
                             popup.style.bottom = "20px";
-                            popup.style.right = "20px";
-                            popup.style.backgroundColor = "#cce5ff";
-                            popup.style.color = "#004085";
-                            popup.style.padding = "10px";
-                            popup.style.border = "1px solid #b8daff";
-                            popup.style.borderRadius = "5px";
-                            popup.style.boxShadow = "0px 0px 10px rgba(0,0,0,0.1)";
-                            popup.style.fontFamily = "Arial, sans-serif";
-                            
-                            popup.innerHTML = `Play more games at <a href="https://edulearnschool.vercel.app" target="_blank" style="color:#004085; font-weight:bold;">https://gn-math.github.io</a>!`;
-                            
-                            const closeBtn = document.createElement("button");
-                            closeBtn.innerText = "?";
-                            closeBtn.style.marginLeft = "10px";
-                            closeBtn.style.background = "none";
-                            closeBtn.style.border = "none";
-                            closeBtn.style.cursor = "pointer";
-                            closeBtn.style.color = "#004085";
-                            closeBtn.style.fontWeight = "bold";
-                            
-                            closeBtn.onclick = () => popup.remove();
-                            popup.appendChild(closeBtn);
+                            // ... styles ...
+                            popup.innerHTML = `Play more games at <a href="https://edulearnschool.vercel.app" target="_blank">https://gn-math.github.io</a>!`;
                             document.body.appendChild(popup);
+                            */
+                            
                             document.documentElement.querySelectorAll('script').forEach(oldScript => {
                                 const newScript = document.createElement('script');
                                 if (oldScript.src) {
@@ -337,14 +331,19 @@ function openZone(file) {
     } else {
         const url = file.url.replace("{COVER_URL}", coverURL).replace("{HTML_URL}", htmlURL);
         fetch(url+"?t="+Date.now()).then(response => response.text()).then(html => {
+            
+            // --- AD SCRUBBER APPLIED HERE ---
+            const cleanHtml = cleanHtmlAds(html);
+
             if (zoneFrame.contentDocument === null) {
                 zoneFrame = document.createElement("iframe");
                 zoneFrame.id = "zoneFrame";
                 zoneViewer.appendChild(zoneFrame);
             }
             zoneFrame.contentDocument.open();
-            zoneFrame.contentDocument.write(html);
+            zoneFrame.contentDocument.write(cleanHtml); // Inject cleaned HTML
             zoneFrame.contentDocument.close();
+            
             document.getElementById('zoneName').textContent = file.name;
             document.getElementById('zoneId').textContent = file.id;
             document.getElementById('zoneAuthor').textContent = "by " + file.author;
@@ -352,9 +351,9 @@ function openZone(file) {
                 document.getElementById('zoneAuthor').href = file.authorLink;
             }
             zoneViewer.style.display = "block";
-            const url = new URL(window.location);
-            url.searchParams.set('id', file.id);
-            history.pushState(null, '', url.toString());
+            const currentUrl = new URL(window.location);
+            currentUrl.searchParams.set('id', file.id);
+            history.pushState(null, '', currentUrl.toString());
             zoneViewer.hidden = true;
         }).catch(error => alert("Failed to load zone: " + error));
     }
@@ -364,9 +363,12 @@ function aboutBlank() {
     const newWindow = window.open("about:blank", "_blank");
     let zone = zones.find(zone => zone.id + '' === document.getElementById('zoneId').textContent).url.replace("{COVER_URL}", coverURL).replace("{HTML_URL}", htmlURL);
     fetch(zone+"?t="+Date.now()).then(response => response.text()).then(html => {
+        // Scrub ads for about:blank instances too
+        const cleanHtml = cleanHtmlAds(html);
+        
         if (newWindow) {
             newWindow.document.open();
-            newWindow.document.write(html);
+            newWindow.document.write(cleanHtml);
             newWindow.document.close();
         }
     })
@@ -384,7 +386,11 @@ function closeZone() {
 function downloadZone() {
     let zone = zones.find(zone => zone.id + '' === document.getElementById('zoneId').textContent);
     fetch(zone.url.replace("{HTML_URL}", htmlURL)+"?t="+Date.now()).then(res => res.text()).then(text => {
-        const blob = new Blob([text], {
+        
+        // Clean ads out of the file before they download it
+        const cleanHtml = cleanHtmlAds(text);
+
+        const blob = new Blob([cleanHtml], {
             type: "text/plain;charset=utf-8"
         });
         const url = URL.createObjectURL(blob);
