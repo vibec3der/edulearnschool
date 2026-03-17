@@ -30,14 +30,18 @@ export default async function handler(req, res) {
 
       const data = await hb.json();
 
-      if (!data || !data.id || !data.embed_url) {
+      // Hyperbeam may return session_id or id depending on API version.
+      const sessionId = data.session_id || data.id;
+      const embedUrl = data.embed_url || data.embedUrl;
+
+      if (!sessionId || !embedUrl) {
         console.error('Hyperbeam create returned bad payload', data);
-        return res.status(502).json({ error: 'Hyperbeam create response missing id/embed_url', details: data });
+        return res.status(502).json({ error: 'Hyperbeam create response missing session_id/embed_url', details: data });
       }
 
       return res.json({
-        session_id: data.id,
-        embed_url: data.embed_url
+        session_id: sessionId,
+        embed_url: embedUrl
       });
     }
 
