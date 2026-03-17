@@ -1,93 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>VM Test</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #111;
-      color: white;
-      text-align: center;
-    }
-    #container {
-      width: 100%;
-      height: 600px;
-      margin-top: 20px;
-      background: #000;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title id="page-title">edulearn vms</title>
+	<link id="dynamic-favicon" rel="icon" href="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+		/* --- EDULEARN THEME SYSTEM --- */
+		:root {
+			--bg-color: #09090b;
+			--grid-color: rgba(255, 255, 255, 0.02);
+			--nav-bg: transparent;
+			--nav-border: transparent;
+			--pill-hover: rgba(255, 255, 255, 0.05);
+			--pill-active: #27272a;
+			--text-main: #ffffff;
+			--text-muted: #a1a1aa;
+			--input-bg: #09090b;
+			--input-border: #3f3f46;
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: 'Inter', system-ui, sans-serif;
+			background-color: var(--bg-color);
+			color: var(--text-main);
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+		}
+
+		.grid-bg {
+			position: absolute;
+			inset: 0;
+			z-index: -2;
+			background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+				linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+			background-size: 40px 40px;
+		}
+
+		.topbar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 80px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 40px;
+			z-index: 100;
+		}
+
+		.brand {
+			font-family: 'Dancing Script', cursive;
+			font-size: 32px;
+			color: var(--text-main);
+			text-decoration: none;
+			cursor: default;
+			transition: 0.2s ease;
+			display: flex;
+			align-items: center;
+			letter-spacing: 1px;
+			text-transform: lowercase;
+		}
+
+		.brand:hover {
+			transform: scale(1.05);
+			text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+		}
+
+		.controls {
+			display: flex;
+			gap: 12px;
+		}
+
+		.clean-btn {
+			background: transparent;
+			color: var(--text-main);
+			border: 1px solid var(--input-border);
+			padding: 8px 18px;
+			border-radius: 9999px;
+			font-size: 13px;
+			font-weight: 500;
+			cursor: pointer;
+			transition: 0.2s;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			height: 38px;
+			white-space: nowrap;
+		}
+
+		.clean-btn:hover {
+			background: var(--pill-hover);
+		}
+
+		.btn-primary {
+			background: var(--text-main);
+			color: var(--bg-color);
+			border: none;
+			font-weight: 600;
+		}
+
+		.btn-primary:hover {
+			background: var(--text-muted);
+		}
+
+		.main-content {
+			flex: 1;
+			margin-top: 80px;
+			position: relative;
+			z-index: 10;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: calc(100vh - 80px);
+			padding: 20px 40px 40px 40px;
+			align-items: center;
+		}
+
+		.header-section {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 20px;
+		}
+		
+		.hero-title {
+			font-family: 'Dancing Script', cursive;
+			font-size: 56px;
+			font-weight: 700;
+			margin: 0;
+			color: var(--text-main);
+			letter-spacing: 2px;
+			text-transform: lowercase;
+			text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+			line-height: 1;
+		}
+
+		#container {
+			width: 100%;
+			max-width: 1400px;
+			height: 100%;
+			background: #000;
+			border-radius: 16px;
+			border: 1px solid var(--input-border);
+			overflow: hidden;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+		}
+	</style>
 </head>
 <body>
+	<div class="grid-bg"></div>
+	
+	<nav class="topbar">
+		<div class="brand">edulearn vms</div>
+		<div class="controls">
+			<button class="clean-btn btn-primary" onclick="start()">
+				<i class="fa-solid fa-play" style="margin-right: 8px;"></i> Start Session
+			</button>
+			<button class="clean-btn" onclick="stop()">
+				<i class="fa-solid fa-stop" style="margin-right: 8px;"></i> Stop Session
+			</button>
+		</div>
+	</nav>
 
-<h1>Hyperbeam VM</h1>
+	<main class="main-content">
+		<div class="header-section">
+			<h1 class="hero-title">edulearn vms</h1>
+			<p style="color: var(--text-muted); font-size: 14px; letter-spacing: 0.5px;">Powered by Hyperbeam</p>
+		</div>
+		<div id="container"></div>
+	</main>
 
-<button onclick="start()">Start</button>
-<button onclick="stop()">Stop</button>
+	<script type="module">
+		import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
+		
+		let hb = null;
+		let sessionId = null;
+		
+		async function start() {
+			// Clear any existing session before starting a new one
+			if (sessionId) await stop();
 
-<div id="container"></div>
-
-<script type="module">
-import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
-
-let hb = null;
-let sessionId = null;
-
-async function start() {
-  const res = await fetch('/api/vmkey', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'create' })
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    alert('Failed to create VM session: ' + err);
-    return;
-  }
-
-  const data = await res.json();
-  console.log('vmkey create response', data);
-
-  if (!data || !data.session_id || !data.embed_url) {
-    alert('Invalid VM session response: ' + JSON.stringify(data));
-    console.error('Invalid VM session response', data);
-    return;
-  }
-
-  sessionId = data.session_id;
-
-  hb = await Hyperbeam(document.getElementById('container'), data.embed_url);
-}
-
-async function stop() {
-  if (!sessionId) return;
-
-  await fetch('/api/vmkey', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      action: 'delete',
-      sessionId
-    })
-  });
-
-  if (hb) {
-    hb.destroy();
-    hb = null;
-  }
-  sessionId = null;
-}
-
-// expose methods for inline onclick handlers
-window.start = start;
-window.stop = stop;
-</script>
-
+			const res = await fetch('/api/vmkey', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ action: 'create' })
+			});
+			
+			if (!res.ok) {
+				const err = await res.text();
+				alert('Failed to create VM session: ' + err);
+				return;
+			}
+			
+			const data = await res.json();
+			console.log('vmkey create response', data);
+			
+			if (!data || !data.session_id || !data.embed_url) {
+				alert('Invalid VM session response: ' + JSON.stringify(data));
+				console.error('Invalid VM session response', data);
+				return;
+			}
+			
+			sessionId = data.session_id;
+			hb = await Hyperbeam(document.getElementById('container'), data.embed_url);
+		}
+		
+		async function stop() {
+			if (!sessionId) return;
+			
+			await fetch('/api/vmkey', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					action: 'delete',
+					sessionId
+				})
+			});
+			
+			if (hb) {
+				hb.destroy();
+				hb = null;
+			}
+			
+			sessionId = null;
+			document.getElementById('container').innerHTML = '';
+		}
+		
+		// Expose methods to the global window object for inline onclick handlers
+		window.start = start;
+		window.stop = stop;
+	</script>
 </body>
 </html>
