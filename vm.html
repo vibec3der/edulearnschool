@@ -181,11 +181,12 @@ body {
   letter-spacing:0.5px; 
   text-align:center;
   flex-shrink: 0;
+  font-weight: 500;
 }
 
 #container { 
   width: 100%;
-  height: 400px;  /* Default height */
+  height: 400px;
   background: #000; 
   border-radius: 12px; 
   overflow: hidden; 
@@ -199,6 +200,16 @@ body {
   height: 100% !important; 
   border: none; 
   display: block; 
+}
+
+.session-expired {
+  color: #ff4444 !important;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 @media (max-width: 768px) {
@@ -258,7 +269,7 @@ import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
 
 let hb = null, sessionId = null, selectedKey = null, countdownInterval = null;
 let resizeObserver = null;
-const SESSION_DURATION = 900; // 15 min
+const SESSION_DURATION = 900; // 15 min in seconds
 
 const keys = [
   {number:"1", label:"Key 1"},
@@ -270,6 +281,7 @@ const keys = [
 
 const searchInput = document.getElementById('key-search');
 const optionsContainer = document.getElementById('key-options');
+const timerElement = document.getElementById('timer');
 let highlightedIndex = -1;
 
 function renderOptions(filteredKeys) {
@@ -327,23 +339,35 @@ function updateHighlight(options) {
 }
 
 function startCountdown() {
-  clearInterval(countdownInterval);
+  // Clear any existing timer
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+  }
+  
   let remaining = SESSION_DURATION;
-  function updateTimer() {
-    const m = Math.floor(remaining / 60).toString().padStart(2, '0');
-    const s = (remaining % 60).toString().padStart(2, '0');
-    document.getElementById('timer').innerText = `Session time: ${m}:${s}`;
-    if (remaining <= 0) { 
-      stop(); 
+  
+  const updateTimer = () => {
+    const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
+    const seconds = (remaining % 60).toString().padStart(2, '0');
+    timerElement.textContent = `Session time: ${minutes}:${seconds}`;
+    
+    if (remaining <= 0) {
+      // Timer expired - auto stop session
       clearInterval(countdownInterval);
+      timerElement.textContent = 'Session expired!';
+      timerElement.classList.add('session-expired');
+      stop(); // This will shut down the session
+      return;
     }
     remaining--;
-  }
+  };
+  
+  // Start immediately
   updateTimer();
+  // Then every second
   countdownInterval = setInterval(updateTimer, 1000);
 }
 
-// FIXED: Use explicit heights that work
 const sizePresets = {
   small: { height: '250px' },
   medium: { height: '450px' },
@@ -364,7 +388,6 @@ window.setContainerSize = function(size) {
   // Resize Hyperbeam after layout settles
   setTimeout(() => {
     resizeHyperbeam();
-    console.log('Set container height to:', preset.height, 'for size:', size);
   }, 100);
 };
 
@@ -374,8 +397,6 @@ function resizeHyperbeam() {
   const rect = container.getBoundingClientRect();
   let width = Math.floor(rect.width);
   let height = Math.floor(rect.height);
-  
-  console.log('Hyperbeam resize to:', width + 'x' + height);
   
   if (hb.maxArea && width * height > hb.maxArea) {
     const scale = Math.sqrt(hb.maxArea / (width * height));
@@ -393,53 +414,73 @@ async function start() {
   }
   if (sessionId) await stop();
 
-  const res = await fetch('/api/vmkey', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({action: 'create', keyNumber: selectedKey})
-  });
-  if (!res.ok) { 
-    alert('Failed to create VM session'); 
-    return;
+  try {
+    const res = await fetch('/api/vmkey', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'create', keyNumber: selectedKey})
+    });
+    if (!res.ok) { 
+      alert('Failed to create VM session'); 
+      return;
+    }
+    const data = await res.json();
+    if (!data.session_id || !data.embed_url) { 
+      alert('Invalid response'); 
+      return;
+    }
+
+    sessionId = data.session_id;
+    const container = document.getElementById('container');
+    hb = await Hyperbeam(container, data.embed_url);
+
+    // Setup resize observer
+    if (resizeObserver) resizeObserver.disconnect();
+    resizeObserver = new ResizeObserver(resizeHyperbeam);
+    resizeObserver.observe(container);
+    
+    // Reset timer display and start countdown
+    timerElement.classList.remove('session-expired');
+    timerElement.textContent = 'Session time: 15:00';
+    
+    // Set to large by default
+    setContainerSize('large');
+    
+    // Start the timer (this will auto-stop when it hits 0)
+    startCountdown();
+
+    // iframe permissions
+    const iframe = container.querySelector('iframe');
+    if (iframe) {
+      iframe.setAttribute('allow', 'fullscreen; clipboard-read; clipboard-write');
+      iframe.setAttribute('allowfullscreen', 'true');
+    }
+  } catch (error) {
+    alert('Error starting session: ' + error.message);
   }
-  const data = await res.json();
-  if (!data.session_id || !data.embed_url) { 
-    alert('Invalid response'); 
-    return;
-  }
-
-  sessionId = data.session_id;
-  const container = document.getElementById('container');
-  hb = await Hyperbeam(container, data.embed_url);
-
-  // Setup resize observer
-  if (resizeObserver) resizeObserver.disconnect();
-  resizeObserver = new ResizeObserver(resizeHyperbeam);
-  resizeObserver.observe(container);
-  
-  // Start with large size
-  setContainerSize('large');
-
-  // iframe permissions
-  const iframe = container.querySelector('iframe');
-  if (iframe) {
-    iframe.setAttribute('allow', 'fullscreen; clipboard-read; clipboard-write');
-    iframe.setAttribute('allowfullscreen', 'true');
-  }
-
-  startCountdown();
 }
 
 async function stop() {
   if (!sessionId) return;
-  clearInterval(countdownInterval);
-  document.getElementById('timer').innerText = 'Session time: 15:00';
+  
+  // Clear timer
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  
+  timerElement.classList.remove('session-expired');
+  timerElement.textContent = 'Session time: 15:00';
 
-  await fetch('/api/vmkey', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({action: 'delete', sessionId, keyNumber: selectedKey})
-  });
+  try {
+    await fetch('/api/vmkey', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'delete', sessionId, keyNumber: selectedKey})
+    });
+  } catch (error) {
+    console.error('Error stopping session:', error);
+  }
 
   if (hb) { 
     hb.destroy(); 
@@ -450,8 +491,10 @@ async function stop() {
     resizeObserver = null;
   }
   sessionId = null;
-  document.getElementById('container').innerHTML = '';
-  document.getElementById('container').style.height = '400px'; // Reset height
+  selectedKey = null;
+  searchInput.value = '';
+  document.getElementById('container').style.height = '400px';
+  filterKeys();
 }
 
 // Initialize
