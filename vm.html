@@ -128,13 +128,17 @@ body {
   background: rgba(255,255,255,0.1);
   border: 1px solid var(--input-border);
   color: var(--text-main);
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: 6px;
   font-size: 12px;
   cursor: pointer;
   transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 .resize-btn:hover { background: var(--pill-hover); }
+.resize-btn.active { background: var(--text-main); color: var(--bg-color); }
 
 .key-selector-container { 
   display:flex; 
@@ -181,7 +185,7 @@ body {
 
 #container { 
   flex: 1; 
-  min-height: 200px;
+  min-height: 300px;
   background: #000; 
   border-radius: 12px; 
   overflow: hidden; 
@@ -228,13 +232,13 @@ body {
   </div>
 
   <div class="resize-controls">
-    <button class="resize-btn" onclick="setContainerSize('small')">
-      <i class="fa-solid fa-compress-arrows-alt"></i> Small
+    <button class="resize-btn active" onclick="setContainerSize('small')" title="Small view">
+      <i class="fa-solid fa-window-minimize"></i> Small
     </button>
-    <button class="resize-btn" onclick="setContainerSize('medium')">
-      <i class="fa-solid fa-expand-arrows-alt"></i> Medium
+    <button class="resize-btn" onclick="setContainerSize('medium')" title="Medium view">
+      <i class="fa-solid fa-window-maximize"></i> Medium
     </button>
-    <button class="resize-btn" onclick="setContainerSize('large')">
+    <button class="resize-btn" onclick="setContainerSize('large')" title="Full size">
       <i class="fa-solid fa-expand"></i> Max
     </button>
   </div>
@@ -253,7 +257,7 @@ body {
 import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
 
 let hb = null, sessionId = null, selectedKey = null, countdownInterval = null;
-let resizeListener = null;
+let resizeObserver = null;
 const SESSION_DURATION = 900; // 15 min
 
 const keys = [
@@ -339,21 +343,29 @@ function startCountdown() {
   countdownInterval = setInterval(updateTimer, 1000);
 }
 
-// Resize presets
+// Resize presets - FIXED
 const sizePresets = {
-  small: { flexBasis: '40%', maxHeight: '400px' },
-  medium: { flexBasis: '70%', maxHeight: '600px' },
-  large: { flexBasis: '100%', maxHeight: 'none' }
+  small: { height: '350px', flex: '0 0 350px' },
+  medium: { height: '500px', flex: '0 0 500px' },
+  large: { height: 'auto', flex: '1' }
 };
 
 window.setContainerSize = function(size) {
   const container = document.getElementById('container');
   const preset = sizePresets[size];
-  if (preset) {
-    container.style.flexBasis = preset.flexBasis;
-    container.style.maxHeight = preset.maxHeight;
-    if (hb) resizeHyperbeam();
-  }
+  
+  // Update all buttons
+  document.querySelectorAll('.resize-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  // Apply size
+  container.style.height = preset.height;
+  container.style.flex = preset.flex;
+  
+  // Resize Hyperbeam if running
+  setTimeout(resizeHyperbeam, 50);
+  
+  console.log('Set size:', size); // Debug
 };
 
 function resizeHyperbeam() {
@@ -363,7 +375,8 @@ function resizeHyperbeam() {
   let width = Math.floor(rect.width);
   let height = Math.floor(rect.height);
   
-  // Respect Hyperbeam maxArea
+  console.log('Resizing to:', width, 'x', height); // Debug
+  
   if (width * height > hb.maxArea) {
     const scale = Math.sqrt(hb.maxArea / (width * height));
     width = Math.floor(width * scale);
@@ -399,12 +412,13 @@ async function start() {
   const container = document.getElementById('container');
   hb = await Hyperbeam(container, data.embed_url);
 
-  // Setup resize handling
-  const resizeObserver = new ResizeObserver(resizeHyperbeam);
+  // Setup resize observer
+  if (resizeObserver) resizeObserver.disconnect();
+  resizeObserver = new ResizeObserver(resizeHyperbeam);
   resizeObserver.observe(container);
   
-  // Initial resize
-  resizeHyperbeam();
+  // Set to large by default and initial resize
+  setContainerSize('large');
 
   // iframe permissions
   const iframe = container.querySelector('iframe');
@@ -414,7 +428,6 @@ async function start() {
   }
 
   startCountdown();
-  setContainerSize('large'); // Default to max size
 }
 
 async function stop() {
@@ -431,6 +444,10 @@ async function stop() {
   if (hb) { 
     hb.destroy(); 
     hb = null;
+  }
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
   }
   sessionId = null;
   document.getElementById('container').innerHTML = '';
