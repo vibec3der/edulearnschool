@@ -43,25 +43,13 @@ body { font-family:'Inter', system-ui, sans-serif; background-color: var(--bg-co
 .header-section { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px; }
 .hero-title { font-family:'Dancing Script', cursive; font-size:56px; font-weight:700; margin:0; color:var(--text-main); letter-spacing:2px; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,0.5); line-height:1; }
 
-#container {
-  width:100%;
-  height:100%;
-  background:#000;
-  border-radius:0;
-  overflow:hidden;
-  display:flex;
-}
-
-/* Force Hyperbeam iframe to fill container */
+#container { width:100%; height:100%; background:#000; border-radius:0; overflow:hidden; display:flex; }
 #container iframe { flex:1; width:100% !important; height:100% !important; border:0; }
 
-/* Key pills */
-.key-selector { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; justify-content:center; }
-.key-pill { padding:6px 14px; border-radius:9999px; cursor:pointer; border:1px solid var(--input-border); font-size:13px; font-weight:500; transition:0.2s; }
-.key-pill:hover { background:var(--pill-hover); }
-.key-pill.active { background:var(--pill-active); }
+.key-selector-container { display:flex; gap:8px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
+.key-selector-container input { padding:6px 10px; border-radius:8px; border:1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); width:120px; }
+.key-selector-container select { padding:6px 10px; border-radius:8px; border:1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); }
 
-/* Timer */
 .timer { color: var(--text-muted); font-size:14px; margin-bottom:8px; letter-spacing:0.5px; text-align:center; }
 </style>
 </head>
@@ -87,8 +75,13 @@ body { font-family:'Inter', system-ui, sans-serif; background-color: var(--bg-co
     <p style="color: var(--text-muted); font-size:14px;">Powered by Hyperbeam</p>
   </div>
 
-  <!-- Key selector container -->
-  <div class="key-selector" id="key-selector"></div>
+  <!-- Dropdown + search -->
+  <div class="key-selector-container">
+    <input type="text" id="key-search" placeholder="Search key number" oninput="filterKeys()">
+    <select id="key-dropdown" onchange="selectKeyFromDropdown()">
+      <!-- Options will be dynamically generated -->
+    </select>
+  </div>
 
   <!-- Timer -->
   <div class="timer" id="timer">Session time: 15:00</div>
@@ -104,36 +97,44 @@ let hb = null;
 let sessionId = null;
 let selectedKey = null;
 let countdownInterval = null;
-const SESSION_DURATION = 900; // 15 minutes
+const SESSION_DURATION = 900; // 15 min
 
-// Load keys dynamically from environment (replace this with real keys if needed)
+// Example keys — add as many as you like
 const keys = [
   { number: "1", label: "Key 1" },
   { number: "2", label: "Key 2" },
   { number: "3", label: "Key 3" },
   { number: "4", label: "Key 4" },
-  // Add as many as you want here
+  { number: "5", label: "Key 5" },
 ];
 
-function renderKeyPills() {
-  const container = document.getElementById('key-selector');
-  keys.forEach((k, idx) => {
-    const pill = document.createElement('div');
-    pill.className = 'key-pill';
-    if(idx===0){ pill.classList.add('active'); selectedKey = k.number; }
-    pill.dataset.key = k.number;
-    pill.innerText = k.label;
-    pill.onclick = () => selectKey(pill);
-    container.appendChild(pill);
+// Render dropdown options
+function renderDropdown(options) {
+  const dropdown = document.getElementById('key-dropdown');
+  dropdown.innerHTML = '';
+  options.forEach((k, idx) => {
+    const opt = document.createElement('option');
+    opt.value = k.number;
+    opt.innerText = k.label;
+    dropdown.appendChild(opt);
+    if(idx===0) selectedKey = k.number;
   });
 }
 
-function selectKey(el) {
-  document.querySelectorAll('.key-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  selectedKey = el.dataset.key;
+// Filter keys based on search input
+function filterKeys() {
+  const query = document.getElementById('key-search').value.toLowerCase();
+  const filtered = keys.filter(k => k.number.toLowerCase().includes(query));
+  renderDropdown(filtered);
 }
 
+// Handle dropdown selection
+function selectKeyFromDropdown() {
+  const dropdown = document.getElementById('key-dropdown');
+  selectedKey = dropdown.value;
+}
+
+// Countdown timer
 function startCountdown() {
   clearInterval(countdownInterval);
   let remaining = SESSION_DURATION;
@@ -141,7 +142,7 @@ function startCountdown() {
     const minutes = Math.floor(remaining / 60).toString().padStart(2,'0');
     const seconds = (remaining % 60).toString().padStart(2,'0');
     document.getElementById('timer').innerText = `Session time: ${minutes}:${seconds}`;
-    if (remaining <= 0) { stop(); clearInterval(countdownInterval); }
+    if(remaining <= 0) { stop(); clearInterval(countdownInterval); }
     remaining--;
   }
   updateTimer();
@@ -149,18 +150,17 @@ function startCountdown() {
 }
 
 async function start() {
-  if (!selectedKey) { alert("No key selected!"); return; }
-  if (sessionId) await stop();
+  if(!selectedKey) { alert("Select a key!"); return; }
+  if(sessionId) await stop();
 
   const res = await fetch('/api/vmkey', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({action:'create', keyNumber:selectedKey})
   });
-
-  if (!res.ok) { alert('Failed to create VM session'); return; }
+  if(!res.ok) { alert('Failed to create VM session'); return; }
   const data = await res.json();
-  if (!data || !data.session_id || !data.embed_url) { alert('Invalid VM session response'); return; }
+  if(!data || !data.session_id || !data.embed_url) { alert('Invalid response'); return; }
 
   sessionId = data.session_id;
   hb = await Hyperbeam(document.getElementById('container'), data.embed_url);
@@ -168,7 +168,7 @@ async function start() {
 }
 
 async function stop() {
-  if (!sessionId) return;
+  if(!sessionId) return;
   clearInterval(countdownInterval);
   document.getElementById('timer').innerText = 'Session time: 15:00';
 
@@ -178,16 +178,18 @@ async function stop() {
     body: JSON.stringify({action:'delete', sessionId, keyNumber:selectedKey})
   });
 
-  if (hb) { hb.destroy(); hb=null; }
+  if(hb) { hb.destroy(); hb=null; }
   sessionId=null;
   document.getElementById('container').innerHTML='';
 }
 
-renderKeyPills();
+// Initialize dropdown
+renderDropdown(keys);
 
-window.start=start;
-window.stop=stop;
-window.selectKey=selectKey;
+window.start = start;
+window.stop = stop;
+window.selectKeyFromDropdown = selectKeyFromDropdown;
+window.filterKeys = filterKeys;
 </script>
 </body>
 </html>
