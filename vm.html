@@ -190,14 +190,24 @@ async function start(){
   if(!data.session_id || !data.embed_url){ alert('Invalid response'); return;}
 
   sessionId=data.session_id;
-  hb=await Hyperbeam(document.getElementById('container'),data.embed_url);
   
-  // --- UPDATED JS FOR IFRAME PERMISSIONS ---
-  const iframe = document.querySelector('#container iframe');
-  if (iframe) {
-    iframe.setAttribute('allow', 'fullscreen; clipboard-read; clipboard-write');
-    iframe.setAttribute('allowfullscreen', 'true');
-  }
+  // --- UPDATED JS: Pre-build the iframe with permissions ---
+  const container = document.getElementById('container');
+  container.innerHTML = ''; // Clear out anything old
+
+  // Manually create the iframe
+  const iframe = document.createElement('iframe');
+  
+  // Grant permissions BEFORE it loads
+  iframe.setAttribute('allow', 'fullscreen; clipboard-read; clipboard-write');
+  iframe.setAttribute('allowfullscreen', 'true');
+  
+  // Put it in the DOM
+  container.appendChild(iframe);
+
+  // Pass the iframe itself to Hyperbeam
+  hb = await Hyperbeam(iframe, data.embed_url);
+  // --------------------------------------------------------
 
   startCountdown();
 }
