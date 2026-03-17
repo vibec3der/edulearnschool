@@ -38,7 +38,7 @@ body { font-family:'Inter', system-ui, sans-serif; background-color: var(--bg-co
 .btn-primary { background:var(--text-main); color:var(--bg-color); border:none; font-weight:600; }
 .btn-primary:hover { background:var(--text-muted); }
 
-.main-content { flex:1; margin-top:80px; position:relative; z-index:10; display:flex; flex-direction:column; width:100%; height:calc(100vh - 80px); padding:20px 20px 20px 20px; align-items:center; }
+.main-content { flex:1; margin-top:80px; position:relative; z-index:10; display:flex; flex-direction:column; width:100%; height:calc(100vh - 80px); padding:20px; align-items:center; }
 
 .header-section { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px; }
 .hero-title { font-family:'Dancing Script', cursive; font-size:56px; font-weight:700; margin:0; color:var(--text-main); letter-spacing:2px; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,0.5); line-height:1; }
@@ -46,9 +46,11 @@ body { font-family:'Inter', system-ui, sans-serif; background-color: var(--bg-co
 #container { width:100%; height:100%; background:#000; border-radius:0; overflow:hidden; display:flex; }
 #container iframe { flex:1; width:100% !important; height:100% !important; border:0; }
 
-.key-selector-container { display:flex; gap:8px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
-.key-selector-container input { padding:6px 10px; border-radius:8px; border:1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); width:120px; }
-.key-selector-container select { padding:6px 10px; border-radius:8px; border:1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); }
+.key-selector-container { display:flex; flex-direction:column; gap:4px; margin-bottom:12px; width:200px; position:relative; }
+.key-selector-container input { padding:6px 10px; border-radius:8px; border:1px solid var(--input-border); background: var(--input-bg); color: var(--text-main); width:100%; }
+.key-options { position:absolute; top:38px; width:100%; background:var(--bg-color); border:1px solid var(--input-border); max-height:150px; overflow-y:auto; display:none; z-index:1000; border-radius:6px; }
+.key-options div { padding:6px 10px; cursor:pointer; }
+.key-options div.highlight { background:var(--pill-hover); }
 
 .timer { color: var(--text-muted); font-size:14px; margin-bottom:8px; letter-spacing:0.5px; text-align:center; }
 </style>
@@ -75,121 +77,133 @@ body { font-family:'Inter', system-ui, sans-serif; background-color: var(--bg-co
     <p style="color: var(--text-muted); font-size:14px;">Powered by Hyperbeam</p>
   </div>
 
-  <!-- Dropdown + search -->
+  <!-- Searchable dropdown -->
   <div class="key-selector-container">
-    <input type="text" id="key-search" placeholder="Search key number" oninput="filterKeys()">
-    <select id="key-dropdown" onchange="selectKeyFromDropdown()">
-      <!-- Options will be dynamically generated -->
-    </select>
+    <input type="text" id="key-search" placeholder="Type or use arrows..." autocomplete="off">
+    <div class="key-options" id="key-options"></div>
   </div>
 
-  <!-- Timer -->
   <div class="timer" id="timer">Session time: 15:00</div>
 
-  <!-- Hyperbeam container -->
   <div id="container"></div>
 </main>
 
 <script type="module">
 import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
 
-let hb = null;
-let sessionId = null;
-let selectedKey = null;
-let countdownInterval = null;
-const SESSION_DURATION = 900; // 15 min
+let hb=null, sessionId=null, selectedKey=null, countdownInterval=null;
+const SESSION_DURATION=900; // 15 min
 
-// Example keys — add as many as you like
-const keys = [
-  { number: "1", label: "Key 1" },
-  { number: "2", label: "Key 2" },
-  { number: "3", label: "Key 3" },
-  { number: "4", label: "Key 4" },
-  { number: "5", label: "Key 5" },
+const keys=[
+  {number:"1", label:"Key 1"},
+  {number:"2", label:"Key 2"},
+  {number:"3", label:"Key 3"},
+  {number:"4", label:"Key 4"},
+  {number:"5", label:"Key 5"}
 ];
 
-// Render dropdown options
-function renderDropdown(options) {
-  const dropdown = document.getElementById('key-dropdown');
-  dropdown.innerHTML = '';
-  options.forEach((k, idx) => {
-    const opt = document.createElement('option');
-    opt.value = k.number;
-    opt.innerText = k.label;
-    dropdown.appendChild(opt);
-    if(idx===0) selectedKey = k.number;
+const searchInput=document.getElementById('key-search');
+const optionsContainer=document.getElementById('key-options');
+let highlightedIndex=-1;
+
+function renderOptions(filteredKeys){
+  optionsContainer.innerHTML="";
+  filteredKeys.forEach((k,i)=>{
+    const div=document.createElement('div');
+    div.innerText=k.label;
+    div.dataset.key=k.number;
+    div.onclick=()=>selectKey(k);
+    optionsContainer.appendChild(div);
   });
+  if(filteredKeys.length>0){
+    optionsContainer.style.display="block";
+    highlightedIndex=-1;
+  } else optionsContainer.style.display="none";
 }
 
-// Filter keys based on search input
-function filterKeys() {
-  const query = document.getElementById('key-search').value.toLowerCase();
-  const filtered = keys.filter(k => k.number.toLowerCase().includes(query));
-  renderDropdown(filtered);
+function selectKey(k){
+  selectedKey=k.number;
+  searchInput.value=k.label;
+  optionsContainer.style.display="none";
 }
 
-// Handle dropdown selection
-function selectKeyFromDropdown() {
-  const dropdown = document.getElementById('key-dropdown');
-  selectedKey = dropdown.value;
+function filterKeys(){
+  const query=searchInput.value.toLowerCase();
+  const filtered=keys.filter(k=>k.number.includes(query) || k.label.toLowerCase().includes(query));
+  renderOptions(filtered);
+}
+
+searchInput.addEventListener('input',filterKeys);
+
+// Keyboard navigation
+searchInput.addEventListener('keydown',e=>{
+  const visibleOptions=Array.from(optionsContainer.children);
+  if(e.key==="ArrowDown"){ e.preventDefault(); highlightedIndex=(highlightedIndex+1)%visibleOptions.length; updateHighlight(visibleOptions);}
+  if(e.key==="ArrowUp"){ e.preventDefault(); highlightedIndex=(highlightedIndex-1+visibleOptions.length)%visibleOptions.length; updateHighlight(visibleOptions);}
+  if(e.key==="Enter"){ e.preventDefault(); if(highlightedIndex>=0) selectKey(keys.find(k=>k.number===visibleOptions[highlightedIndex].dataset.key));}
+});
+
+function updateHighlight(options){
+  options.forEach(o=>o.classList.remove('highlight'));
+  if(highlightedIndex>=0) options[highlightedIndex].classList.add('highlight');
 }
 
 // Countdown timer
-function startCountdown() {
+function startCountdown(){
   clearInterval(countdownInterval);
-  let remaining = SESSION_DURATION;
-  function updateTimer() {
-    const minutes = Math.floor(remaining / 60).toString().padStart(2,'0');
-    const seconds = (remaining % 60).toString().padStart(2,'0');
-    document.getElementById('timer').innerText = `Session time: ${minutes}:${seconds}`;
-    if(remaining <= 0) { stop(); clearInterval(countdownInterval); }
+  let remaining=SESSION_DURATION;
+  function updateTimer(){
+    const m=Math.floor(remaining/60).toString().padStart(2,'0');
+    const s=(remaining%60).toString().padStart(2,'0');
+    document.getElementById('timer').innerText=`Session time: ${m}:${s}`;
+    if(remaining<=0){ stop(); clearInterval(countdownInterval);}
     remaining--;
   }
   updateTimer();
-  countdownInterval = setInterval(updateTimer, 1000);
+  countdownInterval=setInterval(updateTimer,1000);
 }
 
-async function start() {
-  if(!selectedKey) { alert("Select a key!"); return; }
+// Start session
+async function start(){
+  if(!selectedKey){ alert("Select a key!"); return;}
   if(sessionId) await stop();
 
-  const res = await fetch('/api/vmkey', {
+  const res=await fetch('/api/vmkey',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action:'create', keyNumber:selectedKey})
+    body:JSON.stringify({action:'create', keyNumber:selectedKey})
   });
-  if(!res.ok) { alert('Failed to create VM session'); return; }
-  const data = await res.json();
-  if(!data || !data.session_id || !data.embed_url) { alert('Invalid response'); return; }
+  if(!res.ok){ alert('Failed to create VM session'); return;}
+  const data=await res.json();
+  if(!data.session_id || !data.embed_url){ alert('Invalid response'); return;}
 
-  sessionId = data.session_id;
-  hb = await Hyperbeam(document.getElementById('container'), data.embed_url);
+  sessionId=data.session_id;
+  hb=await Hyperbeam(document.getElementById('container'),data.embed_url);
   startCountdown();
 }
 
-async function stop() {
+// Stop session
+async function stop(){
   if(!sessionId) return;
   clearInterval(countdownInterval);
-  document.getElementById('timer').innerText = 'Session time: 15:00';
+  document.getElementById('timer').innerText='Session time: 15:00';
 
-  await fetch('/api/vmkey', {
+  await fetch('/api/vmkey',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action:'delete', sessionId, keyNumber:selectedKey})
+    body:JSON.stringify({action:'delete', sessionId, keyNumber:selectedKey})
   });
 
-  if(hb) { hb.destroy(); hb=null; }
+  if(hb){ hb.destroy(); hb=null;}
   sessionId=null;
   document.getElementById('container').innerHTML='';
 }
 
-// Initialize dropdown
-renderDropdown(keys);
+// Initialize
+filterKeys();
 
-window.start = start;
-window.stop = stop;
-window.selectKeyFromDropdown = selectKeyFromDropdown;
-window.filterKeys = filterKeys;
+window.start=start;
+window.stop=stop;
 </script>
 </body>
 </html>
