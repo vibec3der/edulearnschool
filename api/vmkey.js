@@ -1,11 +1,18 @@
 const SESSION_DURATION = 900; // 15 minutes
 
 export default async function handler(req, res) {
-  const { action, sessionId } = req.body;
-  const API_KEY = process.env.HYPERBEAM_API_KEY;
+  const { action, sessionId, keyNumber } = req.body;
+
+  // Map keys: Key 1 → HYPERBEAM_API_KEY, others → HYPERBEAM_KEY_2/3
+  let API_KEY;
+  if (keyNumber === "1") {
+    API_KEY = process.env.HYPERBEAM_API_KEY; // default first key
+  } else {
+    API_KEY = process.env[`HYPERBEAM_KEY_${keyNumber}`]; // numbered keys
+  }
 
   if (!API_KEY) {
-    return res.status(500).json({ error: "Missing API key" });
+    return res.status(500).json({ error: `Missing API key for keyNumber ${keyNumber}` });
   }
 
   try {
@@ -17,20 +24,11 @@ export default async function handler(req, res) {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          // Hyperbeam expects timeout object values, not a numeric timeout value.
-          timeout: {
-            absolute: SESSION_DURATION
-          },
-          // You can add optional session options here:
-          // start_url: "about:blank",
-          // region: "NA",
-          // adblock: true
+          timeout: { absolute: SESSION_DURATION }
         })
       });
 
       const data = await hb.json();
-
-      // Hyperbeam may return session_id or id depending on API version.
       const sessionId = data.session_id || data.id;
       const embedUrl = data.embed_url || data.embedUrl;
 
@@ -39,18 +37,13 @@ export default async function handler(req, res) {
         return res.status(502).json({ error: 'Hyperbeam create response missing session_id/embed_url', details: data });
       }
 
-      return res.json({
-        session_id: sessionId,
-        embed_url: embedUrl
-      });
+      return res.json({ session_id: sessionId, embed_url: embedUrl });
     }
 
     if (action === "delete") {
       await fetch(`https://engine.hyperbeam.com/v0/vm/${sessionId}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`
-        }
+        headers: { Authorization: `Bearer ${API_KEY}` }
       });
 
       return res.json({});
