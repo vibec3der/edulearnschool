@@ -17,7 +17,14 @@ export default async function handler(req, res) {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          timeout: SESSION_DURATION // 🔥 THIS is the real limiter
+          // Hyperbeam expects timeout object values, not a numeric timeout value.
+          timeout: {
+            absolute: SESSION_DURATION
+          },
+          // You can add optional session options here:
+          // start_url: "about:blank",
+          // region: "NA",
+          // adblock: true
         })
       });
 
