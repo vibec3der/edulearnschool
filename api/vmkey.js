@@ -1,6 +1,7 @@
+const SESSION_DURATION = 900; // 15 minutes
+
 export default async function handler(req, res) {
   const { action, sessionId } = req.body;
-
   const API_KEY = process.env.HYPERBEAM_API_KEY;
 
   if (!API_KEY) {
@@ -14,7 +15,10 @@ export default async function handler(req, res) {
         headers: {
           Authorization: `Bearer ${API_KEY}`,
           "Content-Type": "application/json"
-        }
+        },
+        body: JSON.stringify({
+          timeout: SESSION_DURATION // 🔥 THIS is the real limiter
+        })
       });
 
       const data = await hb.json();
