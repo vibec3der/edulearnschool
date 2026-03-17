@@ -139,6 +139,7 @@ body {
 }
 .resize-btn:hover { background: var(--pill-hover); }
 .resize-btn.active { background: var(--text-main); color: var(--bg-color); }
+.resize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .key-selector-container { 
   display:flex; 
@@ -227,10 +228,10 @@ body {
 <nav class="topbar">
   <div class="brand">edulearn vms</div>
   <div class="controls">
-    <button class="clean-btn btn-primary" onclick="start()">
+    <button class="clean-btn btn-primary" id="startBtn" onclick="start()">
       <i class="fa-solid fa-play" style="margin-right:8px;"></i> Start Session
     </button>
-    <button class="clean-btn" onclick="stop()">
+    <button class="clean-btn" id="stopBtn" onclick="stop()" disabled>
       <i class="fa-solid fa-stop" style="margin-right:8px;"></i> Stop Session
     </button>
   </div>
@@ -282,6 +283,8 @@ const keys = [
 const searchInput = document.getElementById('key-search');
 const optionsContainer = document.getElementById('key-options');
 const timerElement = document.getElementById('timer');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
 let highlightedIndex = -1;
 
 function renderOptions(filteredKeys) {
@@ -338,8 +341,13 @@ function updateHighlight(options) {
   if (highlightedIndex >= 0) options[highlightedIndex].classList.add('highlight');
 }
 
+function updateButtons() {
+  const sessionActive = !!sessionId;
+  startBtn.disabled = sessionActive || !selectedKey;
+  stopBtn.disabled = !sessionActive;
+}
+
 function startCountdown() {
-  // Clear any existing timer
   if (countdownInterval) {
     clearInterval(countdownInterval);
   }
@@ -352,19 +360,17 @@ function startCountdown() {
     timerElement.textContent = `Session time: ${minutes}:${seconds}`;
     
     if (remaining <= 0) {
-      // Timer expired - auto stop session
       clearInterval(countdownInterval);
+      countdownInterval = null;
       timerElement.textContent = 'Session expired!';
       timerElement.classList.add('session-expired');
-      stop(); // This will shut down the session
+      stop();
       return;
     }
     remaining--;
   };
   
-  // Start immediately
   updateTimer();
-  // Then every second
   countdownInterval = setInterval(updateTimer, 1000);
 }
 
@@ -375,17 +381,16 @@ const sizePresets = {
 };
 
 window.setContainerSize = function(size) {
+  if (!hb) return; // Only resize if session active
+  
   const container = document.getElementById('container');
   const preset = sizePresets[size];
   
-  // Update button states
   document.querySelectorAll('.resize-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById(size + '-btn').classList.add('active');
   
-  // Apply height directly
   container.style.height = preset.height;
   
-  // Resize Hyperbeam after layout settles
   setTimeout(() => {
     resizeHyperbeam();
   }, 100);
@@ -409,61 +414,67 @@ function resizeHyperbeam() {
 
 async function start() {
   if (!selectedKey) { 
-    alert("Select a key!"); 
+    alert("Please select a key first!"); 
     return;
   }
-  if (sessionId) await stop();
-
+  
+  // Disable start button immediately
+  startBtn.disabled = true;
+  
   try {
+    console.log('Creating session with key:', selectedKey);
+    
     const res = await fetch('/api/vmkey', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({action: 'create', keyNumber: selectedKey})
     });
-    if (!res.ok) { 
-      alert('Failed to create VM session'); 
-      return;
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`API failed: ${res.status} ${res.statusText} - ${errorText}`);
     }
+    
     const data = await res.json();
-    if (!data.session_id || !data.embed_url) { 
-      alert('Invalid response'); 
-      return;
+    
+    if (!data.session_id || !data.embed_url) {
+      throw new Error('Invalid response from server - missing session_id or embed_url');
     }
 
     sessionId = data.session_id;
     const container = document.getElementById('container');
+    
+    // Clear container first
+    container.innerHTML = '';
+    
     hb = await Hyperbeam(container, data.embed_url);
 
-    // Setup resize observer
     if (resizeObserver) resizeObserver.disconnect();
     resizeObserver = new ResizeObserver(resizeHyperbeam);
     resizeObserver.observe(container);
     
-    // Reset timer display and start countdown
     timerElement.classList.remove('session-expired');
-    timerElement.textContent = 'Session time: 15:00';
-    
-    // Set to large by default
     setContainerSize('large');
-    
-    // Start the timer (this will auto-stop when it hits 0)
     startCountdown();
 
-    // iframe permissions
     const iframe = container.querySelector('iframe');
     if (iframe) {
       iframe.setAttribute('allow', 'fullscreen; clipboard-read; clipboard-write');
       iframe.setAttribute('allowfullscreen', 'true');
     }
+    
+    updateButtons();
+    
   } catch (error) {
-    alert('Error starting session: ' + error.message);
+    console.error('Start session error:', error);
+    alert('Failed to create VM session: ' + error.message + '\n\nCheck browser console for details.');
+    updateButtons();
   }
 }
 
 async function stop() {
   if (!sessionId) return;
   
-  // Clear timer
   if (countdownInterval) {
     clearInterval(countdownInterval);
     countdownInterval = null;
@@ -479,7 +490,7 @@ async function stop() {
       body: JSON.stringify({action: 'delete', sessionId, keyNumber: selectedKey})
     });
   } catch (error) {
-    console.error('Error stopping session:', error);
+    console.error('Stop API error:', error);
   }
 
   if (hb) { 
@@ -490,15 +501,20 @@ async function stop() {
     resizeObserver.disconnect();
     resizeObserver = null;
   }
+  
   sessionId = null;
   selectedKey = null;
   searchInput.value = '';
   document.getElementById('container').style.height = '400px';
+  document.getElementById('container').innerHTML = '';
   filterKeys();
+  
+  updateButtons();
 }
 
 // Initialize
 filterKeys();
+updateButtons();
 window.start = start;
 window.stop = stop;
 </script>
