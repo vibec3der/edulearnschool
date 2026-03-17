@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>VM Test</title>
-  <script src="https://unpkg.com/@hyperbeam/web@latest/dist/index.js"></script>
   <style>
     body {
       font-family: sans-serif;
@@ -33,7 +32,9 @@
 
 <div id="container"></div>
 
-<script>
+<script type="module">
+import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
+
 let hb = null;
 let sessionId = null;
 
@@ -43,6 +44,12 @@ async function start() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'create' })
   });
+
+  if (!res.ok) {
+    const err = await res.text();
+    alert('Failed to create VM session: ' + err);
+    return;
+  }
 
   const data = await res.json();
   sessionId = data.session_id;
@@ -62,8 +69,16 @@ async function stop() {
     })
   });
 
-  if (hb) hb.destroy();
+  if (hb) {
+    hb.destroy();
+    hb = null;
+  }
+  sessionId = null;
 }
+
+// expose methods for inline onclick handlers
+window.start = start;
+window.stop = stop;
 </script>
 
 </body>
