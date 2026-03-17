@@ -80,6 +80,7 @@ body {
   height:38px; 
 }
 .clean-btn:hover { background:var(--pill-hover); }
+.clean-btn:disabled { opacity:0.5; cursor:not-allowed; }
 .btn-primary { background:var(--text-main); color:var(--bg-color); border:none; font-weight:600; }
 .btn-primary:hover { background:var(--text-muted); }
 
@@ -306,6 +307,7 @@ function selectKey(k) {
   selectedKey = k.number;
   searchInput.value = k.label;
   optionsContainer.style.display = "none";
+  updateButtons();
 }
 
 function filterKeys() {
@@ -381,7 +383,10 @@ const sizePresets = {
 };
 
 window.setContainerSize = function(size) {
-  if (!hb) return; // Only resize if session active
+  if (!hb) {
+    alert('Start a session first!');
+    return;
+  }
   
   const container = document.getElementById('container');
   const preset = sizePresets[size];
@@ -418,7 +423,6 @@ async function start() {
     return;
   }
   
-  // Disable start button immediately
   startBtn.disabled = true;
   
   try {
@@ -432,19 +436,17 @@ async function start() {
     
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(`API failed: ${res.status} ${res.statusText} - ${errorText}`);
+      throw new Error(`API Error ${res.status}: ${errorText}`);
     }
     
     const data = await res.json();
     
     if (!data.session_id || !data.embed_url) {
-      throw new Error('Invalid response from server - missing session_id or embed_url');
+      throw new Error('Server response missing session_id or embed_url');
     }
 
     sessionId = data.session_id;
     const container = document.getElementById('container');
-    
-    // Clear container first
     container.innerHTML = '';
     
     hb = await Hyperbeam(container, data.embed_url);
@@ -466,8 +468,8 @@ async function start() {
     updateButtons();
     
   } catch (error) {
-    console.error('Start session error:', error);
-    alert('Failed to create VM session: ' + error.message + '\n\nCheck browser console for details.');
+    console.error('Session error:', error);
+    alert('Failed to start session:\n' + error.message);
     updateButtons();
   }
 }
@@ -489,8 +491,8 @@ async function stop() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({action: 'delete', sessionId, keyNumber: selectedKey})
     });
-  } catch (error) {
-    console.error('Stop API error:', error);
+  } catch (e) {
+    console.error('Stop API error:', e);
   }
 
   if (hb) { 
