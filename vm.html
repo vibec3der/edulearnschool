@@ -93,7 +93,7 @@ body {
   width:100%; 
   height:calc(100vh - 80px); 
   padding:20px; 
-  align-items:stretch;
+  align-items:center;
   gap:12px;
 }
 
@@ -184,15 +184,15 @@ body {
 }
 
 #container { 
-  flex: 1; 
-  min-height: 300px;
+  width: 100%;
+  height: 400px;  /* Default height */
   background: #000; 
   border-radius: 12px; 
   overflow: hidden; 
   position: relative; 
-  width: 100%;
-  transition: all 0.3s ease;
+  transition: height 0.3s ease;
   box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  max-width: 100%;
 }
 #container iframe { 
   width: 100% !important; 
@@ -232,13 +232,13 @@ body {
   </div>
 
   <div class="resize-controls">
-    <button class="resize-btn active" onclick="setContainerSize('small')" title="Small view">
+    <button class="resize-btn active" id="small-btn" onclick="setContainerSize('small')" title="Small view">
       <i class="fa-solid fa-window-minimize"></i> Small
     </button>
-    <button class="resize-btn" onclick="setContainerSize('medium')" title="Medium view">
+    <button class="resize-btn" id="medium-btn" onclick="setContainerSize('medium')" title="Medium view">
       <i class="fa-solid fa-window-maximize"></i> Medium
     </button>
-    <button class="resize-btn" onclick="setContainerSize('large')" title="Full size">
+    <button class="resize-btn" id="large-btn" onclick="setContainerSize('large')" title="Full size">
       <i class="fa-solid fa-expand"></i> Max
     </button>
   </div>
@@ -343,29 +343,29 @@ function startCountdown() {
   countdownInterval = setInterval(updateTimer, 1000);
 }
 
-// Resize presets - FIXED
+// FIXED: Use explicit heights that work
 const sizePresets = {
-  small: { height: '350px', flex: '0 0 350px' },
-  medium: { height: '500px', flex: '0 0 500px' },
-  large: { height: 'auto', flex: '1' }
+  small: { height: '250px' },
+  medium: { height: '450px' },
+  large: { height: 'calc(100vh - 400px)' }
 };
 
 window.setContainerSize = function(size) {
   const container = document.getElementById('container');
   const preset = sizePresets[size];
   
-  // Update all buttons
+  // Update button states
   document.querySelectorAll('.resize-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+  document.getElementById(size + '-btn').classList.add('active');
   
-  // Apply size
+  // Apply height directly
   container.style.height = preset.height;
-  container.style.flex = preset.flex;
   
-  // Resize Hyperbeam if running
-  setTimeout(resizeHyperbeam, 50);
-  
-  console.log('Set size:', size); // Debug
+  // Resize Hyperbeam after layout settles
+  setTimeout(() => {
+    resizeHyperbeam();
+    console.log('Set container height to:', preset.height, 'for size:', size);
+  }, 100);
 };
 
 function resizeHyperbeam() {
@@ -375,9 +375,9 @@ function resizeHyperbeam() {
   let width = Math.floor(rect.width);
   let height = Math.floor(rect.height);
   
-  console.log('Resizing to:', width, 'x', height); // Debug
+  console.log('Hyperbeam resize to:', width + 'x' + height);
   
-  if (width * height > hb.maxArea) {
+  if (hb.maxArea && width * height > hb.maxArea) {
     const scale = Math.sqrt(hb.maxArea / (width * height));
     width = Math.floor(width * scale);
     height = Math.floor(height * scale);
@@ -417,7 +417,7 @@ async function start() {
   resizeObserver = new ResizeObserver(resizeHyperbeam);
   resizeObserver.observe(container);
   
-  // Set to large by default and initial resize
+  // Start with large size
   setContainerSize('large');
 
   // iframe permissions
@@ -451,6 +451,7 @@ async function stop() {
   }
   sessionId = null;
   document.getElementById('container').innerHTML = '';
+  document.getElementById('container').style.height = '400px'; // Reset height
 }
 
 // Initialize
