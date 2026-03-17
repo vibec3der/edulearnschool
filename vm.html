@@ -7,48 +7,62 @@
 <link rel="icon" href="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-  :root {
-    --bg-color: #09090b;
-    --grid-color: rgba(255,255,255,0.02);
-    --pill-hover: rgba(255,255,255,0.05);
-    --pill-active: #27272a;
-    --text-main: #ffffff;
-    --text-muted: #a1a1aa;
-    --input-bg: #09090b;
-    --input-border: #3f3f46;
-  }
+:root {
+  --bg-color: #09090b;
+  --grid-color: rgba(255,255,255,0.02);
+  --pill-hover: rgba(255,255,255,0.05);
+  --pill-active: #27272a;
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+  --input-bg: #09090b;
+  --input-border: #3f3f46;
+}
 
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Inter', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-main); overflow:hidden; display:flex; flex-direction:column; height:100vh; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Inter', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-main); overflow:hidden; display:flex; flex-direction:column; height:100vh; }
 
-  .grid-bg { position:absolute; inset:0; z-index:-2;
-    background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-                      linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
+.grid-bg {
+  position:absolute; inset:0; z-index:-2;
+  background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
 
-  .topbar { position:fixed; top:0; left:0; width:100%; height:80px; display:flex; align-items:center; justify-content:space-between; padding:0 40px; z-index:100; }
-  .brand { font-family:'Dancing Script', cursive; font-size:32px; color: var(--text-main); text-decoration:none; cursor:default; display:flex; align-items:center; letter-spacing:1px; text-transform:lowercase; }
-  .controls { display:flex; gap:12px; align-items:center; }
-  .clean-btn { background:transparent; color:var(--text-main); border:1px solid var(--input-border); padding:8px 18px; border-radius:9999px; font-size:13px; font-weight:500; cursor:pointer; transition:0.2s; display:inline-flex; align-items:center; justify-content:center; height:38px; }
-  .clean-btn:hover { background:var(--pill-hover); }
-  .btn-primary { background:var(--text-main); color:var(--bg-color); border:none; font-weight:600; }
-  .btn-primary:hover { background:var(--text-muted); }
+.topbar { position:fixed; top:0; left:0; width:100%; height:80px; display:flex; align-items:center; justify-content:space-between; padding:0 40px; z-index:100; }
+.brand { font-family:'Dancing Script', cursive; font-size:32px; color: var(--text-main); text-decoration:none; cursor:default; display:flex; align-items:center; letter-spacing:1px; text-transform:lowercase; }
+.controls { display:flex; gap:12px; align-items:center; }
+.clean-btn { background:transparent; color:var(--text-main); border:1px solid var(--input-border); padding:8px 18px; border-radius:9999px; font-size:13px; font-weight:500; cursor:pointer; transition:0.2s; display:inline-flex; align-items:center; justify-content:center; height:38px; }
+.clean-btn:hover { background:var(--pill-hover); }
+.btn-primary { background:var(--text-main); color:var(--bg-color); border:none; font-weight:600; }
+.btn-primary:hover { background:var(--text-muted); }
 
-  .main-content { flex:1; margin-top:80px; position:relative; z-index:10; display:flex; flex-direction:column; width:100%; height:calc(100vh - 80px); padding:20px 20px 20px 20px; align-items:center; }
-  .header-section { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px; }
-  .hero-title { font-family:'Dancing Script', cursive; font-size:56px; font-weight:700; margin:0; color:var(--text-main); letter-spacing:2px; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,0.5); line-height:1; }
+.main-content { flex:1; margin-top:80px; position:relative; z-index:10; display:flex; flex-direction:column; width:100%; height:calc(100vh - 80px); padding:20px 20px 20px 20px; align-items:center; }
 
-  #container { width:100%; height:100%; background:#000; border-radius:12px; border:1px solid var(--input-border); overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.6); display:flex; }
+.header-section { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px; }
+.hero-title { font-family:'Dancing Script', cursive; font-size:56px; font-weight:700; margin:0; color:var(--text-main); letter-spacing:2px; text-transform:lowercase; text-shadow:0 4px 20px rgba(0,0,0,0.5); line-height:1; }
 
-  .key-selector { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; justify-content:center; }
-  .key-pill { padding:6px 14px; border-radius:9999px; cursor:pointer; border:1px solid var(--input-border); font-size:13px; font-weight:500; transition:0.2s; }
-  .key-pill:hover { background:var(--pill-hover); }
-  .key-pill.active { background:var(--pill-active); }
+#container {
+  width:100%;
+  height:100%;
+  background:#000;
+  border-radius:0;
+  overflow:hidden;
+  display:flex;
+}
 
-  .timer { color: var(--text-muted); font-size:14px; margin-bottom:8px; letter-spacing:0.5px; text-align:center; }
+/* Force Hyperbeam iframe to fill container */
+#container iframe { flex:1; width:100% !important; height:100% !important; border:0; }
+
+/* Key pills */
+.key-selector { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; justify-content:center; }
+.key-pill { padding:6px 14px; border-radius:9999px; cursor:pointer; border:1px solid var(--input-border); font-size:13px; font-weight:500; transition:0.2s; }
+.key-pill:hover { background:var(--pill-hover); }
+.key-pill.active { background:var(--pill-active); }
+
+/* Timer */
+.timer { color: var(--text-muted); font-size:14px; margin-bottom:8px; letter-spacing:0.5px; text-align:center; }
 </style>
 </head>
 <body>
@@ -70,16 +84,11 @@
 <main class="main-content">
   <div class="header-section">
     <h1 class="hero-title">edulearn vms</h1>
-    <p style="color: var(--text-muted); font-size: 14px;">Powered by Hyperbeam</p>
+    <p style="color: var(--text-muted); font-size:14px;">Powered by Hyperbeam</p>
   </div>
 
-  <!-- Key selector -->
-  <div class="key-selector">
-    <div class="key-pill active" data-key="1" onclick="selectKey(this)">Key 1</div>
-    <div class="key-pill" data-key="2" onclick="selectKey(this)">Key 2</div>
-    <div class="key-pill" data-key="3" onclick="selectKey(this)">Key 3</div>
-    <div class="key-pill" data-key="4" onclick="selectKey(this)">Key 4</div>
-  </div>
+  <!-- Key selector container -->
+  <div class="key-selector" id="key-selector"></div>
 
   <!-- Timer -->
   <div class="timer" id="timer">Session time: 15:00</div>
@@ -93,9 +102,31 @@ import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
 
 let hb = null;
 let sessionId = null;
-let selectedKey = "1";
+let selectedKey = null;
 let countdownInterval = null;
-const SESSION_DURATION = 900; // 15 minutes in seconds
+const SESSION_DURATION = 900; // 15 minutes
+
+// Load keys dynamically from environment (replace this with real keys if needed)
+const keys = [
+  { number: "1", label: "Key 1" },
+  { number: "2", label: "Key 2" },
+  { number: "3", label: "Key 3" },
+  { number: "4", label: "Key 4" },
+  // Add as many as you want here
+];
+
+function renderKeyPills() {
+  const container = document.getElementById('key-selector');
+  keys.forEach((k, idx) => {
+    const pill = document.createElement('div');
+    pill.className = 'key-pill';
+    if(idx===0){ pill.classList.add('active'); selectedKey = k.number; }
+    pill.dataset.key = k.number;
+    pill.innerText = k.label;
+    pill.onclick = () => selectKey(pill);
+    container.appendChild(pill);
+  });
+}
 
 function selectKey(el) {
   document.querySelectorAll('.key-pill').forEach(p => p.classList.remove('active'));
@@ -106,23 +137,19 @@ function selectKey(el) {
 function startCountdown() {
   clearInterval(countdownInterval);
   let remaining = SESSION_DURATION;
-
   function updateTimer() {
     const minutes = Math.floor(remaining / 60).toString().padStart(2,'0');
     const seconds = (remaining % 60).toString().padStart(2,'0');
     document.getElementById('timer').innerText = `Session time: ${minutes}:${seconds}`;
-    if (remaining <= 0) {
-      stop();
-      clearInterval(countdownInterval);
-    }
+    if (remaining <= 0) { stop(); clearInterval(countdownInterval); }
     remaining--;
   }
-
   updateTimer();
   countdownInterval = setInterval(updateTimer, 1000);
 }
 
 async function start() {
+  if (!selectedKey) { alert("No key selected!"); return; }
   if (sessionId) await stop();
 
   const res = await fetch('/api/vmkey', {
@@ -133,22 +160,15 @@ async function start() {
 
   if (!res.ok) { alert('Failed to create VM session'); return; }
   const data = await res.json();
-
-  if (!data || !data.session_id || !data.embed_url) {
-    alert('Invalid VM session response'); return;
-  }
+  if (!data || !data.session_id || !data.embed_url) { alert('Invalid VM session response'); return; }
 
   sessionId = data.session_id;
-
-  // Make iframe fit the entire container
-  hb = await Hyperbeam(document.getElementById('container'), data.embed_url, { width:'100%', height:'100%' });
-
+  hb = await Hyperbeam(document.getElementById('container'), data.embed_url);
   startCountdown();
 }
 
 async function stop() {
   if (!sessionId) return;
-
   clearInterval(countdownInterval);
   document.getElementById('timer').innerText = 'Session time: 15:00';
 
@@ -162,6 +182,8 @@ async function stop() {
   sessionId=null;
   document.getElementById('container').innerHTML='';
 }
+
+renderKeyPills();
 
 window.start=start;
 window.stop=stop;
