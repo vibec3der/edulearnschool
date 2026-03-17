@@ -52,6 +52,14 @@ async function start() {
   }
 
   const data = await res.json();
+  console.log('vmkey create response', data);
+
+  if (!data || !data.session_id || !data.embed_url) {
+    alert('Invalid VM session response: ' + JSON.stringify(data));
+    console.error('Invalid VM session response', data);
+    return;
+  }
+
   sessionId = data.session_id;
 
   hb = await Hyperbeam(document.getElementById('container'), data.embed_url);

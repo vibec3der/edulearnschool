@@ -23,6 +23,11 @@ export default async function handler(req, res) {
 
       const data = await hb.json();
 
+      if (!data || !data.id || !data.embed_url) {
+        console.error('Hyperbeam create returned bad payload', data);
+        return res.status(502).json({ error: 'Hyperbeam create response missing id/embed_url', details: data });
+      }
+
       return res.json({
         session_id: data.id,
         embed_url: data.embed_url
@@ -40,7 +45,9 @@ export default async function handler(req, res) {
       return res.json({});
     }
 
+    return res.status(400).json({ error: 'Invalid action' });
   } catch (err) {
+    console.error('vmkey API error', err);
     return res.status(500).json({ error: err.message });
   }
 }
