@@ -1,14 +1,11 @@
-# Edulearn V5.3.0 (Beta Channel)
+# Edulearn
+![Edulearn Lite V6](./imgs/example2.png)
 
-![Edulearn OS V5.3.0](./imgs/example.png)
-
-*Edulearn V5.3.0 - The best unblocked "OS" with many features.* ![Edulearn Lite V6](./imgs/example2.png)
-
-*Edulearn Lite V9 - The Best Gaming Site.*
+*Edulearn Lite - The Best Gaming Site.*
 
 ---
 
-## What's New in V9
+## What's New
 
 - **Dual Architecture:** A brand new entry point allowing you to choose between **Edulearn Lite** (Streamlined for Gaming) and **EdulearnOS** (Built for Productivity).
 - **Extras Hub:** A new integrated dashboard in Lite mode allowing you to launch tools like the Graphing Calculator and Music Player without leaving your current session.
