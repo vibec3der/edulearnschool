@@ -140,7 +140,7 @@
         <a href="#" onclick="loadPrivacy(); return false;">Privacy Policy</a>
         <a href="javascript:saveData()">Export Data</a>
         <a href="#" onclick="document.getElementById('importData').click(); return false;">Import Data</a>
-        <input type="file" id="importData" class="hidden" onchange="loadData(event)">
+        <input type="file" id="importData" class="hidden" accept=".json" onchange="loadData(event)">
     </footer>
 
     <script src="script.js" defer></script>

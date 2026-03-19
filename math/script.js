@@ -519,11 +519,12 @@ async function saveData() {
     }
   
     alert("Done, wait for the download to come");
+    const blob = new Blob([JSON.stringify(result, null, 2)], {
+        type: "application/json"
+    });
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(new Blob([JSON.stringify(result)], {
-        type: "application/octet-stream"
-    }));
-    link.download = `${Date.now()}.data`;
+    link.href = URL.createObjectURL(blob);
+    link.download = `save_data-${Date.now()}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
