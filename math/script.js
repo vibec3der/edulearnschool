@@ -646,19 +646,28 @@ async function saveData() {
               await cache.keys().then(keys => Promise.all(keys.map(k => cache.delete(k)))); // clear existing
         
               for (const entry of data.caches[cacheName]) {
+                if (entry.body === '[Unable to read body]') {
+                  console.warn('Skipping non-restorable cache entry during import:', entry.url);
+                  continue;
+                }
                 let responseBody;
                 if (entry.contentType.includes('application/json')) {
                   responseBody = JSON.stringify(entry.body);
                 } else if (entry.contentType.includes('text') || entry.contentType.includes('javascript')) {
                   responseBody = entry.body;
                 } else {
-                  const binaryStr = atob(entry.body);
-                  const len = binaryStr.length;
-                  const bytes = new Uint8Array(len);
-                  for (let i = 0; i < len; i++) {
-                    bytes[i] = binaryStr.charCodeAt(i);
+                  try {
+                    const binaryStr = atob(entry.body);
+                    const len = binaryStr.length;
+                    const bytes = new Uint8Array(len);
+                    for (let i = 0; i < len; i++) {
+                      bytes[i] = binaryStr.charCodeAt(i);
+                    }
+                    responseBody = bytes.buffer;
+                  } catch (err) {
+                    console.warn('Failed to decode cache body for', entry.url, err);
+                    continue;
                   }
-                  responseBody = bytes.buffer;
                 }
                 const headers = new Headers({ 'content-type': entry.contentType });
                 const response = new Response(responseBody, { headers });
