@@ -455,7 +455,10 @@ async function saveData() {
     const dbs = await indexedDB.databases();
     for (const dbInfo of dbs) {
       if (!dbInfo.name) continue;
-      result.indexedDB[dbInfo.name] = {};
+      result.indexedDB[dbInfo.name] = {
+        version: dbInfo.version || 1,
+        stores: {}
+      };
       await new Promise((resolve, reject) => {
         const openRequest = indexedDB.open(dbInfo.name, dbInfo.version);
         openRequest.onerror = () => reject(openRequest.error);
@@ -469,12 +472,28 @@ async function saveData() {
           const transaction = db.transaction(storeNames, "readonly");
           const storePromises = [];
           for (const storeName of storeNames) {
-            result.indexedDB[dbInfo.name][storeName] = [];
             const store = transaction.objectStore(storeName);
+            const indexList = [];
+            for (let i = 0; i < store.indexNames.length; i++) {
+              const idxName = store.indexNames[i];
+              const idx = store.index(idxName);
+              indexList.push({
+                name: idx.name,
+                keyPath: idx.keyPath,
+                unique: idx.unique,
+                multiEntry: idx.multiEntry
+              });
+            }
+            result.indexedDB[dbInfo.name].stores[storeName] = {
+              data: [],
+              keyPath: store.keyPath || null,
+              autoIncrement: store.autoIncrement,
+              indexes: indexList
+            };
             const getAllRequest = store.getAll();
             const p = new Promise((res, rej) => {
               getAllRequest.onsuccess = () => {
-                result.indexedDB[dbInfo.name][storeName] = sanitizeData(getAllRequest.result, 1000, 100);
+                result.indexedDB[dbInfo.name].stores[storeName].data = sanitizeData(getAllRequest.result, 1000, 100);
                 res();
               };
               getAllRequest.onerror = () => rej(getAllRequest.error);
@@ -556,33 +575,65 @@ async function saveData() {
         
           if (data.indexedDB) {
             for (const dbName in data.indexedDB) {
-              const stores = data.indexedDB[dbName];
+              const dbData = data.indexedDB[dbName];
               await new Promise((resolve, reject) => {
-                const request = indexedDB.open(dbName, 1);
+                const request = indexedDB.open(dbName, dbData.version || 1);
                 request.onupgradeneeded = e => {
                   const db = e.target.result;
-                  for (const storeName in stores) {
+                  for (const storeName in dbData.stores) {
                     if (!db.objectStoreNames.contains(storeName)) {
-                      db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+                      const storeMeta = dbData.stores[storeName];
+                      const options = {};
+                      if (storeMeta.keyPath !== null) options.keyPath = storeMeta.keyPath;
+                      if (typeof storeMeta.autoIncrement === 'boolean') options.autoIncrement = storeMeta.autoIncrement;
+                      const objectStore = db.createObjectStore(storeName, options);
+
+                      if (Array.isArray(storeMeta.indexes)) {
+                        storeMeta.indexes.forEach(idx => {
+                          if (!objectStore.indexNames.contains(idx.name)) {
+                            objectStore.createIndex(idx.name, idx.keyPath, {
+                              unique: !!idx.unique,
+                              multiEntry: !!idx.multiEntry
+                            });
+                          }
+                        });
+                      }
                     }
                   }
                 };
                 request.onsuccess = e => {
                   const db = e.target.result;
-                  const transaction = db.transaction(Object.keys(stores), 'readwrite');
+                  const storeNames = Object.keys(dbData.stores);
+                  if (storeNames.length === 0) {
+                    resolve();
+                    return;
+                  }
+                  const transaction = db.transaction(storeNames, 'readwrite');
                   transaction.onerror = () => reject(transaction.error);
-                  let pendingStores = Object.keys(stores).length;
-        
-                  for (const storeName in stores) {
+                  let pendingStores = storeNames.length;
+
+                  for (const storeName of storeNames) {
                     const objectStore = transaction.objectStore(storeName);
+                    const items = dbData.stores[storeName].data || [];
                     objectStore.clear().onsuccess = () => {
-                      for (const item of stores[storeName]) {
-                        objectStore.put(item);
+                      if (items.length === 0) {
+                        pendingStores--;
+                        if (pendingStores === 0) resolve();
+                        return;
                       }
-                      pendingStores--;
-                      if (pendingStores === 0) resolve();
+                      let inserted = 0;
+                      items.forEach(item => {
+                        objectStore.put(item).onsuccess = () => {
+                          inserted++;
+                          if (inserted === items.length) {
+                            pendingStores--;
+                            if (pendingStores === 0) resolve();
+                          }
+                        };
+                      });
                     };
                   }
+                  // If there are no stores, resolve earlier, else it will resolve in the objectStore callbacks.
                 };
                 request.onerror = () => reject(request.error);
               });
