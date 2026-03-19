@@ -614,7 +614,16 @@ async function saveData() {
               }
             }
           }
-        alert("Data loaded");
+
+          if (zoneFrame && zoneFrame.contentWindow) {
+            try {
+              zoneFrame.contentWindow.location.reload();
+            } catch (err) {
+              console.warn('Could not reload game iframe after import:', err);
+            }
+          }
+
+          alert("Data loaded");
     };
     alert("This might take a while, dont touch anything other than this OK button");
     reader.readAsText(file);
