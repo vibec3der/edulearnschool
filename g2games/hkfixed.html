@@ -1,5 +1,6 @@
-<!DOCTYPE html><html lang="en-us"><head>
-    <base href="https://cdn.jsdelivr.net/gh/GLITCHED-OVERRIDE/Stratus@main/Games/Files/Hollow%20Knight/">
+<!DOCTYPE html>
+<html lang="en-us"><head>
+<base href="https://cdn.jsdelivr.net/gh/GLITCHED-OVERRIDE/Stratus@main/Games/Files/Hollow%20Knight/">
 <meta charset="utf-8">
 <title>Hollow Knight</title>
 <style>
@@ -17,7 +18,7 @@ body{background:#7e0000;overflow:hidden}
 </head>
 <body>
 
-<div id="loading-text">194.52 MB / 912.81 MB</div>
+<div id="loading-text">814.97 MB / 912.81 MB</div>
 <div id="unity-mobile-warning">WebGL not supported on mobile</div>
 <canvas id="unity-canvas"></canvas>
 <div id="fps-graph" style="display:none"><canvas id="fps-canvas" width="180" height="50"></canvas></div>
@@ -29,7 +30,7 @@ body{background:#7e0000;overflow:hidden}
     let LOG_BUFFER = [];
 
     function add(type, args){
-        const msg = [${new Date().toISOString()}] ${type}:  +
+        const msg = `[${new Date().toISOString()}] ${type}: ` +
             args.map(a => typeof a==="object"?JSON.stringify(a):String(a)).join(" ");
         LOG_BUFFER.push(msg);
         if(LOG_BUFFER.length>5000) LOG_BUFFER.shift();
@@ -92,7 +93,7 @@ body{background:#7e0000;overflow:hidden}
     window.fetch = async (...args)=>{
         const res = await _fetch(...args);
         if(!res.ok){
-            showPopup(FETCH ERROR ${res.status}\n${args[0]});
+            showPopup(`FETCH ERROR ${res.status}\n${args[0]}`);
         }
         return res;
     };
@@ -135,7 +136,7 @@ function rst(){clearTimeout(tm_id);if(!hd){hd=true;fg.classList.add('hidden');if
 document.addEventListener('keydown',rst);
 
 // =================== UNITY LOAD ===================
-function gp(f,s,e){return Array.from({length:e-s+1},(_,i)=>${f}.part${s+i})}
+function gp(f,s,e){return Array.from({length:e-s+1},(_,i)=>`${f}.part${s+i}`)}
 
 async function fwp(u){
     const r = await fetch(u), rd = r.body.getReader(), ch=[];
@@ -143,7 +144,7 @@ async function fwp(u){
         const {done,value}=await rd.read();
         if(done) break;
         lb+=value.length; ch.push(value);
-        lt.textContent=${(lb/1048576).toFixed(2)} MB / ${tm} MB;
+        lt.textContent=`${(lb/1048576).toFixed(2)} MB / ${tm} MB`;
     }
     return URL.createObjectURL(new Blob(ch));
 }
@@ -225,7 +226,7 @@ function importRealSave(){
 (() => {
   const input = document.createElement("input");
   input.type = "file";
-  input.accept = "/";
+  input.accept = "*/*";
 
   input.onchange = async () => {
     const file = input.files[0];
@@ -250,7 +251,7 @@ function importRealSave(){
         const firstKey = keys[0];
         const currentHash = firstKey.split("/")[2];
 
-        const key = /idbfs/${currentHash}/user1.dat;
+        const key = `/idbfs/${currentHash}/user1.dat`;
 
         const value = {
           timestamp: new Date().toISOString(),
@@ -285,7 +286,7 @@ async function sdl(){
                 const store=tx.objectStore(st);
                 const dt=await new Promise(res=>{store.getAll().onsuccess=e=>res(e.target.result)});
                 if(dt.length){
-                    sv[${inf.name}/${st}]=dt;
+                    sv[`${inf.name}/${st}`]=dt;
                     fd=true;
                 }
             }catch{}
