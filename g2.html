@@ -1,303 +1,358 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>UGS + Extra games</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGS + Extra games</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-		:root {
-			/* Edulearn Theme Colors */
-			--bg-color: #09090b;
-			--topbar-bg: rgba(9, 9, 11, 0.85);
-			--text-main: #ffffff;
-			--text-muted: #a1a1aa;
-			--card-bg: rgba(255, 255, 255, 0.02);
-			--card-hover: rgba(134, 239, 172, 0.05);
-			--border-color: #27272a;
-			--border-hover: #3f3f46;
-			--accent: #86efac;
-			--input-bg: #121214;
-		}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
+        :root {
+            --bg-color: #09090b;
+            --topbar-bg: rgba(9, 9, 11, 0.85);
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --card-hover: rgba(134, 239, 172, 0.05);
+            --border-color: #27272a;
+            --border-hover: #3f3f46;
+            --accent: #86efac;
+            --input-bg: #121214;
+        }
 
-		body {
-			font-family: 'Inter', system-ui, -apple-system, sans-serif;
-			background-color: var(--bg-color);
-			background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-				linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-			background-size: 40px 40px;
-			background-attachment: fixed;
-			color: var(--text-main);
-			min-height: 100vh;
-			display: flex;
-			flex-direction: column;
-			overflow-x: hidden;
-		}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-		/* --- TOP BAR --- */
-		.topbar {
-			background-color: var(--topbar-bg);
-			backdrop-filter: blur(12px);
-			-webkit-backdrop-filter: blur(12px);
-			border-bottom: 1px solid var(--border-color);
-			padding: 0 40px;
-			height: 80px;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			position: sticky;
-			top: 0;
-			z-index: 100;
-		}
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
 
-		.topbar-brand {
-			font-family: 'Dancing Script', cursive;
-			font-size: 32px;
-			font-weight: 700;
-			color: var(--text-main);
-			letter-spacing: 1px;
-			text-transform: lowercase;
-			cursor: default;
-			transition: 0.2s ease;
-		}
+        /* --- TOP BAR --- */
+        .topbar {
+            background-color: var(--topbar-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-		.topbar-brand:hover {
-			transform: scale(1.05);
-			text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-		}
+        .topbar-brand {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: 1px;
+            text-transform: lowercase;
+            cursor: default;
+            transition: 0.2s ease;
+        }
 
-		.search-container {
-			position: relative;
-		}
+        .topbar-brand:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
 
-		.search-input {
-			background: var(--input-bg);
-			border: 1px solid var(--border-color);
-			color: var(--text-main);
-			padding: 10px 16px 10px 38px;
-			border-radius: 8px;
-			font-size: 14px;
-			width: 280px;
-			transition: 0.2s;
-			font-family: inherit;
-			outline: none;
-		}
+        .search-container {
+            position: relative;
+        }
 
-		.search-input:focus {
-			border-color: var(--text-main);
-		}
+        .search-input {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 16px 10px 38px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 280px;
+            transition: 0.2s;
+            font-family: inherit;
+            outline: none;
+        }
 
-		.search-icon {
-			position: absolute;
-			left: 14px;
-			top: 50%;
-			transform: translateY(-50%);
-			color: var(--text-muted);
-			font-size: 14px;
-		}
+        .search-input:focus {
+            border-color: var(--text-main);
+        }
 
-		/* --- MAIN CONTENT --- */
-		.main-container {
-			padding: 40px;
-			max-width: 1600px;
-			margin: 0 auto;
-			width: 100%;
-			flex: 1;
-		}
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
 
-		.category-header {
-			font-size: 13px;
-			font-weight: 600;
-			text-transform: uppercase;
-			letter-spacing: 1px;
-			color: var(--text-muted);
-			margin-bottom: 20px;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			user-select: none;
-		}
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            padding: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
 
-		.category-header span {
-			color: var(--accent);
-			font-weight: 700;
-		}
+        .category-header {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
 
-		/* --- GRID --- */
-		.game-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-			gap: 16px;
-			margin-bottom: 40px;
-		}
+        .category-header span {
+            color: var(--accent);
+            font-weight: 700;
+        }
 
-		.game-card {
-			background: var(--card-bg);
-			border: 1px solid var(--border-color);
-			border-radius: 12px;
-			padding: 18px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			transition: all 0.2s ease;
-			text-align: center;
-			min-height: 60px;
-		}
+        /* --- GRID --- */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
 
-		.game-card:hover {
-			background: var(--card-hover);
-			border-color: var(--accent);
-			transform: translateY(-4px);
-		}
+        .game-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 60px;
+        }
 
-		.game-card:active {
-			transform: scale(0.98);
-		}
+        .game-card:hover {
+            background: var(--card-hover);
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
 
-		.game-name {
-			font-weight: 500;
-			font-size: 14px;
-			color: var(--text-main);
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			transition: color 0.2s;
-		}
+        .game-card:active {
+            transform: scale(0.98);
+        }
 
-		.game-card:hover .game-name {
-			color: var(--accent);
-		}
+        .game-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.2s;
+        }
 
-		/* --- GAMEPLAY OVERLAY (IFRAME VIEW) --- */
-		.game-view-overlay {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: var(--bg-color);
-			z-index: 2000;
-			display: none;
-			flex-direction: column;
-		}
+        .game-card:hover .game-name {
+            color: var(--accent);
+        }
 
-		.game-view-overlay.active {
-			display: flex;
-		}
+        /* --- GAMEPLAY OVERLAY (IFRAME VIEW) --- */
+        .game-view-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+        }
 
-		.game-header-bar {
-			height: 60px;
-			background: var(--topbar-bg);
-			border-bottom: 1px solid var(--border-color);
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding: 0 30px;
-		}
+        .game-view-overlay.active {
+            display: flex;
+        }
 
-		.toolbar-left {
-			display: flex;
-			align-items: center;
-			gap: 20px;
-		}
+        .game-header-bar {
+            height: 60px;
+            background: var(--topbar-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
 
-		.btn-back {
-			background: transparent;
-			border: 1px solid var(--border-hover);
-			color: var(--text-main);
-			padding: 8px 18px;
-			border-radius: 9999px;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			font-size: 13px;
-			font-weight: 500;
-			transition: background 0.2s;
-			font-family: inherit;
-		}
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-		.btn-back:hover {
-			background: rgba(255, 255, 255, 0.05);
-		}
+        .btn-back {
+            background: transparent;
+            border: 1px solid var(--border-hover);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
 
-		.game-title {
-			color: var(--text-main);
-			font-size: 16px;
-			font-weight: 600;
-		}
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
 
-		.controls-hint {
-			font-size: 13px;
-			color: var(--text-muted);
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
+        .game-title {
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 600;
+        }
 
-		.key-badge {
-			background: var(--card-bg);
-			border: 1px solid var(--border-color);
-			padding: 3px 8px;
-			border-radius: 4px;
-			font-family: monospace;
-			color: var(--accent);
-			font-size: 11px;
-			background: rgba(134, 239, 172, 0.05);
-		}
+        .controls-hint {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-		.game-frame {
-			flex: 1;
-			width: 100%;
-			border: none;
-			background: #000;
-		}
-	</style>
+        .key-badge {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--accent);
+            font-size: 11px;
+            background: rgba(134, 239, 172, 0.05);
+        }
+
+        /* NEW: right-side toolbar for fullscreen / new-tab */
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toolbar-btn {
+            background: transparent;
+            border: 1px solid var(--border-hover);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s, border-color 0.2s, transform 0.1s;
+            font-family: inherit;
+        }
+
+        .toolbar-btn i {
+            font-size: 13px;
+        }
+
+        .toolbar-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent);
+        }
+
+        .toolbar-btn:active {
+            transform: scale(0.97);
+        }
+
+        .game-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #000;
+        }
+
+        /* Optional: when iframe is fullscreen, make sure it covers */
+        :fullscreen .game-frame,
+        :-webkit-full-screen .game-frame {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
-
 <body>
 
-	<div class="topbar">
-		<div class="topbar-brand">UGS + extra games</div>
-		<div class="search-container">
-			<i class="fa-solid fa-search search-icon"></i>
-			<input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+    <div class="topbar">
+        <div class="topbar-brand">UGS + extra games</div>
+        <div class="search-container">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
         </div>
-		</div>
+    </div>
 
-		<div class="main-container" id="libraryView">
-			<div class="category-header">
-				<i class="fa-solid fa-gamepad" style="margin-right: 4px;"></i> All Games <span id="gameCount">(0)</span>
-			</div>
+    <div class="main-container" id="libraryView">
+        <div class="category-header">
+            <i class="fa-solid fa-gamepad" style="margin-right: 4px;"></i> All Games <span id="gameCount">(0)</span>
+        </div>
 
-			<div class="game-grid" id="gameGrid"></div>
-		</div>
+        <div class="game-grid" id="gameGrid"></div>
+    </div>
 
-		<div id="gameOverlay" class="game-view-overlay">
-			<div class="game-header-bar">
-				<div class="toolbar-left">
-					<button class="btn-back" onclick="closeGame()">
+    <div id="gameOverlay" class="game-view-overlay">
+        <div class="game-header-bar">
+            <div class="toolbar-left">
+                <button class="btn-back" onclick="closeGame()">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </button>
-					<div class="game-title" id="activeTitle">Game Title</div>
-				</div>
-				<div class="controls-hint" id="activeControls"></div>
-			</div>
-			<iframe id="gameFrame" class="game-frame" src="about:blank"></iframe>
-		</div>
+                <div class="game-title" id="activeTitle">Game Title</div>
+            </div>
 
-		<script>
-			// Data Configuration
+            <div class="toolbar-right">
+                <div class="controls-hint" id="activeControls"></div>
+                <button class="toolbar-btn" onclick="openInBlankTab()">
+                    <i class="fa-solid fa-up-right-from-square"></i>
+                    <span>New tab</span>
+                </button>
+                <button class="toolbar-btn" onclick="toggleFullscreen()">
+                    <i class="fa-solid fa-expand" id="fsIcon"></i>
+                    <span id="fsLabel">Fullscreen</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- allowfullscreen so Fullscreen API can work on iframe -->
+        <iframe id="gameFrame" class="game-frame" src="about:blank" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        // Data Configuration
         const gamesList = [
             {
                 title: "Hover Drive",
@@ -306,39 +361,43 @@
             },
             {
                 title: "Astra client",
-                url: "./g2games/astraclientbeta.html", 
+                url: "./g2games/astraclientbeta.html",
                 controls: "WASD to Move, Space to Jump"
             },
             {
                 title: "Tuff client",
-                url: "./g2games/tuffclientwasm.html", 
+                url: "./g2games/tuffclientwasm.html",
                 controls: "WASD to Move, Space to Jump"
             },
-             {
+            {
                 title: "Dragon X V3",
-                url: "./g2games/dragonxv3.html", 
+                url: "./g2games/dragonxv3.html",
                 controls: "WASD to Move, Space to Jump"
             },
-			{
-				title: "Monkey mart",
-			  url: "./g2games/clmonkeymart.html",
-				controls: "WASD to Move"
-			 },
-			{
-				title: "Hollow Knight",
-				url: "./g2games/hkfixed.html",
-				contrils: "C.S. here, i gotchu with the fixed hollow knight, with save management"
-			}
+            {
+                title: "Monkey mart",
+                url: "./g2games/clmonkeymart.html",
+                controls: "WASD to Move"
+            },
+            {
+                title: "Beatable Hollow Knight",
+                url: "./g2games/hkfixed.html",
+                contrils: "C.S. here, i gotchu with the fixed hollow knight, with save management"
+            }
         ];
 
         const grid = document.getElementById('gameGrid');
         const searchInput = document.getElementById('searchInput');
         const countLabel = document.getElementById('gameCount');
 
-        // Render Games
+        const fsIcon = document.getElementById('fsIcon');
+        const fsLabel = document.getElementById('fsLabel');
+
+        let currentGameUrl = null;
+
         function renderGames(filter = "") {
             grid.innerHTML = "";
-            const filtered = gamesList.filter(g => 
+            const filtered = gamesList.filter(g =>
                 g.title.toLowerCase().includes(filter.toLowerCase())
             );
 
@@ -354,22 +413,22 @@
                 card.className = 'game-card';
                 card.onclick = () => launchGame(game);
                 card.title = 'Click to play';
-                
                 card.innerHTML = `<div class="game-name">${game.title}</div>`;
                 grid.appendChild(card);
             });
         }
 
-        // Launch Game
         function launchGame(game) {
             const overlay = document.getElementById('gameOverlay');
             const frame = document.getElementById('gameFrame');
             const activeTitle = document.getElementById('activeTitle');
             const activeControls = document.getElementById('activeControls');
-            
+
+            currentGameUrl = game.url;
+
             activeTitle.innerText = game.title;
             frame.src = game.url;
-            
+
             if (game.controls) {
                 activeControls.innerHTML = `<i class="fa-solid fa-keyboard"></i> <span class="key-badge">${game.controls}</span>`;
             } else {
@@ -379,13 +438,105 @@
             overlay.classList.add('active');
         }
 
-        // Close Game
         function closeGame() {
             const overlay = document.getElementById('gameOverlay');
             const frame = document.getElementById('gameFrame');
-            
+
             overlay.classList.remove('active');
-            frame.src = "about:blank"; // Stop game instances/audio
+            frame.src = "about:blank";
+            currentGameUrl = null;
+
+            resetFullscreenButton();
+            if (document.fullscreenElement) {
+                document.exitFullscreen?.();
+            }
+        }
+
+        function resetFullscreenButton() {
+            fsIcon.classList.remove('fa-compress');
+            fsIcon.classList.add('fa-expand');
+            fsLabel.textContent = 'Fullscreen';
+        }
+
+        function setExitFullscreenButton() {
+            fsIcon.classList.remove('fa-expand');
+            fsIcon.classList.add('fa-compress');
+            fsLabel.textContent = 'Exit';
+        }
+
+        // Fullscreen toggle
+        function toggleFullscreen() {
+            const iframe = document.getElementById('gameFrame');
+
+            if (!document.fullscreenElement) {
+                if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                } else if (iframe.mozRequestFullScreen) {
+                    iframe.mozRequestFullScreen();
+                } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        // Update button state when fullscreen changes
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                setExitFullscreenButton();
+            } else {
+                resetFullscreenButton();
+            }
+        });
+
+        // Open current game in about:blank new tab
+        function openInBlankTab() {
+            if (!currentGameUrl) return;
+
+            const popup = window.open('about:blank', '_blank');
+            if (!popup) return;
+
+            const title = document.getElementById('activeTitle').innerText;
+
+            popup.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${title}</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        html, body {
+                            margin: 0;
+                            padding: 0;
+                            height: 100%;
+                            width: 100%;
+                            background: #000;
+                            overflow: hidden;
+                        }
+                        iframe {
+                            border: none;
+                            width: 100%;
+                            height: 100%;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <iframe src="${currentGameUrl}" allowfullscreen></iframe>
+                </body>
+                </html>
+            `);
+            popup.document.close();
         }
 
         // Search Listener
@@ -395,7 +546,6 @@
 
         // Initial Load
         renderGames();
-		</script>
+    </script>
 </body>
-
 </html>
