@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <base href="https://cdn.jsdelivr.net/gh/GLITCHED-OVERRIDE/Stratus@main/Games/Files/Hollow%20Knight/" />
+    <meta charset="utf-8" />
+    <title>
+      Hollow Knight
+    </title>
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}
+body{background:#7e0000;overflow:hidden}
+#loading-text{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font:24px Arial}
+#unity-canvas{width:100vw;height:100vh;display:block}
+#unity-mobile-warning{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;background:rgba(0,0,0,.9);padding:20px;border-radius:8px;font:14px Arial}
+#fps-graph{position:fixed;top:12px;left:12px;width:200px;height:70px;background:rgba(0,0,0,.8);border-radius:6px;padding:10px;z-index:9999;transition:.3s}
+#fps-canvas{width:100%;height:100%;display:block}
+.savebtn{position:fixed;top:12px;padding:10px 18px;cursor:pointer;background:rgba(50,50,50,.85);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;font:14px Arial;z-index:9999;transition:.3s}
+.savebtn:hover{background:rgba(70,70,70,.95)}
+.hidden{opacity:0;pointer-events:none}
+    </style>
+  </head>
+  <body>
+    <div id="loading-text">
+      Glitches Exploits
+    </div>
+    <div>
+      Beware ignore all hk framework errors should still load
+    </div>
+    <div id="unity-mobile-warning">
+      WebGL not supported on mobile
+    </div>
+    <canvas id="unity-canvas">
+    </canvas>
+    <div id="fps-graph" style="display:none">
+      <canvas id="fps-canvas">
+      </canvas>
+    </div>
+    <script>
+      // =================== CONSOLE LOG DUMPER ===================
+(function () {
+    const original = { log: console.log, warn: console.warn, error: console.error };
+    let LOG_BUFFER = [];
+
+    function add(type, args){
+        const msg = `[${new Date().toISOString()}] ${type}: ` +
+            args.map(a =&gt; typeof a===&#34;object&#34;?JSON.stringify(a):String(a)).join(&#34; &#34;);
+        LOG_BUFFER.push(msg);
+        if(LOG_BUFFER.length&gt;5000) LOG_BUFFER.shift();
+    }
+
+    console.log = (...a)=&gt;{add(&#34;LOG&#34;,a); original.log(...a);};
+    console.warn = (...a)=&gt;{add(&#34;WARN&#34;,a); original.warn(...a);};
+    console.error = (...a)=&gt;{add(&#34;ERROR&#34;,a); original.error(...a);};
+
+    window.__dumpConsoleLog = function(){
+        const blob = new Blob([LOG_BUFFER.join(&#34;\n&#34;)], {type:&#34;text/plain&#34;});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement(&#34;a&#34;);
+        a.href=url; a.download=&#34;console_dump.txt&#34;;
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+})();
+
+// =================== GLOBAL ERROR POPUPS ===================
+(function(){
+    function showPopup(msg){
+        console.error(msg);
+        const d = document.createElement(&#34;div&#34;);
+        d.style = `
+            position:fixed;
+            top:20px;
+            left:50%;
+            transform:translateX(-50%);
+            background:#000;
+            color:#ff3333;
+            border:2px solid #ff0000;
+            padding:12px 16px;
+            font:13px monospace;
+            z-index:9999999;
+            border-radius:6px;
+            max-width:95%;
+            white-space:pre-wrap;
+        `;
+        d.textContent = msg;
+        document.body.appendChild(d);
+        setTimeout(()=&gt;d.remove(),10000);
+    }
+
+    window.addEventListener(&#34;error&#34;, e=&gt;{
+        if(e.target &amp;&amp; (e.target.src || e.target.href)){
+            const url = e.target.src||e.target.href;
+            showPopup(&#34;RESOURCE LOAD ERROR:\n&#34; + url);
+        } else {
+            showPopup(&#34;JS ERROR:\n&#34; + e.message + &#34;\n&#34; + e.filename + &#34;:&#34; + e.lineno);
+        }
+    }, true);
+
+    window.addEventListener(&#34;unhandledrejection&#34;, e=&gt;{
+        showPopup(&#34;PROMISE ERROR:\n&#34;+(e.reason?.stack||e.reason));
+    });
+
+    const _fetch = window.fetch;
+    window.fetch = async (...args)=&gt;{
+        const res = await _fetch(...args);
+        if(!res.ok){
+            showPopup(`FETCH ERROR ${res.status}\n${args[0]}`);
+        }
+        return res;
+    };
+})();
+
+window.Module = { print: console.log, printErr: console.error };
+
+const lt=document.getElementById(&#34;loading-text&#34;),
+cv=document.getElementById(&#34;unity-canvas&#34;),
+mw=document.getElementById(&#34;unity-mobile-warning&#34;),
+fg=document.getElementById(&#34;fps-graph&#34;),
+fc=document.getElementById(&#34;fps-canvas&#34;);
+
+let lb=0,hd=false,tm_id;
+const tm=&#39;912.81&#39;,fh=[],ml=90;
+fc.width=180; fc.height=50;
+const ctx=fc.getContext(&#39;2d&#39;);
+let lft=performance.now(),fr=0,fps=60,sb;
+
+function uf(){
+    const nt=performance.now(), dt=(nt-lft)/1000;
+    lft=nt; fps=dt&gt;0?1/dt:60; fr++;
+    if(fr%3===0){
+        fh.push(fps); if(fh.length&gt;ml) fh.shift();
+        ctx.clearRect(0,0,180,50);
+        for(let i=0;i&lt;fh.length;i++){
+            const f=fh[i], h=Math.min(f/60,1)*35, c=f&gt;50?&#39;#0f0&#39;:f&gt;30?&#39;#fa0&#39;:&#39;#f33&#39;;
+            ctx.fillStyle=c; ctx.fillRect(i*2,50-h,1.8,h);
+        }
+        ctx.fillStyle=&#39;#fff&#39;; ctx.font=&#39;bold 13px monospace&#39;;
+        ctx.shadowColor=&#39;#000&#39;; ctx.shadowBlur=4;
+        ctx.fillText(Math.round(fps)+&#39; FPS&#39;,6,16);
+        ctx.shadowBlur=0;
+    }
+    requestAnimationFrame(uf);
+}
+
+function shw(){hd=false;fg.classList.remove(&#39;hidden&#39;);if(sb)sb.classList.remove(&#39;hidden&#39;)}
+function rst(){clearTimeout(tm_id);if(!hd){hd=true;fg.classList.add(&#39;hidden&#39;);if(sb)sb.classList.add(&#39;hidden&#39;)}tm_id=setTimeout(shw,5000)}
+document.addEventListener(&#39;keydown&#39;,rst);
+
+// =================== UNITY LOAD ===================
+function gp(f,s,e){return Array.from({length:e-s+1},(_,i)=&gt;`${f}.part${s+i}`)}
+
+async function fwp(u){
+    const r = await fetch(u), rd = r.body.getReader(), ch=[];
+    while(true){
+        const {done,value}=await rd.read();
+        if(done) break;
+        lb+=value.length; ch.push(value);
+        lt.textContent=`${(lb/1048576).toFixed(2)} MB / ${tm} MB`;
+    }
+    return URL.createObjectURL(new Blob(ch));
+}
+
+async function mf(p){
+    const b=await Promise.all(p.map(fwp)),
+    bl=await Promise.all(b.map(u=&gt;fetch(u).then(r=&gt;r.blob())));
+    return URL.createObjectURL(new Blob(bl));
+}
+
+(async()=&gt;{
+    const [du,wu]=await Promise.all([
+        mf(gp(&#34;Build/hktruffled.data&#34;,1,45)),
+        mf(gp(&#34;Build/hktruffled.wasm&#34;,1,2))
+    ]);
+    const sc=document.createElement(&#34;script&#34;);
+    sc.src=&#34;Build/hktruffled.loader.js&#34;;
+    sc.onload=()=&gt;{
+        createUnityInstance(cv,{
+            dataUrl:du,
+            frameworkUrl:&#34;Build/hktruffled.framework.js&#34;,
+            codeUrl:wu,
+            streamingAssetsUrl:&#34;StreamingAssets&#34;,
+            companyName:&#34;Team Cherry&#34;,
+            productName:&#34;Hollow Knight&#34;,
+            productVersion:&#34;1.0&#34;
+        }).then(()=&gt;{
+            lt.remove();
+            createButtons();
+            fg.style.display=&#39;block&#39;;
+            uf();
+        }).catch(e=&gt;alert(&#34;UNITY LOAD ERROR: &#34;+e));
+    };
+    document.body.appendChild(sc);
+})();
+
+// =================== BUTTONS ===================
+function createButtons(){
+    addImportRealButton();
+    addDumpButton();
+    addUploadButton();
+    addDownloadButton();
+}
+
+function baseBtn(right,text,onclick){
+    const b=document.createElement(&#39;button&#39;);
+    b.className=&#39;savebtn&#39;;
+    b.style.right=right;
+    b.textContent=text;
+    b.onclick=onclick;
+    document.body.appendChild(b);
+}
+
+// Download
+function addDownloadButton(){
+    baseBtn(&#39;12px&#39;,&#39;download&#39;,sdl);
+}
+
+// Upload JSON Export
+function addUploadButton(){
+    baseBtn(&#39;110px&#39;,&#39;upload&#39;,()=&gt;document.getElementById(&#39;datInput&#39;).click());
+    const fi=document.createElement(&#39;input&#39;);
+    fi.type=&#39;file&#39;; fi.id=&#39;datInput&#39;; fi.accept=&#39;.dat&#39;; fi.style.display=&#39;none&#39;;
+    fi.onchange=idl;
+    document.body.appendChild(fi);
+}
+
+// Dump Console
+function addDumpButton(){
+    baseBtn(&#39;220px&#39;,&#39;dump log&#39;,()=&gt;window.__dumpConsoleLog());
+}
+
+// Import Real IDBFS
+function addImportRealButton(){
+    baseBtn(&#39;330px&#39;,&#39;Import Real&#39;,importRealSave);
+}
+
+function importRealSave(){
+(() =&gt; {
+  const input = document.createElement(&#34;input&#34;);
+  input.type = &#34;file&#34;;
+  input.accept = &#34;*/*&#34;;
+
+  input.onchange = async () =&gt; {
+    const file = input.files[0];
+    if (!file) return;
+
+    const buffer = await file.arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+
+    const openReq = indexedDB.open(&#34;/idbfs&#34;);
+    openReq.onsuccess = e =&gt; {
+      const db = e.target.result;
+      const tx = db.transaction(&#34;FILE_DATA&#34;, &#34;readwrite&#34;);
+      const store = tx.objectStore(&#34;FILE_DATA&#34;);
+
+      store.getAllKeys().onsuccess = ev =&gt; {
+        const keys = ev.target.result;
+        if (!keys.length) {
+          console.error(&#34;No keys found in FILE_DATA&#34;);
+          return;
+        }
+
+        const firstKey = keys[0];
+        const currentHash = firstKey.split(&#34;/&#34;)[2];
+
+        const key = `/idbfs/${currentHash}/user1.dat`;
+
+        const value = {
+          timestamp: new Date().toISOString(),
+          mode: 33206,
+          contents: bytes
+        };
+
+        store.put(value, key).onsuccess = () =&gt; {
+          alert(&#34;Real save imported. Refresh page.&#34;);
+        };
+      };
+    };
+  };
+
+  input.click();
+})();
+}
+
+// =================== EXPORT / IMPORT JSON SAVE ===================
+async function sdl(){
+    const dbs=await indexedDB.databases();
+    let sv={},fd=false;
+    for(const inf of dbs){
+        const db=await new Promise((ok,bd)=&gt;{
+            const r=indexedDB.open(inf.name);
+            r.onsuccess=()=&gt;ok(r.result);
+            r.onerror=()=&gt;bd(r.error);
+        });
+        for(const st of db.objectStoreNames){
+            try{
+                const tx=db.transaction(st,&#39;readonly&#39;);
+                const store=tx.objectStore(st);
+                const dt=await new Promise(res=&gt;{store.getAll().onsuccess=e=&gt;res(e.target.result)});
+                if(dt.length){
+                    sv[`${inf.name}/${st}`]=dt;
+                    fd=true;
+                }
+            }catch{}
+        }
+        db.close();
+    }
+    if(!fd){alert(&#39;No save found&#39;);return;}
+    const bl=new Blob([JSON.stringify(sv)],{type:&#39;application/octet-stream&#39;});
+    const u=URL.createObjectURL(bl);
+    const a=document.createElement(&#39;a&#39;);
+    a.href=u; a.download=&#39;hk_save.dat&#39;;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(u);
+}
+
+async function idl(e){
+    const f=e.target.files[0]; if(!f) return;
+    const txt=await f.text();
+    let data;
+    try{data=JSON.parse(txt);}catch{alert(&#34;Invalid .dat file&#34;); return;}
+    const dbs = await indexedDB.databases();
+    for(const key in data){
+        const [,storeName] = key.split(&#39;/&#39;);
+        for(const inf of dbs){
+            const db = await new Promise((ok,bd)=&gt;{
+                const r=indexedDB.open(inf.name);
+                r.onsuccess=()=&gt;ok(r.result);
+                r.onerror=()=&gt;bd(r.error);
+            });
+            if(!db.objectStoreNames.contains(storeName)){ db.close(); continue; }
+            const tx=db.transaction(storeName,&#34;readwrite&#34;);
+            const store=tx.objectStore(storeName);
+            for(const item of data[key]){
+                store.put(item);
+            }
+            await new Promise(r=&gt;tx.oncomplete=r);
+            db.close();
+        }
+    }
+    alert(&#34;Save imported. Reload page.&#34;);
+}
+    </script>
+  </body>
+</html>
