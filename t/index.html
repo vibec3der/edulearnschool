@@ -4,26 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Tools</title>
+    <title>Edulearn | Geography</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         :root {
-            /* Edulearn Theme Colors */
-            --bg-color: #09090b;
-            --topbar-bg: rgba(9, 9, 11, 0.85);
+            /* --- NEW EDULEARN THEME VARIABLES --- */
+            --bg-color: #000000;
             --text-main: #ffffff;
-            --text-muted: #a1a1aa;
-            --card-bg: rgba(255, 255, 255, 0.02);
-            --card-hover: rgba(134, 239, 172, 0.05);
-            --border-color: #27272a;
-            --border-hover: #3f3f46;
-            --accent: #86efac;
-            --input-bg: #121214;
+            --text-muted: #9ca3af;
+            --modal-bg: #0a0a0a;
+            --modal-border: #222222;
+            --input-bg: #000000;
+            --input-border: #333333;
+            --pill-hover: rgba(255, 255, 255, 0.1);
+            --pill-active: #222222;
+            --accent-glow: rgba(255, 255, 255, 0.1);
             
             --danger: #f87171;
             --success: #86efac;
+        }
+
+        /* --- THEMES --- */
+        [data-theme="sakura"] {
+            --bg-color: #fdf6f5;
+            --text-main: #4a3b3c;
+            --text-muted: #9e8487;
+            --modal-bg: #ffffff;
+            --modal-border: #f0e4e4;
+            --input-bg: #fdf6f5;
+            --input-border: #e6d3d3;
+            --pill-hover: rgba(255, 183, 197, 0.4);
+            --accent-glow: rgba(255, 183, 197, 0.3);
+        }
+
+        [data-theme="red"] {
+            --bg-color: #0a0000;
+            --text-main: #ff4d4d;
+            --text-muted: #802b2b;
+            --modal-bg: #140000;
+            --modal-border: #330000;
+            --input-bg: #0a0000;
+            --input-border: #4d0000;
+            --pill-hover: rgba(255, 0, 0, 0.15);
+            --accent-glow: rgba(255, 77, 77, 0.2);
+        }
+
+        [data-theme="azure"] {
+            --bg-color: #faf9f8;
+            --text-main: #323130;
+            --text-muted: #605e5c;
+            --modal-bg: #ffffff;
+            --modal-border: #edebe9;
+            --input-bg: #ffffff;
+            --input-border: #8a8886;
+            --pill-hover: #f3f2f1;
+            --accent-glow: rgba(0, 120, 212, 0.2);
+        }
+
+        /* --- FORCE ALL ICONS VERY WHITE --- */
+        i, svg, [class^="fa-"], [class*=" fa-"] {
+            color: #ffffff !important;
+            filter: brightness(1.5);
+            text-shadow: 0 0 8px rgba(255,255,255,0.35);
         }
 
         * {
@@ -35,23 +79,20 @@
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         /* --- TOP BAR --- */
         .topbar {
-            background-color: var(--topbar-bg);
+            background-color: var(--modal-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--modal-border);
             padding: 0 40px;
             height: 80px;
             display: flex;
@@ -60,22 +101,24 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 20px var(--accent-glow);
         }
 
         .topbar-brand {
-            font-family: 'Dancing Script', cursive;
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--text-main);
-            letter-spacing: 1px;
-            text-transform: lowercase;
-            cursor: default;
+            letter-spacing: -0.04em;
+            cursor: pointer;
             transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .topbar-brand:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px var(--accent-glow);
         }
 
         .search-container {
@@ -84,7 +127,7 @@
 
         .search-input {
             background: var(--input-bg);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--input-border);
             color: var(--text-main);
             padding: 10px 16px 10px 38px;
             border-radius: 8px;
@@ -97,6 +140,7 @@
 
         .search-input:focus {
             border-color: var(--text-main);
+            box-shadow: 0 0 0 2px var(--accent-glow);
         }
 
         .search-icon {
@@ -104,7 +148,6 @@
             left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
             font-size: 14px;
         }
 
@@ -119,7 +162,7 @@
 
         .category-header {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
@@ -130,12 +173,7 @@
             user-select: none;
         }
 
-        .category-header span {
-            color: var(--accent);
-            font-weight: 700;
-        }
-
-        /* --- GRID --- */
+        /* --- GRID & CARDS --- */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -144,8 +182,8 @@
         }
 
         .tool-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background: var(--modal-bg);
+            border: 1px solid var(--modal-border);
             border-radius: 12px;
             padding: 18px;
             display: flex;
@@ -159,9 +197,9 @@
         }
 
         .tool-card:hover {
-            background: var(--card-hover);
-            border-color: var(--accent);
+            background: var(--pill-hover);
             transform: translateY(-4px);
+            box-shadow: 0 4px 20px var(--accent-glow);
         }
 
         .tool-card:active {
@@ -169,7 +207,7 @@
         }
 
         .tool-name {
-            font-weight: 500;
+            font-weight: 600;
             font-size: 14px;
             color: var(--text-main);
             white-space: nowrap;
@@ -177,63 +215,72 @@
             text-overflow: ellipsis;
             transition: color 0.2s;
         }
-        
-        .tool-card:hover .tool-name {
-            color: var(--accent);
-        }
 
-        /* --- TOOL OVERLAY (IFRAME VIEW) --- */
+        /* --- CONTROLLED SANDBOX OVERLAY --- */
         .tool-view-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-color);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
             z-index: 2000;
             display: none;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .tool-view-overlay.active {
             display: flex;
         }
 
-        .tool-header-bar {
-            height: 60px;
-            background: var(--topbar-bg);
-            border-bottom: 1px solid var(--border-color);
+        .sandbox-container {
+            width: 85%;
+            max-width: 1000px;
+            height: 85vh;
+            background: var(--bg-color);
+            border: 1px solid var(--modal-border);
+            border-radius: 12px;
+            overflow: hidden;
             display: flex;
-            align-items: center;
-            padding: 0 30px;
-        }
-
-        .btn-back {
-            background: transparent;
-            border: 1px solid var(--border-hover);
-            color: var(--text-main);
-            padding: 8px 18px;
-            border-radius: 9999px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            transition: background 0.2s;
-            font-family: inherit;
-        }
-
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.05);
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px var(--accent-glow);
+            position: relative;
         }
 
         .tool-frame {
             flex: 1;
             width: 100%;
             border: none;
-            background: #000;
+            background: #fff; /* Keep iframe white inside */
         }
+
+        /* The Dark Bottom Toolbar */
+        .sandbox-toolbar {
+            background-color: var(--modal-bg);
+            border-top: 1px solid var(--modal-border);
+            padding: 12px 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .sandbox-toolbar button {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .sandbox-toolbar button:hover { 
+            background-color: var(--pill-hover); 
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        
+        .sandbox-toolbar button svg { width: 18px; height: 18px; }
 
         /* --- TOAST --- */
         .toast-container {
@@ -249,22 +296,19 @@
         }
 
         .toast {
-            background: var(--topbar-bg);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--border-color);
+            background: var(--modal-bg);
+            border: 1px solid var(--modal-border);
             color: var(--text-main);
             padding: 12px 24px;
             border-radius: 8px;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 30px var(--accent-glow);
             animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-
-        .toast i { color: var(--success); font-size: 16px; }
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -280,7 +324,10 @@
 <body>
 
     <div class="topbar">
-        <div class="topbar-brand">Useful tools</div>
+        <div class="topbar-brand" onclick="window.location.href='/h/'">
+            <i class="fa-solid fa-house" style="font-size: 18px; margin-right: 4px;"></i> Home
+        </div>
+        
         <div class="search-container">
             <i class="fa-solid fa-search search-icon"></i>
             <input type="text" id="searchInput" class="search-input" placeholder="Search tools...">
@@ -296,22 +343,49 @@
     </div>
 
     <div id="toolOverlay" class="tool-view-overlay">
-        <div class="tool-header-bar">
-            <button class="btn-back" onclick="closeTool()">
-                <i class="fa-solid fa-arrow-left"></i> Back
-            </button>
+        <div class="sandbox-container" id="sandboxContainer">
+            
+            <iframe id="toolFrame" class="tool-frame" src=""></iframe>
+            
+            <div class="sandbox-toolbar">
+                <button onclick="fullscreenTool()" title="Fullscreen">
+                    <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                </button>
+                
+                <button onclick="document.getElementById('toolFrame').src = document.getElementById('toolFrame').src" title="Refresh">
+                    <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                </button>
+                
+                <button onclick="copyCurrentToolLink()" title="Copy Link">
+                    <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                </button>
+                
+                <button onclick="openToolExternal()" title="Open in New Tab">
+                    <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                </button>
+
+                <button onclick="closeTool()" title="Close Sandbox" style="margin-left: auto; border-color: var(--danger); background: transparent;">
+                    <i class="fa-solid fa-xmark" style="color: var(--danger) !important; filter: none; text-shadow: none;"></i>
+                </button>
+            </div>
         </div>
-        <iframe id="toolFrame" class="tool-frame" src=""></iframe>
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // Tool Data Configuration
+        // Check for theme in local storage to apply it automatically
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+            if (savedData.theme) {
+                document.body.setAttribute('data-theme', savedData.theme);
+            }
+        });
+
         const tools = [
-            { name: "E2E v2", url: "./e2ev2.html", action: "open" },
-            { name: "WebRetro", url: "./webretro-standalone.html", action: "open" },
-            { name: "ROM files", url: "./roms.html", action: "open" },
+            { name: "E2E v2", url: "/e2ev2.html", action: "open" },
+            { name: "WebRetro", url: "/webretro-standalone.html", action: "open" },
+            { name: "ROM files", url: "/roms.html", action: "open" },
             { name: "Sh1mmer", url: "https://sh1mmer.me", action: "copy" },
             { name: "ExtPrint3r", url: "https://extprint3r.github.io/", action: "copy" },
             { name: "Versioner", url: "https://vibec3der.github.io/chromeos-versioner", action: "copy" },
@@ -322,8 +396,8 @@
         const grid = document.getElementById('toolsGrid');
         const searchInput = document.getElementById('searchInput');
         const toolCountLabel = document.getElementById('toolCount');
+        const frame = document.getElementById('toolFrame');
 
-        // Render Cards
         function renderTools(filter = "") {
             grid.innerHTML = "";
             const filtered = tools.filter(t => 
@@ -341,14 +415,13 @@
                 const card = document.createElement('div');
                 card.className = 'tool-card';
                 card.onclick = () => handleToolClick(tool);
-                card.title = tool.action === 'open' ? 'Click to open' : 'Click to copy link';
+                card.title = tool.action === 'open' ? 'Click to open in sandbox' : 'Click to copy link';
                 
                 card.innerHTML = `<div class="tool-name">${tool.name}</div>`;
                 grid.appendChild(card);
             });
         }
 
-        // Handle Click (Switch Logic)
         function handleToolClick(tool) {
             if (tool.action === 'open') {
                 openToolView(tool.url);
@@ -357,23 +430,43 @@
             }
         }
 
-        // Open Tool Logic
         function openToolView(url) {
             const overlay = document.getElementById('toolOverlay');
-            const frame = document.getElementById('toolFrame');
             frame.src = url;
             overlay.classList.add('active');
         }
 
-        // Close Tool Logic (Back Button)
         function closeTool() {
             const overlay = document.getElementById('toolOverlay');
-            const frame = document.getElementById('toolFrame');
             overlay.classList.remove('active');
-            frame.src = "about:blank"; // Stop any media/scripts running
+            frame.src = "about:blank"; // Stop background processes/audio
         }
 
-        // Copy Logic
+        // --- Sandbox Toolbar Actions ---
+        function fullscreenTool() {
+            const container = document.getElementById('sandboxContainer');
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function copyCurrentToolLink() {
+            if (frame.src && frame.src !== "about:blank") {
+                copyToClipboard(frame.src, "Current Tool");
+            }
+        }
+
+        function openToolExternal() {
+            if (frame.src && frame.src !== "about:blank") {
+                window.open(frame.src, '_blank');
+            }
+        }
+
+        // --- Utilities ---
         async function copyToClipboard(text, name) {
             try {
                 await navigator.clipboard.writeText(text);
@@ -383,7 +476,6 @@
             }
         }
 
-        // Toast Notification
         function showToast(msg, isError = false) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -392,7 +484,8 @@
             const icon = isError ? 'fa-circle-xmark' : 'fa-circle-check';
             const color = isError ? 'var(--danger)' : 'var(--success)';
             
-            toast.innerHTML = `<i class="fa-solid ${icon}" style="color: ${color}"></i> ${msg}`;
+            // Override force-white for toast icons so success/error colors show
+            toast.innerHTML = `<i class="fa-solid ${icon}" style="color: ${color} !important; filter: none; text-shadow: none;"></i> ${msg}`;
             container.appendChild(toast);
 
             setTimeout(() => {
@@ -401,12 +494,10 @@
             }, 3000);
         }
 
-        // Search Listener
         searchInput.addEventListener('input', (e) => {
             renderTools(e.target.value);
         });
 
-        // Initial Load
         renderTools();
     </script>
 </body>

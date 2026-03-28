@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edulearn | Chemistry</title>
+    <title>Edulearn | Extras</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -21,8 +21,6 @@
             --pill-hover: rgba(255, 255, 255, 0.1);
             --pill-active: #222222;
             --accent-glow: rgba(255, 255, 255, 0.1);
-            
-            --accent: #86efac; /* Keeping the specific green accent for key badges */
         }
 
         /* --- THEMES --- */
@@ -36,7 +34,6 @@
             --input-border: #e6d3d3;
             --pill-hover: rgba(255, 183, 197, 0.4);
             --accent-glow: rgba(255, 183, 197, 0.3);
-            --accent: #ffb7c5;
         }
 
         [data-theme="red"] {
@@ -49,7 +46,6 @@
             --input-border: #4d0000;
             --pill-hover: rgba(255, 0, 0, 0.15);
             --accent-glow: rgba(255, 77, 77, 0.2);
-            --accent: #ff4d4d;
         }
 
         [data-theme="azure"] {
@@ -62,7 +58,6 @@
             --input-border: #8a8886;
             --pill-hover: #f3f2f1;
             --accent-glow: rgba(0, 120, 212, 0.2);
-            --accent: #0078d4;
         }
 
         /* --- FORCE ALL ICONS VERY WHITE --- */
@@ -176,15 +171,15 @@
             user-select: none;
         }
 
-        /* --- GRID --- */
-        .game-grid {
+        /* --- GRID & CARDS --- */
+        .extras-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 40px;
         }
 
-        .game-card {
+        .extra-card {
             background: var(--modal-bg);
             border: 1px solid var(--modal-border);
             border-radius: 12px;
@@ -198,17 +193,17 @@
             min-height: 60px;
         }
 
-        .game-card:hover {
+        .extra-card:hover {
             background: var(--pill-hover);
             transform: translateY(-4px);
             box-shadow: 0 4px 20px var(--accent-glow);
         }
 
-        .game-card:active {
+        .extra-card:active {
             transform: scale(0.98);
         }
 
-        .game-name {
+        .extra-name {
             font-weight: 600;
             font-size: 14px;
             color: var(--text-main);
@@ -218,8 +213,8 @@
             transition: color 0.2s;
         }
 
-        /* --- GAMEPLAY OVERLAY (IFRAME VIEW) --- */
-        .game-view-overlay {
+        /* --- APP OVERLAY (IFRAME VIEW) --- */
+        .app-view-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -231,84 +226,52 @@
             flex-direction: column;
         }
 
-        .game-view-overlay.active {
+        .app-view-overlay.active {
             display: flex;
         }
 
-        .game-header-bar {
+        .app-header-bar {
             height: 60px;
             background: var(--modal-bg);
             border-bottom: 1px solid var(--modal-border);
             display: flex;
             align-items: center;
-            justify-content: space-between;
             padding: 0 30px;
+            gap: 20px;
             box-shadow: 0 4px 20px var(--accent-glow);
         }
 
-        .toolbar-left,
-        .toolbar-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .btn-back,
-        .btn-action {
+        .btn-back {
             background: transparent;
             border: 1px solid var(--input-border);
             color: var(--text-main);
+            padding: 8px 18px;
             border-radius: 9999px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
             font-size: 13px;
             font-weight: 500;
-            transition: all 0.2s;
+            transition: background 0.2s;
             font-family: inherit;
         }
-        
-        .btn-back { padding: 8px 18px; }
-        .btn-action { padding: 8px 14px; }
 
-        .btn-back:hover,
-        .btn-action:hover {
+        .btn-back:hover {
             background: var(--pill-hover);
-            box-shadow: 0 0 10px var(--accent-glow);
         }
 
-        .game-title {
+        .app-title {
             color: var(--text-main);
             font-size: 16px;
             font-weight: 600;
         }
 
-        .controls-hint {
-            font-size: 13px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .key-badge {
-            background: var(--pill-hover);
-            border: 1px solid var(--input-border);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: var(--text-main);
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .game-frame {
+        .app-frame {
             flex: 1;
             width: 100%;
             border: none;
-            background: #000;
+            background: #000; /* Darker iframe background to fit theme */
         }
     </style>
 </head>
@@ -321,37 +284,26 @@
         </div>
         <div class="search-container">
             <i class="fa-solid fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search extras...">
         </div>
     </div>
 
-    <div class="main-container" id="libraryView">
+    <div class="main-container" id="mainContainer">
         <div class="category-header">
-            <i class="fa-solid fa-gamepad" style="margin-right: 4px;"></i> All Games <span id="gameCount">(0)</span>
+            <i class="fa-solid fa-star" style="margin-right: 4px;"></i> All Extras <span id="extraCount">(0)</span>
         </div>
-
-        <div class="game-grid" id="gameGrid"></div>
+        
+        <div class="extras-grid" id="extrasGrid"></div>
     </div>
 
-    <div id="gameOverlay" class="game-view-overlay">
-        <div class="game-header-bar">
-            <div class="toolbar-left">
-                <button class="btn-back" onclick="closeGame()">
-                    <i class="fa-solid fa-arrow-left"></i> Back
-                </button>
-                <div class="game-title" id="activeTitle">Game Title</div>
-            </div>
-            <div class="toolbar-right">
-                <div class="controls-hint" id="activeControls"></div>
-                <button class="btn-action" onclick="toggleFullscreen()" title="Fullscreen">
-                    <i class="fa-solid fa-expand"></i>
-                </button>
-                <button class="btn-action" onclick="openInAboutBlank()" title="Open in about:blank tab">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </button>
-            </div>
+    <div id="appOverlay" class="app-view-overlay">
+        <div class="app-header-bar">
+            <button class="btn-back" onclick="closeApp()">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <div class="app-title" id="appTitle">Application</div>
         </div>
-        <iframe id="gameFrame" class="game-frame" src="about:blank" allowfullscreen></iframe>
+        <iframe id="appFrame" class="app-frame" src=""></iframe>
     </div>
 
     <script>
@@ -364,149 +316,69 @@
         });
 
         // Data Configuration
-        const gamesList = [
-            {
-                title: "Hover Drive",
-                url: "./g2games/clhoverracerdrive.html",
-                controls: "Arrow Keys or WASD to Drive"
-            },
-            {
-                title: "Astra client",
-                url: "./g2games/astraclientbeta.html", 
-                controls: "WASD to Move, Space to Jump"
-            },
-            {
-                title: "Tuff client",
-                url: "./g2games/tuffclientwasm.html", 
-                controls: "WASD to Move, Space to Jump"
-            },
-             {
-                title: "Dragon X V3",
-                url: "./g2games/dragonxv3.html", 
-                controls: "WASD to Move, Space to Jump"
-            },
-            {
-                title: "Monkey mart",
-              url: "./g2games/clmonkeymart.html",
-                controls: "WASD to Move"
-             },
-            {
-                title: "Beatable Hollow Knight",
-                url: "./g2games/hkfixed.html",
-                controls: "C.S. here, i gotchu with the fixed hollow knight, with save management"
-            }
+        const extras = [
+            { name: "Music Player", url: "/musicplayer.html" },
+            { name: "Image Gallery", url: "/images.html" },
+            { name: "AI Games", url: "/aigames.html" },
+            { name: "Easter Egg List", url: "easteregglist.txt" }
         ];
 
-        const grid = document.getElementById('gameGrid');
+        const grid = document.getElementById('extrasGrid');
         const searchInput = document.getElementById('searchInput');
-        const countLabel = document.getElementById('gameCount');
+        const countLabel = document.getElementById('extraCount');
 
-        // Render Games
-        function renderGames(filter = "") {
+        // Render Cards
+        function renderExtras(filter = "") {
             grid.innerHTML = "";
-            const filtered = gamesList.filter(g => 
-                g.title.toLowerCase().includes(filter.toLowerCase())
+            const filtered = extras.filter(e => 
+                e.name.toLowerCase().includes(filter.toLowerCase())
             );
 
             countLabel.innerText = `(${filtered.length})`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); font-size: 14px; text-align: center; padding: 40px 0;">No games found.</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); font-size: 14px; text-align: center; padding: 40px 0;">No extras found.</div>`;
                 return;
             }
 
-            filtered.forEach(game => {
+            filtered.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'game-card';
-                card.onclick = () => launchGame(game);
-                card.title = 'Click to play';
+                card.className = 'extra-card';
+                card.onclick = () => openApp(item.url, item.name);
+                card.title = 'Click to open';
                 
-                card.innerHTML = `<div class="game-name">${game.title}</div>`;
+                card.innerHTML = `<div class="extra-name">${item.name}</div>`;
                 grid.appendChild(card);
             });
         }
 
-        // Launch Game
-        function launchGame(game) {
-            const overlay = document.getElementById('gameOverlay');
-            const frame = document.getElementById('gameFrame');
-            const activeTitle = document.getElementById('activeTitle');
-            const activeControls = document.getElementById('activeControls');
+        // Open App Logic
+        function openApp(url, title) {
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
+            const appTitle = document.getElementById('appTitle');
             
-            activeTitle.innerText = game.title;
-            frame.src = game.url;
-            
-            if (game.controls) {
-                activeControls.innerHTML = `<i class="fa-solid fa-keyboard"></i> <span class="key-badge">${game.controls}</span>`;
-            } else {
-                activeControls.innerHTML = '';
-            }
-
+            appTitle.innerText = title;
+            frame.src = url;
             overlay.classList.add('active');
         }
 
-        // Close Game
-        function closeGame() {
-            const overlay = document.getElementById('gameOverlay');
-            const frame = document.getElementById('gameFrame');
+        // Close App Logic
+        function closeApp() {
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
             
             overlay.classList.remove('active');
-            frame.src = "about:blank"; // Stop game instances/audio
-        }
-
-        // Fullscreen Game
-        function toggleFullscreen() {
-            const frame = document.getElementById('gameFrame');
-            if (frame.requestFullscreen) {
-                frame.requestFullscreen();
-            } else if (frame.webkitRequestFullscreen) { /* Safari */
-                frame.webkitRequestFullscreen();
-            } else if (frame.msRequestFullscreen) { /* IE11 */
-                frame.msRequestFullscreen();
-            }
-        }
-
-        // Open in about:blank
-        function openInAboutBlank() {
-            const frame = document.getElementById('gameFrame');
-            const currentUrl = frame.src;
-            
-            // Don't open if there's no game loaded
-            if (currentUrl === "about:blank" || currentUrl === "") return;
-
-            // Open new tab
-            const win = window.open('about:blank', '_blank');
-            if (!win) {
-                alert("Please allow popups for this site to use the about:blank feature.");
-                return;
-            }
-
-            // Style the new window's body
-            win.document.body.style.margin = '0';
-            win.document.body.style.height = '100vh';
-            win.document.body.style.overflow = 'hidden';
-            win.document.title = "Classes"; // Disguise tab title
-
-            // Create and append iframe
-            const iframe = win.document.createElement('iframe');
-            iframe.style.border = 'none';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.margin = '0';
-            iframe.src = currentUrl;
-            win.document.body.appendChild(iframe);
-
-            // Close the game in the original tab so it's not running twice
-            closeGame();
+            frame.src = "about:blank"; // Stop background scripts/audio
         }
 
         // Search Listener
         searchInput.addEventListener('input', (e) => {
-            renderGames(e.target.value);
+            renderExtras(e.target.value);
         });
 
         // Initial Load
-        renderGames();
+        renderExtras();
     </script>
 </body>
 </html>
