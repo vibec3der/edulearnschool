@@ -1,299 +1,1020 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-gVvhM7XA8pnmE1DIiOjpN.js"></script>
-<script>
-  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-  plausible.init()
-</script>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYTK6H2VP7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title id="page-title">edulearn</title>
+	<link id="dynamic-favicon" rel="icon" href="">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    /* --- FORCE ALL ICONS VERY WHITE --- */
 
-  gtag('config', 'G-KYTK6H2VP7');
-</script>
-
-<link rel="icon" type="image/favicon" href="favicon.ico" />
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Edulearn K-12 | Authentication Required</title>
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+nav a i {
+    color: #ffffff !important;
+    filter: brightness(1.5);
+    text-shadow: 0 0 8px rgba(255,255,255,0.35);
 }
 
-body {
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #1a2332;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  color: #fff;
+.setting-info h3 i {
+    color: #ffffff !important;
+    filter: brightness(1.4);
 }
 
-header {
-  background: #0f1419;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  position: relative;
-  z-index: 100;
-  border-bottom: 3px solid #2c5aa0;
+.spotlight-item i {
+    color: #ffffff !important;
+    filter: brightness(1.4);
 }
 
-.header-top {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.spotlight-input-wrapper i {
+    color: #ffffff !important;
 }
 
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+.settings-header-top i {
+    color: #ffffff !important;
 }
 
-.school-logo img {
-  width: 60px;
-  height: auto;
+.btn-close-icon i {
+    color: #ffffff !important;
 }
 
-.school-info h1 {
-  font-size: 28px;
-  color: #5b9bd5;
-  font-weight: 700;
-  margin-bottom: 5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+[class^="ph-"], [class*=" ph-"] {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255,255,255,0.25);
 }
 
-.school-info p {
-  font-size: 13px;
-  color: #a0aec0;
-  font-weight: 400;
-}
+		:root {
+			--bg-color: #000000;
+			--text-main: #ffffff;
+			--text-muted: #9ca3af;
+			--modal-bg: #0a0a0a;
+			--modal-border: #222222;
+			--input-bg: #000000;
+			--input-border: #333333;
+			--pill-hover: rgba(255, 255, 255, 0.1);
+			--pill-active: #222222;
+			--toggle-track-off: #333333;
+			--toggle-track-on: #ffffff;
+			--toggle-knob-off: #ffffff;
+			--toggle-knob-on: #000000;
+			--accent-glow: rgba(255, 255, 255, 0.1);
+		}
 
-.container {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  animation: fadeIn 0.8s ease-in;
-  background: linear-gradient(135deg, #1a2332 0%, #0f1419 100%);
-}
+		/* --- THEMES --- */
+		[data-theme="sakura"] {
+			--bg-color: #fdf6f5;
+			--text-main: #4a3b3c;
+			--text-muted: #9e8487;
+			--modal-bg: #ffffff;
+			--modal-border: #f0e4e4;
+			--input-bg: #fdf6f5;
+			--input-border: #e6d3d3;
+			--pill-hover: rgba(255, 183, 197, 0.4);
+			--toggle-track-off: #e6d3d3;
+			--toggle-track-on: #ffb7c5;
+			--toggle-knob-off: #ffffff;
+			--toggle-knob-on: #ffffff;
+			--accent-glow: rgba(255, 183, 197, 0.3);
+		}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+		[data-theme="red"] {
+			--bg-color: #0a0000;
+			--text-main: #ff4d4d;
+			--text-muted: #802b2b;
+			--modal-bg: #140000;
+			--modal-border: #330000;
+			--input-bg: #0a0000;
+			--input-border: #4d0000;
+			--pill-hover: rgba(255, 0, 0, 0.15);
+			--toggle-track-off: #4d0000;
+			--toggle-track-on: #ff4d4d;
+			--toggle-knob-off: #ffb3b3;
+			--toggle-knob-on: #0a0000;
+			--accent-glow: rgba(255, 77, 77, 0.2);
+		}
 
-.auth-box {
-  background: rgba(21, 32, 48, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 60px 50px;
-  max-width: 550px;
-  width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  border: 1px solid rgba(91, 155, 213, 0.2);
-}
+		[data-theme="azure"] {
+			--bg-color: #faf9f8;
+			--text-main: #323130;
+			--text-muted: #605e5c;
+			--modal-bg: #ffffff;
+			--modal-border: #edebe9;
+			--input-bg: #ffffff;
+			--input-border: #8a8886;
+			--pill-hover: #f3f2f1;
+			--toggle-track-off: #8a8886;
+			--toggle-track-on: #0078d4;
+			--toggle-knob-off: #ffffff;
+			--toggle-knob-on: #ffffff;
+			--accent-glow: rgba(0, 120, 212, 0.2);
+		}
 
-.lock-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #2c5aa0 0%, #1a3a6b 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 30px;
-  box-shadow: 0 8px 20px rgba(44, 90, 160, 0.4);
-}
+		body {
+			margin: 0;
+			padding: 0;
+			height: 100vh;
+			background-color: var(--bg-color);
+			color: var(--text-main);
+			font-family: 'Inter', sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+			position: relative;
+			transition: background-color 0.4s ease, color 0.4s ease;
+		}
 
-.lock-icon svg {
-  width: 40px;
-  height: 40px;
-  fill: white;
-}
+		#constellation-canvas {
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+			pointer-events: none;
+		}
 
-h2 {
-  font-size: 32px;
-  color: #fff;
-  font-weight: 700;
-  margin-bottom: 15px;
-  line-height: 1.3;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
+		.container {
+			text-align: center;
+			margin-top: -5vh;
+			z-index: 10;
+		}
 
-.subtitle {
-  font-size: 18px;
-  color: #cbd5e0;
-  margin-bottom: 35px;
-  line-height: 1.6;
-  font-weight: 400;
-}
+		h1 {
+			font-size: 6rem;
+			font-weight: 700;
+			margin: 0 0 10px 0;
+			letter-spacing: -0.04em;
+		}
 
-.classlink-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(44, 90, 160, 0.2);
-  padding: 15px 30px;
-  border-radius: 50px;
-  margin-bottom: 35px;
-  border: 2px solid rgba(91, 155, 213, 0.3);
-}
+		.dynamic-quote {
+			color: var(--text-muted);
+			font-size: 1.1rem;
+			font-style: italic;
+			font-weight: 400;
+			margin-bottom: 40px;
+			max-width: 600px;
+			line-height: 1.5;
+		}
 
-.classlink-badge img {
-  width: 28px;
-  height: 28px;
-  filter: brightness(0) invert(1);
-}
+		nav {
+			display: flex;
+			gap: 25px;
+			justify-content: center;
+			flex-wrap: wrap;
+			background: var(--modal-bg);
+			padding: 15px 30px;
+			border-radius: 999px;
+			border: 1px solid var(--modal-border);
+			box-shadow: 0 4px 20px var(--accent-glow);
+		}
 
-.classlink-badge span {
-  font-size: 16px;
-  font-weight: 600;
-  color: #5b9bd5;
-}
+		nav a {
+			color: var(--text-muted);
+			text-decoration: none;
+			font-size: 1.4rem;
+			transition: all 0.2s ease;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 45px;
+			height: 45px;
+			border-radius: 50%;
+			position: relative;
+		}
 
-.redirect-box {
-  background: rgba(44, 90, 160, 0.15);
-  padding: 20px;
-  border-radius: 12px;
-  border-left: 4px solid #2c5aa0;
-}
+		nav a:hover {
+			color: var(--text-main);
+			background: var(--pill-hover);
+			transform: translateY(-2px);
+		}
 
-.redirect-message {
-  font-size: 15px;
-  color: #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
+		/* --- NOTIFICATION BADGE --- */
+		.badge {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			width: 10px;
+			height: 10px;
+			background-color: #ff4d4d;
+			border-radius: 50%;
+			display: none;
+			box-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
+			pointer-events: none;
+		}
 
-.spinner {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 3px solid rgba(91, 155, 213, 0.3);
-  border-radius: 50%;
-  border-top-color: #5b9bd5;
-  animation: spin 0.8s linear infinite;
-}
+		.badge.active {
+			display: block;
+		}
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+		/* --- MODALS --- */
+		.modal-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(8px);
+			z-index: 2000;
+			display: none;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
 
-footer {
-  background: #0f1419;
-  color: #a0aec0;
-  text-align: center;
-  padding: 20px;
-  font-size: 13px;
-  border-top: 1px solid rgba(91, 155, 213, 0.1);
-}
+		.modal-overlay.active {
+			display: flex;
+			opacity: 1;
+		}
 
-footer p {
-  margin: 5px 0;
-  opacity: 0.9;
-}
+		.settings-box {
+			width: 750px;
+			max-width: 95%;
+			max-height: 85vh;
+			background: var(--modal-bg);
+			border: 1px solid var(--modal-border);
+			border-radius: 16px;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 0 25px 50px -12px var(--accent-glow);
+			transform: scale(0.98);
+			transition: transform 0.2s ease, background-color 0.4s ease, border-color 0.4s ease;
+			overflow: hidden;
+		}
 
-@media (max-width: 768px) {
-  .header-top {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
+		.modal-overlay.active .settings-box {
+			transform: scale(1);
+		}
 
-  .school-info h1 {
-    font-size: 24px;
-  }
+		.settings-header-top {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 24px 32px;
+			border-bottom: 1px solid var(--modal-border);
+			background: var(--modal-bg);
+			flex-shrink: 0;
+		}
 
-  .school-info p {
-    font-size: 12px;
-  }
+		.settings-header-top h2 {
+			font-size: 20px;
+			font-weight: 600;
+			color: var(--text-main);
+			margin: 0;
+		}
 
-  .auth-box {
-    padding: 40px 30px;
-  }
+		.btn-close-icon {
+			background: transparent;
+			border: none;
+			color: var(--text-muted);
+			font-size: 20px;
+			cursor: pointer;
+			transition: 0.2s;
+		}
 
-  h2 {
-    font-size: 26px;
-  }
+		.btn-close-icon:hover {
+			color: var(--text-main);
+			transform: scale(1.1);
+		}
 
-  .subtitle {
-    font-size: 16px;
-  }
-}
-</style>
+		.settings-content {
+			padding: 0 32px 32px 32px;
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			min-height: 0;
+			overflow-y: auto;
+		}
+
+		.settings-section-title {
+			font-size: 13px;
+			font-weight: 700;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			margin: 32px 0 12px 4px;
+			letter-spacing: 0.5px;
+			flex-shrink: 0;
+		}
+
+		.settings-card {
+			background: transparent;
+			border: 1px solid var(--modal-border);
+			border-radius: 12px;
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+			flex-shrink: 0;
+		}
+
+		.setting-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px;
+			border-bottom: 1px solid var(--modal-border);
+			gap: 20px;
+			background: rgba(128, 128, 128, 0.02);
+			transition: background 0.2s;
+		}
+
+		.setting-row:hover {
+			background: var(--pill-hover);
+		}
+
+		.setting-row:last-child {
+			border-bottom: none;
+		}
+
+		.setting-info {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			flex: 1;
+		}
+
+		.setting-info h3 {
+			font-size: 16px;
+			font-weight: 600;
+			color: var(--text-main);
+			margin: 0;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.setting-info h3 i {
+			color: var(--text-muted);
+			font-size: 14px;
+		}
+
+		.setting-info p {
+			font-size: 13px;
+			color: var(--text-muted);
+			line-height: 1.5;
+			margin: 0;
+		}
+
+		.setting-action {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex-shrink: 0;
+			flex-wrap: wrap;
+			justify-content: flex-end;
+		}
+
+		.dark-input,
+		select.dark-input {
+			background: var(--input-bg);
+			border: 1px solid var(--input-border);
+			color: var(--text-main);
+			padding: 10px 16px;
+			border-radius: 8px;
+			font-family: inherit;
+			font-size: 14px;
+			outline: none;
+			transition: 0.2s;
+		}
+
+		.dark-input:focus,
+		select.dark-input:focus {
+			border-color: var(--text-main);
+			box-shadow: 0 0 0 2px var(--accent-glow);
+		}
+
+		select.dark-input {
+			appearance: none;
+			padding-right: 36px;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='gray' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 12px center;
+			cursor: pointer;
+		}
+
+		.clean-btn {
+			background: transparent;
+			color: var(--text-main);
+			border: 1px solid var(--input-border);
+			padding: 8px 18px;
+			border-radius: 9999px;
+			font-size: 13px;
+			font-weight: 500;
+			cursor: pointer;
+			transition: all 0.2s;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			height: 38px;
+			text-decoration: none;
+		}
+
+		.clean-btn:hover {
+			background: var(--pill-hover);
+		}
+
+		.btn-primary {
+			background: var(--text-main);
+			color: var(--bg-color);
+			border: none;
+			font-weight: 600;
+		}
+
+		.btn-primary:hover {
+			opacity: 0.85;
+			transform: scale(1.05);
+		}
+
+		/* --- TOGGLE SWITCHES --- */
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 44px;
+			height: 24px;
+		}
+
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: var(--toggle-track-off);
+			transition: .3s;
+			border-radius: 9999px;
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 18px;
+			width: 18px;
+			left: 3px;
+			bottom: 3px;
+			background-color: var(--toggle-knob-off);
+			transition: .3s;
+			border-radius: 50%;
+		}
+
+		input:checked+.slider {
+			background-color: var(--toggle-track-on);
+		}
+
+		input:checked+.slider:before {
+			transform: translateX(20px);
+			background-color: var(--toggle-knob-on);
+		}
+
+		/* --- SPOTLIGHT --- */
+		.spotlight-box {
+			width: 600px;
+			max-width: 95%;
+			background: var(--modal-bg);
+			border: 1px solid var(--modal-border);
+			border-radius: 16px;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 0 30px 60px -15px var(--accent-glow);
+			transform: scale(0.98);
+			transition: transform 0.2s ease;
+			overflow: hidden;
+			align-self: flex-start;
+			margin-top: 15vh;
+		}
+
+		.spotlight-input-wrapper {
+			position: relative;
+			display: flex;
+			align-items: center;
+			padding: 0 24px;
+			border-bottom: 1px solid var(--modal-border);
+		}
+
+		.spotlight-input-wrapper i {
+			color: var(--text-muted);
+			font-size: 20px;
+			margin-right: 16px;
+		}
+
+		.spotlight-input {
+			width: 100%;
+			background: transparent;
+			border: none;
+			color: var(--text-main);
+			padding: 24px 0;
+			font-family: 'Inter', sans-serif;
+			font-size: 20px;
+			outline: none;
+		}
+
+		.spotlight-results {
+			max-height: 350px;
+			overflow-y: auto;
+			padding: 12px;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.spotlight-item {
+			display: flex;
+			align-items: center;
+			padding: 12px 16px;
+			border-radius: 8px;
+			color: var(--text-main);
+			cursor: pointer;
+			transition: background 0.1s;
+			font-size: 15px;
+			font-weight: 500;
+		}
+
+		.spotlight-item:hover,
+		.spotlight-item.active {
+			background: var(--pill-hover);
+		}
+
+		/* --- IFRAME TRANSITION OVERLAY --- */
+		#transition-overlay {
+			position: fixed;
+			inset: 0;
+			z-index: 99999;
+			background: var(--bg-color);
+			display: none;
+			opacity: 0;
+			transition: opacity 0.4s ease;
+		}
+
+		#transition-overlay.active {
+			display: block;
+			opacity: 1;
+		}
+
+		#transition-overlay iframe {
+			width: 100%;
+			height: 100%;
+			border: none;
+			background: transparent;
+		}
+	</style>
 </head>
+
 <body>
-<header>
-  <div class="header-top">
-    <div class="logo-section">
-      <div class="school-logo">
-        <img src="edulearn.png" alt="Edulearn" />
-      </div>
-      <div class="school-info">
-        <h1>EDULEARN K-12</h1>
-        <p>Your comprehensive online learning platform for students in grades K-12</p>
-      </div>
-    </div>
-  </div>
-</header>
 
-<div class="container">
-  <div class="auth-box">
-    <div class="lock-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M12 1C8.676 1 6 3.676 6 7v3H5c-1.105 0-2 .895-2 2v9c0 1.105.895 2 2 2h14c1.105 0 2-.895 2-2v-9c0-1.105-.895-2-2-2h-1V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v3H8V7c0-2.276 1.724-4 4-4zm0 10c1.105 0 2 .895 2 2s-.895 2-2 2-2-.895-2-2 .895-2 2-2z"/>
-      </svg>
-    </div>
-    
-    <h2>Authentication Required</h2>
-    
-    <p class="subtitle">
-      You need to log in with ClassLink to continue to EDULEARN
-    </p>
-    
-    <div class="classlink-badge">
-      <img src="//cdn.classlink.com/production/launchpad/img/genericlogin/ClassLink-Cloud-White.svg" alt="ClassLink" />
-      <span>Secured by ClassLink</span>
-    </div>
-    
-    <div class="redirect-box">
-      <div class="redirect-message">
-        <span>Redirecting to login page</span>
-        <span class="spinner"></span>
-      </div>
-    </div>
-  </div>
-</div>
+	<canvas id="constellation-canvas"></canvas>
 
-<footer>
-  <p>© 2025 EduLearn K-12. All Rights Reserved.</p>
-  <p>Premier Online Learning | Privacy Policy | Terms of Service</p>
-</footer>
+	<div id="transition-overlay">
+		<iframe src="" id="transition-iframe"></iframe>
+	</div>
 
-<script>
-function _0x53a1(_0x61c18,_0x670d12){_0x61c18=_0x61c18-0x16e;var _0x1b9517=_0x1b95();var _0x53a157=_0x1b9517[_0x61c18];return _0x53a157;}function _0x1b95(){var _0x2a9c52=['88CeKmwg','198WwLemx','2316745YfOaLH','454076xIwMzy','24NNwroy','131854bGroIk','360244XKVtlo','1987917IhxWbw','4xjYwrM','/login.html','169200tifxth','558630SQiuaK'];_0x1b95=function(){return _0x2a9c52;};return _0x1b95();}(function(_0xec7e9f,_0x95e014){var _0x3783de=_0x53a1,_0x18d2bf=_0xec7e9f();while(!![]){try{var _0x38379d=parseInt(_0x3783de(0x174))/0x1+-parseInt(_0x3783de(0x175))/0x2+-parseInt(_0x3783de(0x176))/0x3+parseInt(_0x3783de(0x177))/0x4*(parseInt(_0x3783de(0x171))/0x5)+-parseInt(_0x3783de(0x173))/0x6*(-parseInt(_0x3783de(0x172))/0x7)+-parseInt(_0x3783de(0x16f))/0x8*(-parseInt(_0x3783de(0x16e))/0x9)+-parseInt(_0x3783de(0x179))/0xa*(parseInt(_0x3783de(0x170))/0xb);if(_0x38379d===_0x95e014)break;else _0x18d2bf['push'](_0x18d2bf['shift']());}catch(_0x3f37b6){_0x18d2bf['push'](_0x18d2bf['shift']());}}}(_0x1b95,0x5f3ec),setTimeout(function(){var _0x15401c=_0x53a1;window['location']['href']=_0x15401c(0x178);},0x9c4));
-</script>
+	<div class="container">
+		<h1>edulearn</h1>
+		<div id="dynamic-quote" class="dynamic-quote">Loading wisdom...</div>
+
+		<nav>
+			<a href="#" onclick="navigateWithTransition('/h/'); return false;"
+				title="Home"><i class="fa-solid fa-house"></i></a>
+			<a href="#" onclick="navigateWithTransition('/g/'); return false;"
+				title="Games"><i class="fa-solid fa-gamepad"></i></a>
+			<a href="#" onclick="navigateWithTransition('/g2/'); return false;"
+				title="G2"><i class="fa-solid fa-rocket"></i></a>
+			<a href="#" onclick="navigateWithTransition('/b/'); return false;"
+				title="Browser"><i class="fa-solid fa-globe"></i></a>
+			<a href="#" onclick="navigateWithTransition('/t/'); return false;"
+				title="Tools"><i class="fa-solid fa-wrench"></i></a>
+			<a href="#" onclick="navigateWithTransition('/e/'); return false;"
+				title="Extras"><i class="fa-solid fa-shapes"></i></a>
+
+			<a href="#" onclick="openAnnouncements(); return false;" title="Announcements">
+				<i class="fa-solid fa-bell"></i>
+				<span id="bell-badge" class="badge"></span>
+			</a>
+
+			<a href="#" onclick="openSettings(); return false;" title="Settings"><i class="fa-solid fa-gear"></i></a>
+		</nav>
+	</div>
+
+	<div class="modal-overlay" id="announcement-modal" onclick="handleBackdropClick(event)">
+		<div class="settings-box" style="width: 500px; min-height: 200px;">
+			<div class="settings-header-top">
+				<h2><i class="fa-solid fa-bullhorn" style="margin-right: 10px; color: var(--text-muted);"></i> Updates
+				</h2>
+				<button class="btn-close-icon" onclick="closeAnnouncements()"><i class="fa-solid fa-xmark"></i></button>
+			</div>
+			<div class="settings-content" style="padding-top: 24px;">
+				<div class="settings-card" style="padding: 24px; text-align: left;">
+					<h3 style="margin-top: 0; font-size: 18px;">We want to hear from you!</h3>
+					<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; font-size: 14px;">
+						Here at edulearn, we value your feedback. We are constantly looking for ways to improve your
+						experience. Let us know what features you want to see next.
+					</p>
+					<a href="https://forms.gle/siDC34KDQn59Lmn69" target="_blank" class="clean-btn btn-primary"
+						onclick="closeAnnouncements()">Submit Suggestions</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
+		<div class="settings-box">
+			<div class="settings-header-top">
+				<h2>Settings</h2>
+				<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
+			</div>
+			<div class="settings-content">
+
+				<div class="settings-section-title">Stealth & Privacy</div>
+				<div class="settings-card">
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3><i class="fa-solid fa-user-secret"></i> Panic Button</h3>
+							<p>Quickly hide the screen. Triggered by a keypress.</p>
+						</div>
+						<div class="setting-action">
+							<input type="text" id="panic-key" class="dark-input" placeholder="Key (e.g. `)" style="width: 80px; text-align: center;">
+							<input type="text" id="panic-url" class="dark-input" placeholder="Redirect URL" style="width: 180px;">
+							<button class="clean-btn btn-primary" onclick="savePanic()">Save</button>
+						</div>
+					</div>
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3><i class="fa-solid fa-mask"></i> Tab Cloak</h3>
+							<p>Disguise the current tab title and icon from prying eyes.</p>
+						</div>
+						<div class="setting-action">
+							<select id="cloak-preset" class="dark-input" onchange="loadCloakPreset()" style="width: 130px; margin-right: 4px;">
+                                <option value="custom">Custom...</option>
+                                <option value="classroom">Google Classroom</option>
+                                <option value="canvas">Canvas</option>
+                                <option value="iready">i-Ready</option>
+                                <option value="drive">Google Drive</option>
+                                <option value="gmail">Gmail</option>
+                                <option value="docs">Google Docs</option>
+                                <option value="clever">Clever</option>
+                            </select>
+							<input type="text" id="cloak-title" class="dark-input" placeholder="Page Title" style="width: 100px;">
+							<input type="text" id="cloak-icon" class="dark-input" placeholder="Icon URL" style="width: 100px;">
+							<button class="clean-btn btn-primary" onclick="saveCloak()">Apply</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="settings-section-title">Appearance</div>
+				<div class="settings-card">
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3><i class="fa-solid fa-palette"></i> UI Theme</h3>
+							<p>Customize the color palette of the application.</p>
+						</div>
+						<div class="setting-action">
+							<select id="theme-select" class="dark-input" onchange="changeTheme()" style="width: 200px;">
+                                <option value="default">Default Dark</option>
+                                <option value="sakura">Sakura Pink</option>
+                                <option value="red">Crimson Red</option>
+                                <option value="azure">Microsoft Azure Slop</option>
+                            </select>
+						</div>
+					</div>
+				</div>
+
+				<div class="settings-section-title">Preferences</div>
+				<div class="settings-card">
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3><i class="fa-solid fa-diagram-project"></i> Constellations</h3>
+							<p>Toggle floating animated background network.</p>
+						</div>
+						<div class="setting-action">
+							<label class="switch"><input type="checkbox" id="particle-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
+						</div>
+					</div>
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Smooth UI Transitions</h3>
+							<p>Enable fluid animations across the interface.</p>
+						</div>
+						<div class="setting-action">
+							<label class="switch"><input type="checkbox" id="smooth-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
+						</div>
+					</div>
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3><i class="fa-solid fa-magnifying-glass-chart"></i> Spotlight Indexing</h3>
+							<p>Pre-cache pages for instant spotlight search results.</p>
+						</div>
+						<div class="setting-action">
+							<label class="switch"><input type="checkbox" id="index-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-overlay" id="spotlight-modal" onclick="handleSpotlightBackdropClick(event)">
+		<div class="spotlight-box">
+			<div class="spotlight-input-wrapper">
+				<i class="fa-solid fa-magnifying-glass"></i>
+				<input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search commands or pages..." autocomplete="off" oninput="filterSpotlight()">
+            </div>
+				<div id="spotlight-results" class="spotlight-results">
+					<div class="spotlight-item" onclick="navigateWithTransition('/index.html')">
+						<i class="fa-solid fa-house" style="margin-right: 12px; color: var(--text-muted)"></i> Home
+					</div>
+					<div class="spotlight-item" onclick="navigateWithTransition('/math/gn-math.html')">
+						<i class="fa-solid fa-gamepad" style="margin-right: 12px; color: var(--text-muted)"></i> Games
+					</div>
+					<div class="spotlight-item" onclick="navigateWithTransition('/g2.html')">
+						<i class="fa-solid fa-rocket" style="margin-right: 12px; color: var(--text-muted)"></i> G2</div>
+					<div class="spotlight-item" onclick="navigateWithTransition('/active/index.html')">
+						<i class="fa-solid fa-globe" style="margin-right: 12px; color: var(--text-muted)"></i> Browser
+					</div>
+					<div class="spotlight-item" onclick="navigateWithTransition('/tools.html')">
+						<i class="fa-solid fa-wrench" style="margin-right: 12px; color: var(--text-muted)"></i> Tools
+					</div>
+					<div class="spotlight-item" onclick="navigateWithTransition('/extras.html')">
+						<i class="fa-solid fa-shapes" style="margin-right: 12px; color: var(--text-muted)"></i> Extras
+					</div>
+					<div class="spotlight-item" onclick="openSettings(); closeSpotlight();">
+						<i class="fa-solid fa-gear" style="margin-right: 12px; color: var(--text-muted)"></i> Settings
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// --- 0. RANDOM QUOTES ---
+        const quotes = [
+            "Learning is a treasure that will follow its owner everywhere.",
+            "The beautiful thing about learning is that no one can take it away from you.",
+            "Education is the most powerful weapon which you can use to change the world.",
+            "Wisdom is not a product of schooling but of the lifelong attempt to acquire it.",
+            "Curiosity is the wick in the candle of learning.",
+            "Knowledge speaks, but wisdom listens."
+        ];
+
+        function setRandomQuote() {
+            const quoteEl = document.getElementById('dynamic-quote');
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            quoteEl.innerText = `"${randomQuote}"`;
+        }
+
+        // --- CLOAK PRESETS DATA ---
+        const cloakPresets = {
+            "classroom": { title: "Classes", icon: "https://ssl.gstatic.com/classroom/favicon.png" },
+            "canvas": { title: "Dashboard", icon: "https://du11hjcvx0uqb.cloudfront.net/br/dist/images/favicon-e10d657a73.ico" },
+            "iready": { title: "i-Ready", icon: "https://login.i-ready.com/favicon.ico" },
+            "drive": { title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" },
+            "gmail": { title: "Inbox (1) - Gmail", icon: "https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" },
+            "docs": { title: "Google Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
+            "clever": { title: "Clever | Portal", icon: "https://assets.clever.com/favicons/clever/favicon.ico" }
+        };
+
+        function loadCloakPreset() {
+            const preset = document.getElementById('cloak-preset').value;
+            if (preset !== 'custom' && cloakPresets[preset]) {
+                document.getElementById('cloak-title').value = cloakPresets[preset].title;
+                document.getElementById('cloak-icon').value = cloakPresets[preset].icon;
+            }
+        }
+
+        // --- 1. SETTINGS & STATE ---
+        const defaultSettings = {
+            panicKey: 'Escape',
+            panicUrl: '/login.html',
+            cloakTitle: 'Login',
+            cloakIcon: 'https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png',
+            theme: 'default',
+            particles: true,
+            smoothUI: true,
+            devMode: false,
+            spotlightIndex: true,
+            announcementRead: false
+        };
+
+        let savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+        let userSettings = { ...defaultSettings, ...savedData };
+
+        function saveState() {
+            localStorage.setItem('edulearn_settings', JSON.stringify(userSettings));
+        }
+
+        function initSettings() {
+            // Populate text inputs
+            document.getElementById('panic-key').value = userSettings.panicKey;
+            document.getElementById('panic-url').value = userSettings.panicUrl;
+            document.getElementById('cloak-title').value = userSettings.cloakTitle;
+            document.getElementById('cloak-icon').value = userSettings.cloakIcon;
+            
+            // Populate toggles & dropdowns
+            document.getElementById('theme-select').value = userSettings.theme || 'default';
+            document.getElementById('particle-toggle').checked = userSettings.particles;
+            document.getElementById('smooth-toggle').checked = userSettings.smoothUI;
+            document.getElementById('index-toggle').checked = userSettings.spotlightIndex;
+
+            // Apply cloaking
+            document.getElementById('page-title').innerText = userSettings.cloakTitle;
+            if (userSettings.cloakIcon) {
+                document.getElementById('dynamic-favicon').href = userSettings.cloakIcon;
+            }
+
+            // Apply theme
+            applyTheme(userSettings.theme || 'default');
+
+            // Handle Announcements
+            if (!userSettings.announcementRead) {
+                document.getElementById('bell-badge').classList.add('active');
+                setTimeout(openAnnouncements, 800); 
+            }
+        }
+
+        function applyTheme(themeName) {
+            document.body.setAttribute('data-theme', themeName);
+        }
+
+        function changeTheme() {
+            const newTheme = document.getElementById('theme-select').value;
+            applyTheme(newTheme);
+            userSettings.theme = newTheme;
+            saveState();
+        }
+
+        function savePanic() {
+            userSettings.panicKey = document.getElementById('panic-key').value || 'Escape';
+            userSettings.panicUrl = document.getElementById('panic-url').value || '/login.html';
+            saveState();
+        }
+
+        function saveCloak() {
+            userSettings.cloakTitle = document.getElementById('cloak-title').value || 'Login';
+            userSettings.cloakIcon = document.getElementById('cloak-icon').value || 'https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png';
+            saveState();
+            initSettings();
+            
+            // Reset preset dropdown to custom if they manually saved
+            document.getElementById('cloak-preset').value = 'custom';
+        }
+
+        function togglePreferences() {
+            userSettings.particles = document.getElementById('particle-toggle').checked;
+            userSettings.smoothUI = document.getElementById('smooth-toggle').checked;
+            userSettings.spotlightIndex = document.getElementById('index-toggle').checked;
+            saveState();
+        }
+
+        // --- 2. MODAL & NAVIGATION LOGIC ---
+        function openSettings() { document.getElementById('settings-modal').classList.add('active'); }
+        function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
+        
+        function openAnnouncements() {
+            document.getElementById('announcement-modal').classList.add('active');
+            if (!userSettings.announcementRead) {
+                userSettings.announcementRead = true;
+                saveState();
+                document.getElementById('bell-badge').classList.remove('active');
+            }
+        }
+        function closeAnnouncements() { document.getElementById('announcement-modal').classList.remove('active'); }
+
+        function openSpotlight() { 
+            document.getElementById('spotlight-modal').classList.add('active'); 
+            setTimeout(() => document.getElementById('spotlight-input').focus(), 50);
+        }
+        function closeSpotlight() { document.getElementById('spotlight-modal').classList.remove('active'); }
+
+        function handleBackdropClick(e) {
+            if (e.target.id === 'settings-modal') closeSettings();
+            if (e.target.id === 'announcement-modal') closeAnnouncements();
+        }
+        function handleSpotlightBackdropClick(e) {
+            if (e.target.id === 'spotlight-modal') closeSpotlight();
+        }
+
+        function filterSpotlight() {
+            const query = document.getElementById('spotlight-input').value.toLowerCase();
+            const items = document.querySelectorAll('.spotlight-item');
+            items.forEach(item => {
+                if (item.innerText.toLowerCase().includes(query)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function navigateWithTransition(url) {
+            closeSpotlight(); // Close spotlight if open
+            const overlay = document.getElementById('transition-overlay');
+            const iframe = document.getElementById('transition-iframe');
+            
+            iframe.src = '/index.html';
+            overlay.style.display = 'block';
+            
+            setTimeout(() => {
+                overlay.classList.add('active');
+            }, 10);
+
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1400); // Wait time
+        }
+
+        // --- 3. EVENT LISTENERS ---
+        window.addEventListener('keydown', (e) => {
+            // Panic Key
+            if (e.key === userSettings.panicKey && document.activeElement.tagName !== 'INPUT') {
+                window.location.replace(userSettings.panicUrl);
+            }
+            // Spotlight (Ctrl+Y)
+            if (e.ctrlKey && e.key.toLowerCase() === 'y') {
+                e.preventDefault();
+                openSpotlight();
+            }
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                closeSettings();
+                closeSpotlight();
+                closeAnnouncements();
+            }
+        });
+
+        // --- 4. PARTICLES (Constellations) ---
+        const canvas = document.getElementById('constellation-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw(colorStr) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = colorStr;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (userSettings.particles) {
+                
+                const dotColor = `rgba(150, 150, 150, 0.3)`; 
+                const lineColorBase = `rgba(150, 150, 150, `;
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw(dotColor);
+                });
+                for(let i=0; i<particles.length; i++) {
+                    for(let j=i+1; j<particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let dist = Math.sqrt(dx*dx + dy*dy);
+                        if(dist < 120) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `${lineColorBase}${0.15 * (1 - dist/120)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+        // --- 5. INITIALIZE ---
+        window.addEventListener('DOMContentLoaded', () => {
+            window.focus();
+            initSettings();
+            setRandomQuote();
+        });
+		</script>
 </body>
+
 </html>
