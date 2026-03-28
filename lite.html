@@ -4,337 +4,87 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title id="page-title">Login</title>
-	<link id="dynamic-favicon" rel="icon"
-		href="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png">
+	<title id="page-title">edulearn</title>
+	<link id="dynamic-favicon" rel="icon" href="">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-		/* --- THEME SYSTEM --- */
 		:root {
-			--bg-color: #09090b;
-			--grid-color: rgba(255, 255, 255, 0.02);
-			--nav-bg: transparent;
-			--nav-border: transparent;
-			--pill-hover: rgba(255, 255, 255, 0.05);
-			--pill-active: #27272a;
+			--bg-color: #000000;
 			--text-main: #ffffff;
-			--text-muted: #a1a1aa;
-			--modal-bg: #121214;
-			--modal-border: #27272a;
-			--input-bg: #09090b;
-			--input-border: #3f3f46;
-			--toggle-track-off: #3f3f46;
+			--text-muted: #9ca3af;
+			--modal-bg: #0a0a0a;
+			--modal-border: #222222;
+			--input-bg: #000000;
+			--input-border: #333333;
+			--pill-hover: rgba(255, 255, 255, 0.1);
+			--pill-active: #222222;
+			--toggle-track-off: #333333;
 			--toggle-track-on: #ffffff;
 			--toggle-knob-off: #ffffff;
 			--toggle-knob-on: #000000;
 		}
 
-		body.theme-mocha {
-			--bg-color: #1e1e2e;
-			--pill-active: #313244;
-			--text-main: #cdd6f4;
-			--text-muted: #a6adc8;
-			--modal-bg: #11111b;
-			--modal-border: #313244;
-			--input-bg: #1e1e2e;
-			--input-border: #45475a;
-		}
-
-		body.theme-inverted {
-			--bg-color: #f4f4f5;
-			--pill-active: #e4e4e7;
-			--text-main: #18181b;
-			--text-muted: #52525b;
-			--modal-bg: #ffffff;
-			--modal-border: #e4e4e7;
-			--input-bg: #f4f4f5;
-			--input-border: #d4d4d8;
-			--toggle-track-off: #d4d4d8;
-			--toggle-track-on: #18181b;
-			--toggle-knob-off: #ffffff;
-			--toggle-knob-on: #ffffff;
-		}
-
-		* {
-			box-sizing: border-box;
+		body {
 			margin: 0;
 			padding: 0;
-		}
-
-		body {
-			font-family: 'Inter', system-ui, sans-serif;
+			height: 100vh;
 			background-color: var(--bg-color);
 			color: var(--text-main);
-			overflow: hidden;
+			font-family: 'Inter', sans-serif;
 			display: flex;
-			flex-direction: column;
-			height: 100vh;
-			transition: background-color 0.3s ease;
-		}
-
-		.grid-bg {
-			position: absolute;
-			inset: 0;
-			z-index: -2;
-			background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-				linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
-			background-size: 40px 40px;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+			position: relative;
 		}
 
 		#constellation-canvas {
 			position: absolute;
 			inset: 0;
-			z-index: -1;
+			z-index: 0;
 			pointer-events: none;
 		}
 
-		.topbar {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 80px;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding: 0 40px;
-			z-index: 100;
-		}
-
-		.brand {
-			font-family: 'Dancing Script', cursive;
-			font-size: 32px;
-			color: var(--text-main);
-			text-decoration: none;
-			cursor: pointer;
-			transition: 0.2s ease;
-			display: flex;
-			align-items: center;
-			letter-spacing: 1px;
-			text-transform: lowercase;
-		}
-
-		.brand:hover {
-			transform: scale(1.05);
-			text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-		}
-
-		.nav-links {
-			display: flex;
-			gap: 12px;
-		}
-
-		.nav-link {
-			padding: 10px 24px;
-			border-radius: 9999px;
-			color: var(--text-muted);
-			cursor: pointer;
-			transition: 0.2s ease;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			font-weight: 500;
-			font-size: 15px;
-			border: 1px solid transparent;
-			text-decoration: none !important;
-		}
-
-		.nav-link:hover {
-			color: var(--text-main);
-			background: var(--pill-hover);
-		}
-
-		.nav-link.active {
-			color: var(--text-main);
-			background: var(--pill-active);
-		}
-
-		.nav-actions {
-			display: flex;
-			gap: 15px;
-			align-items: center;
-		}
-
-		.icon-btn {
-			background: transparent;
-			border: none !important;
-			color: var(--text-main);
-			font-size: 20px;
-			cursor: pointer;
-			transition: 0.2s;
-			padding: 10px;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			position: relative;
-			text-decoration: none !important;
-		}
-
-		.icon-btn:hover {
-			background: var(--pill-hover);
-		}
-
-		.notification-dot {
-			position: absolute;
-			top: 8px;
-			right: 10px;
-			width: 8px;
-			height: 8px;
-			background-color: #f87171;
-			border-radius: 50%;
-			display: block;
-		}
-
-		.main-content {
-			flex: 1;
-			margin-top: 80px;
-			position: relative;
-			z-index: 10;
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-			height: calc(100vh - 80px);
-		}
-
-		.page {
-			display: none;
-			width: 100%;
-			height: 100%;
-			animation: fadeIn 0.3s ease;
-		}
-
-		.page.active {
-			display: flex;
-			flex-direction: column;
-		}
-
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-				transform: translateY(5px);
-			}
-
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-
-		.home-container {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			height: 100%;
+		.container {
 			text-align: center;
-			padding: 40px;
+			margin-top: -5vh;
+			z-index: 10;
 		}
 
-		/* --- FANCY ROTATING BORDER BOX --- */
-		.hero-title-box {
-			position: relative;
-			padding: 20px 60px;
-			background: transparent;
-			border-radius: 16px;
-			margin-bottom: 25px;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			overflow: hidden;
-			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-		}
-
-		.hero-title-box::before {
-			content: '';
-			position: absolute;
-			top: -50%;
-			left: -50%;
-			width: 200%;
-			height: 200%;
-			background: conic-gradient(transparent, rgba(134, 239, 172, 0.1), #86efac, transparent 30%);
-			animation: rotateGlow 3s linear infinite;
-			z-index: -2;
-		}
-
-		.hero-title-box::after {
-			content: '';
-			position: absolute;
-			inset: 2px;
-			background: var(--input-bg);
-			border-radius: 14px;
-			z-index: -1;
-		}
-
-		.hero-title {
-			font-family: 'Dancing Script', cursive;
-			font-size: 85px;
+		h1 {
+			font-size: 6rem;
 			font-weight: 700;
-			margin: 0;
-			color: var(--text-main);
-			letter-spacing: 2px;
-			text-transform: lowercase;
-			text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-			line-height: 1;
-			z-index: 2;
+			margin: 0 0 30px 0;
+			letter-spacing: -0.04em;
 		}
 
-		@keyframes rotateGlow {
-			0% {
-				transform: rotate(0deg);
-			}
-
-			100% {
-				transform: rotate(360deg);
-			}
+		nav {
+			display: flex;
+			gap: 30px;
+			justify-content: center;
+			flex-wrap: wrap;
 		}
 
-		.hero-search-hint {
+		nav a {
 			color: var(--text-muted);
-			font-size: 13px;
-			margin-bottom: 30px;
-			letter-spacing: 0.3px;
+			text-decoration: none;
+			font-size: 1.25rem;
+			font-weight: 500;
+			transition: color 0.2s ease;
+			cursor: pointer;
 		}
 
-		.hero-search-hint kbd {
-			background: var(--modal-bg);
-			border: 1px solid var(--modal-border);
-			padding: 3px 6px;
-			border-radius: 4px;
-			font-family: 'Inter', monospace;
-			font-size: 11px;
+		nav a:hover {
 			color: var(--text-main);
-		}
-
-		.hero-quote {
-			color: var(--text-muted);
-			font-size: 14px;
-			background: var(--modal-bg);
-			padding: 12px 24px;
-			border-radius: 9999px;
-			border: 1px solid var(--modal-border);
-			opacity: 0.7;
-		}
-
-		.iframe-wrapper {
-			width: 100%;
-			height: 100%;
-			background: var(--bg-color);
-		}
-
-		iframe {
-			width: 100%;
-			height: 100%;
-			border: none;
 		}
 
 		/* --- MODALS --- */
 		.modal-overlay {
 			position: fixed;
 			inset: 0;
-			background: rgba(0, 0, 0, 0.5);
+			background: rgba(0, 0, 0, 0.7);
 			backdrop-filter: blur(8px);
 			z-index: 2000;
 			display: none;
@@ -350,7 +100,7 @@
 		}
 
 		.settings-box {
-			width: 850px;
+			width: 750px;
 			max-width: 95%;
 			max-height: 85vh;
 			background: var(--modal-bg);
@@ -381,6 +131,7 @@
 			font-size: 20px;
 			font-weight: 600;
 			color: var(--text-main);
+			margin: 0;
 		}
 
 		.btn-close-icon {
@@ -402,15 +153,6 @@
 			display: flex;
 			flex-direction: column;
 			overflow-y: auto;
-		}
-
-		.settings-content::-webkit-scrollbar {
-			width: 8px;
-		}
-
-		.settings-content::-webkit-scrollbar-thumb {
-			background: var(--modal-border);
-			border-radius: 4px;
 		}
 
 		.settings-section-title {
@@ -439,11 +181,6 @@
 			gap: 20px;
 		}
 
-		.setting-row-column {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-
 		.setting-row:last-child {
 			border-bottom: none;
 		}
@@ -459,12 +196,14 @@
 			font-size: 15px;
 			font-weight: 500;
 			color: var(--text-main);
+			margin: 0;
 		}
 
 		.setting-info p {
 			font-size: 13px;
 			color: var(--text-muted);
 			line-height: 1.5;
+			margin: 0;
 		}
 
 		.setting-action {
@@ -474,128 +213,7 @@
 			flex-shrink: 0;
 		}
 
-		/* --- SPOTLIGHT COMPONENT --- */
-		.spotlight-box {
-			width: 600px;
-			max-width: 95%;
-			background: var(--modal-bg);
-			border: 1px solid var(--modal-border);
-			border-radius: 16px;
-			display: flex;
-			flex-direction: column;
-			box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
-			transform: scale(0.98);
-			transition: transform 0.2s ease;
-			overflow: hidden;
-			align-self: flex-start;
-			margin-top: 15vh;
-		}
-
-		.modal-overlay.active .spotlight-box {
-			transform: scale(1);
-		}
-
-		.spotlight-input-wrapper {
-			position: relative;
-			display: flex;
-			align-items: center;
-			padding: 0 24px;
-			border-bottom: 1px solid var(--modal-border);
-		}
-
-		.spotlight-input-wrapper i {
-			color: var(--text-muted);
-			font-size: 20px;
-			margin-right: 16px;
-		}
-
-		.spotlight-input {
-			width: 100%;
-			background: transparent;
-			border: none;
-			color: var(--text-main);
-			padding: 24px 0;
-			font-family: 'Inter', sans-serif;
-			font-size: 20px;
-			outline: none;
-		}
-
-		.spotlight-input::placeholder {
-			color: #52525b;
-		}
-
-		.spotlight-results {
-			max-height: 350px;
-			overflow-y: auto;
-			padding: 12px;
-			display: flex;
-			flex-direction: column;
-			gap: 4px;
-		}
-
-		.spotlight-results::-webkit-scrollbar {
-			width: 6px;
-		}
-
-		.spotlight-results::-webkit-scrollbar-thumb {
-			background: var(--modal-border);
-			border-radius: 3px;
-		}
-
-		.spotlight-item {
-			display: flex;
-			align-items: center;
-			padding: 12px 16px;
-			border-radius: 8px;
-			color: var(--text-main);
-			cursor: pointer;
-			transition: background 0.1s;
-			font-size: 15px;
-			font-weight: 500;
-			position: relative;
-		}
-
-		.spotlight-item i {
-			width: 24px;
-			color: var(--text-muted);
-			margin-right: 12px;
-			font-size: 16px;
-			text-align: center;
-		}
-
-		.spotlight-item:hover,
-		.spotlight-item.active {
-			background: var(--pill-hover);
-		}
-
-		.spotlight-item.active {
-			background: var(--pill-active);
-		}
-
-		.spotlight-shortcut {
-			font-size: 11px;
-			background: rgba(134, 239, 172, 0.15);
-			color: #86efac;
-			padding: 3px 6px;
-			border-radius: 4px;
-			font-family: monospace;
-			margin-left: 10px;
-		}
-
-		.spotlight-item-badge {
-			margin-left: auto;
-			font-size: 11px;
-			color: var(--text-muted);
-			background: rgba(255, 255, 255, 0.05);
-			padding: 4px 8px;
-			border-radius: 4px;
-			text-transform: uppercase;
-			letter-spacing: 0.5px;
-		}
-
-		/* UI ELEMENTS */
-		.dark-input,
-		.dark-select {
+		.dark-input {
 			background: var(--input-bg);
 			border: 1px solid var(--input-border);
 			color: var(--text-main);
@@ -607,27 +225,8 @@
 			transition: 0.2s;
 		}
 
-		.dark-input:focus,
-		.dark-select:focus {
+		.dark-input:focus {
 			border-color: var(--text-main);
-		}
-
-		.dark-input.full-width {
-			width: 100%;
-			margin-bottom: 12px;
-		}
-
-		.mint-accent {
-			background: #a7f3d0 !important;
-			color: #064e3b !important;
-			border: none !important;
-			font-weight: 600;
-			width: 100px;
-			text-align: center;
-		}
-
-		.mint-accent::placeholder {
-			color: rgba(6, 78, 59, 0.6);
 		}
 
 		.clean-btn {
@@ -644,7 +243,6 @@
 			align-items: center;
 			justify-content: center;
 			height: 38px;
-			white-space: nowrap;
 		}
 
 		.clean-btn:hover {
@@ -659,7 +257,7 @@
 		}
 
 		.btn-primary:hover {
-			background: var(--text-muted);
+			background: #e5e5e5;
 		}
 
 		.switch {
@@ -708,192 +306,137 @@
 			background-color: var(--toggle-knob-on);
 		}
 
-		.prompt-modal-box {
-			width: 420px;
-			padding: 32px;
-			text-align: center;
+		/* --- SPOTLIGHT --- */
+		.spotlight-box {
+			width: 600px;
+			max-width: 95%;
+			background: var(--modal-bg);
+			border: 1px solid var(--modal-border);
 			border-radius: 16px;
-		}
-
-		/* Cloak Tabs */
-		.segmented-control {
 			display: flex;
-			background: var(--input-bg);
-			border: 1px solid var(--input-border);
-			border-radius: 8px;
-			padding: 4px;
-			margin-bottom: 16px;
-			width: 100%;
+			flex-direction: column;
+			box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+			transform: scale(0.98);
+			transition: transform 0.2s ease;
+			overflow: hidden;
+			align-self: flex-start;
+			margin-top: 15vh;
 		}
 
-		.segmented-btn {
-			flex: 1;
+		.spotlight-input-wrapper {
+			position: relative;
+			display: flex;
+			align-items: center;
+			padding: 0 24px;
+			border-bottom: 1px solid var(--modal-border);
+		}
+
+		.spotlight-input-wrapper i {
+			color: var(--text-muted);
+			font-size: 20px;
+			margin-right: 16px;
+		}
+
+		.spotlight-input {
+			width: 100%;
 			background: transparent;
 			border: none;
-			color: var(--text-muted);
-			padding: 8px 0;
-			border-radius: 6px;
-			cursor: pointer;
-			font-weight: 500;
-			transition: 0.2s;
-			font-size: 14px;
-		}
-
-		.segmented-btn.active {
-			background: var(--modal-border);
 			color: var(--text-main);
+			padding: 24px 0;
+			font-family: 'Inter', sans-serif;
+			font-size: 20px;
+			outline: none;
 		}
 
-		.cloak-view {
-			display: none;
-			width: 100%;
+		.spotlight-results {
+			max-height: 350px;
+			overflow-y: auto;
+			padding: 12px;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
 		}
 
-		.cloak-view.active {
-			display: block;
-			animation: fadeIn 0.2s ease;
-		}
-
-		.preset-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-			gap: 10px;
-		}
-
-		.preset-btn {
+		.spotlight-item {
 			display: flex;
 			align-items: center;
-			gap: 10px;
-			background: var(--input-bg);
-			border: 1px solid var(--input-border);
-			color: var(--text-main);
-			padding: 10px 14px;
+			padding: 12px 16px;
 			border-radius: 8px;
+			color: var(--text-main);
 			cursor: pointer;
-			transition: 0.2s;
-			font-size: 13px;
+			transition: background 0.1s;
+			font-size: 15px;
 			font-weight: 500;
 		}
 
-		.preset-btn img {
-			width: 18px;
-			height: 18px;
-			border-radius: 2px;
-		}
-
-		.preset-btn:hover {
+		.spotlight-item:hover,
+		.spotlight-item.active {
 			background: var(--pill-hover);
-		}
-
-		.preset-btn.active {
-			border-color: #a7f3d0;
-			background: rgba(167, 243, 208, 0.05);
-		}
-
-		.preview-box {
-			display: inline-flex;
-			align-items: center;
-			gap: 10px;
-			background: var(--input-bg);
-			border: 1px solid var(--input-border);
-			padding: 10px 16px;
-			border-radius: 8px;
-			margin-bottom: 16px;
-			font-size: 14px;
-			color: var(--text-main);
-		}
-
-		.preview-box img {
-			width: 16px;
-			height: 16px;
 		}
 	</style>
 </head>
 
 <body>
-	<div class="grid-bg"></div>
+
 	<canvas id="constellation-canvas"></canvas>
 
-	<nav class="topbar">
-		<a class="brand" onclick="switchPage('home', this)">edulearn</a>
+	<div class="container">
+		<h1>edulearn</h1>
+		<nav>
+			<a href="./h/">Home</a>
+			<a href="./g/">Games</a>
+			<a href="./g2/">G2</a>
+			<a href="./b/">Browser</a>
+			<a href="./tools.html">Tools</a>
+			<a href="./extras.html">Extras</a>
+			<a href="#" onclick="openSettings(); return false;">Settings</a>
+		</nav>
+	</div>
 
-		<div class="nav-links">
-			<a class="nav-link active" onclick="switchPage('home', this)"><i class="fa-solid fa-house"></i> Home</a>
-			<a class="nav-link" onclick="switchPage('games-page', this)"><i class="fa-solid fa-gamepad"></i> Games</a>
-			<a class="nav-link" onclick="switchPage('g2-page', this)"><i class="fa-solid fa-gamepad"></i> G2</a>
-			<a class="nav-link" onclick="switchPage('search-page', this)"><i class="fa-solid fa-globe"></i> Browser</a>
-			<a class="nav-link" onclick="switchPage('tools-page', this)"><i class="fa-solid fa-wrench"></i> Tools</a>
-			
-			<a class="nav-link" onclick="switchPage('extras-page', this)"><i class="fa-solid fa-shapes"></i> Extras</a>
-			<a class="nav-link" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
-		</div>
-
-		<div class="nav-actions">
-			<button class="icon-btn" onclick="openAnnouncement()" title="Announcements">
-                <i class="fa-solid fa-bell"></i>
-                <div class="notification-dot" id="bell-dot"></div>
-            </button>
-			<a href="https://discord.gg/EPm5qnKkYN" target="_blank" class="icon-btn" title="Join our Discord">
-				<i class="fa-brands fa-discord"></i>
-			</a>
-		</div>
-	</nav>
-
-	<main class="main-content">
-		<section id="home" class="page active">
-			<div class="home-container">
-				<div class="hero-title-box">
-					<h1 class="hero-title">edulearn</h1>
+	<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
+		<div class="settings-box">
+			<div class="settings-header-top">
+				<h2>Settings</h2>
+				<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
+			</div>
+			<div class="settings-content">
+				<div class="settings-section-title">Stealth & Privacy</div>
+				<div class="settings-card">
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3>Panic Button</h3>
+							<p>Quickly hide the screen. Triggered by a keypress.</p>
+						</div>
+						<div class="setting-action">
+							<input type="text" id="panic-key" class="dark-input" placeholder="Key (e.g. `)" style="width: 80px; text-align: center;">
+							<input type="text" id="panic-url" class="dark-input" placeholder="Redirect URL" style="width: 200px;">
+							<button class="clean-btn btn-primary" onclick="savePanic()">Save</button>
+						</div>
+					</div>
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3>Tab Cloak</h3>
+							<p>Disguise the current tab title and icon.</p>
+						</div>
+						<div class="setting-action">
+							<input type="text" id="cloak-title" class="dark-input" placeholder="Page Title (e.g. Login)">
+							<input type="text" id="cloak-icon" class="dark-input" placeholder="Icon URL">
+							<button class="clean-btn btn-primary" onclick="saveCloak()">Apply</button>
+						</div>
+					</div>
 				</div>
 
-				<div class="hero-search-hint">Press <kbd>Ctrl+Y</kbd> to open command palette</div>
-				<div class="hero-quote" id="random-quote">Loading...</div>
-			</div>
-		</section>
-
-		<section id="games-page" class="page">
-			<div class="iframe-wrapper"><iframe data-src="./math/gn-math.html"></iframe></div>
-		</section>
-		<section id="g2-page" class="page">
-			<div class="iframe-wrapper"><iframe data-src="./g2.html"></iframe></div>
-		</section>
-		<section id="search-page" class="page">
-			<div class="iframe-wrapper"><iframe data-src="./active/index.html"></iframe></div>
-		</section>
-		<section id="tools-page" class="page">
-			<div class="iframe-wrapper"><iframe data-src="./tools.html"></iframe></div>
-		</section>
-		
-		<section id="extras-page" class="page">
-			<div class="iframe-wrapper"><iframe data-src="./extras.html"></iframe></div>
-		</section>
-
-		<section id="dynamic-iframe-page" class="page">
-			<div class="iframe-wrapper"><iframe id="dynamic-frame" src=""></iframe></div>
-		</section>
-	</main>
-
-	<div class="modal-overlay" id="announcement-modal" onclick="handleBackdropClick(event)">
-		<div class="settings-box prompt-modal-box" style="width: 500px; text-align: left;">
-			<div class="settings-header-top">
-				<h2>Announcements</h2>
-				<button class="btn-close-icon" onclick="closeAnnouncement()"><i class="fa-solid fa-xmark"></i></button>
-			</div>
-			<div class="settings-content" style="padding-top: 24px;">
-				<div
-					style="background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; padding: 16px;">
-					<div
-						style="color: var(--text-muted); font-size: 12px; margin-bottom: 8px; font-weight: 600; text-transform: uppercase;">
-						Update: 3/14/2026</div>
-					<p style="color: var(--text-main); font-size: 14px; line-height: 1.6; margin: 0;">
-						Hello everyone, it has come to my attention that someone has copied edulearn and is distributing
-						it around. The fake copy (so obv made with ai) is <a href="https://bebby.w3spaces.com"
-							target="_blank"
-							style="color: #86efac; text-decoration: none;">https://bebby.w3spaces.com</a>. if you ever
-						see the owner online hes a chungis for filling it with stolen games giving no credit and trying to copy edulearn 😂
-						<p>-[HOTFIX]: Panic key now works 100% of the time (unless you're in a iframe) </p>
-						<p>- Added command pallette search for panic key and settings </p>
-					</p>
+				<div class="settings-section-title">Customization</div>
+				<div class="settings-card">
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3>Constellations</h3>
+							<p>Toggle floating animated background network.</p>
+						</div>
+						<div class="setting-action">
+							<label class="switch"><input type="checkbox" id="particle-toggle" onchange="toggleParticles()"><span class="slider"></span></label>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -903,938 +446,163 @@
 		<div class="spotlight-box">
 			<div class="spotlight-input-wrapper">
 				<i class="fa-solid fa-magnifying-glass"></i>
-				<input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search commands, pages, and directories..." autocomplete="off">
+				<input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search commands or pages..." autocomplete="off" oninput="filterSpotlight()">
             </div>
 				<div id="spotlight-results" class="spotlight-results">
-				</div>
-			</div>
-		</div>
-
-		<div class="modal-overlay" id="add-dir-modal" onclick="handleBackdropClick(event)">
-			<div class="settings-box prompt-modal-box">
-				<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--text-main);">Add Custom
-					Directory</h2>
-				<p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Create a quick link to any
-					URL or path.</p>
-				<input type="text" id="new-dir-name" class="dark-input full-width" placeholder="Name (e.g. Math Backup)">
-				<input type="text" id="new-dir-path" class="dark-input full-width" placeholder="Path/URL (e.g. ./math/)">
-				<div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
-					<button class="clean-btn" onclick="closeDirModal()">Cancel</button>
-					<button class="clean-btn btn-primary" onclick="addCustomDirectory()">Save Link</button>
-				</div>
-
-				<div id="dir-modal-list"
-					style="margin-top: 20px; text-align: left; display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto;">
-				</div>
-			</div>
-		</div>
-
-		<div class="modal-overlay" id="session-prompt-modal" onclick="handleBackdropClick(event)">
-			<div class="settings-box prompt-modal-box">
-				<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: var(--text-main);">Is class
-					session active?</h2>
-				<p style="color: var(--text-muted); font-size: 14px; margin-bottom: 28px; line-height: 1.5;">
-					If yes, we strongly recommend using Blob URL Cloaking right now to securely hide this site from your
-					tab history.
-				</p>
-				<div style="display: flex; gap: 12px; justify-content: center;">
-					<button class="clean-btn" onclick="closeSessionPrompt()">No, skip</button>
-					<button class="clean-btn btn-primary" onclick="openBlob(); closeSessionPrompt();">Yes, use Blob Cloak</button>
-				</div>
-			</div>
-		</div>
-
-		<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
-			<div class="settings-box">
-				<div class="settings-header-top">
-					<h2>Settings</h2>
-					<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
-				</div>
-				<div class="settings-content">
-
-					<div class="settings-section-title">Cloaking Options</div>
-					<div class="settings-card">
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3>Auto-blank Mode</h3>
-								<p>Automatically open the site in about:blank upon visiting.</p>
-							</div>
-							<div class="setting-action">
-								<label class="switch"><input type="checkbox" id="auto-blank-toggle"><span class="slider"></span></label>
-							</div>
-						</div>
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3>One-time about:blank</h3>
-								<p>Open current instance in an about:blank popup.</p>
-							</div>
-							<div class="setting-action">
-								<button class="clean-btn btn-primary" onclick="openAboutBlank()">Open Window</button>
-							</div>
-						</div>
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3>One-time Blob Cloak</h3>
-								<p>Launch in a secure Blob URL to hide the origin link.</p>
-							</div>
-							<div class="setting-action">
-								<button class="clean-btn btn-primary" onclick="openBlob()">Launch Blob</button></div>
-						</div>
-					</div>
-
-					<div class="settings-section-title">Stealth & Privacy</div>
-					<div class="settings-card">
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3>Panic Button</h3>
-								<p>Quickly hide the screen. Separate multiple keys with commas.</p>
-							</div>
-							<div class="setting-action">
-								<input type="text" id="panic-key" class="dark-input mint-accent" placeholder="Key (e.g. `)">
-								<input type="text" id="panic-url" class="dark-input" placeholder="Redirect URL" style="width: 200px;">
-								<button class="clean-btn btn-primary" onclick="savePanic(event)">Save</button>
-							</div>
-						</div>
-
-						<div class="setting-row setting-row-column">
-							<div class="setting-info" style="width: 100%; margin-bottom: 12px;">
-								<h3>Tab Cloak</h3>
-								<p>Disguise the current tab title and icon immediately.</p>
-							</div>
-							<div class="segmented-control">
-								<button class="segmented-btn active" onclick="switchCloakTab('presets', this)"><i class="fa-solid fa-list"></i> Presets</button>
-								<button class="segmented-btn" onclick="switchCloakTab('custom', this)"><i class="fa-solid fa-pen"></i> Custom</button>
-							</div>
-							<div id="cloak-presets-view" class="cloak-view active">
-								<div class="preset-grid">
-									<button class="preset-btn" data-preset="default" onclick="applyCloakPreset('default', event)"><img src="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png"> Default</button>
-									<button class="preset-btn" data-preset="google" onclick="applyCloakPreset('google', event)"><img src="https://www.google.com/favicon.ico"> Google</button>
-									<button class="preset-btn" data-preset="drive" onclick="applyCloakPreset('drive', event)"><img src="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"> Drive</button>
-									<button class="preset-btn" data-preset="classroom" onclick="applyCloakPreset('classroom', event)"><img src="https://ssl.gstatic.com/classroom/ic_product_classroom_32.png"> Classroom</button>
-									<button class="preset-btn" data-preset="docs" onclick="applyCloakPreset('docs', event)"><img src="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico"> Docs</button>
-								</div>
-							</div>
-							<div id="cloak-custom-view" class="cloak-view">
-								<div
-									style="margin-bottom: 8px; font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">
-									Live Preview</div>
-								<div class="preview-box">
-									<img id="custom-preview-icon" src="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png"><span id="custom-preview-title">Login</span>
-								</div>
-								<input type="text" id="custom-cloak-title" class="dark-input full-width" placeholder="Page Title (e.g. My Drive)" oninput="updatePreview()">
-								<input type="text" id="custom-cloak-icon" class="dark-input full-width" placeholder="Icon URL (must be https://...)" oninput="updatePreview()">
-								<button class="clean-btn btn-primary" onclick="applyCustomCloak(event)" style="margin-top: 4px;">Apply Custom</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="settings-section-title">Customization</div>
-					<div class="settings-card">
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3>Theme preset</h3>
-								<p>Pick a theme to customize the overall visual style.</p>
-							</div>
-							<div class="setting-action">
-								<select id="theme-select" class="dark-select" style="width: 200px;" onchange="previewTheme()">
-                                <option value="default">Midnight Indigo (Default)</option>
-                                <option value="inverted">Inverted (Light)</option>
-                                <option value="mocha">Catppuccin Mocha</option>
-                            </select>
-								<button class="clean-btn btn-primary" onclick="saveTheme(event)">Apply</button>
-							</div>
-						</div>
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3>Constellations</h3>
-								<p>Toggle floating animated background network.</p>
-							</div>
-							<div class="setting-action">
-								<label class="switch"><input type="checkbox" id="particle-toggle" onchange="toggleParticles()"><span class="slider"></span></label>
-							</div>
-						</div>
-					</div>
-
+					<div class="spotlight-item" onclick="window.location.href='index.html'">
+						<i class="fa-solid fa-house"></i> Home</div>
+					<div class="spotlight-item" onclick="window.location.href='./math/gn-math.html'">
+						<i class="fa-solid fa-gamepad"></i> Games</div>
+					<div class="spotlight-item" onclick="window.location.href='./g2.html'">
+						<i class="fa-solid fa-gamepad"></i> G2</div>
+					<div class="spotlight-item" onclick="window.location.href='./active/index.html'">
+						<i class="fa-solid fa-globe"></i> Browser</div>
+					<div class="spotlight-item" onclick="window.location.href='./tools.html'">
+						<i class="fa-solid fa-wrench"></i> Tools</div>
+					<div class="spotlight-item" onclick="window.location.href='./extras.html'">
+						<i class="fa-solid fa-shapes"></i> Extras</div>
+					<div class="spotlight-item" onclick="openSettings(); closeSpotlight();">
+						<i class="fa-solid fa-gear"></i> Settings</div>
 				</div>
 			</div>
 		</div>
 
 		<script>
-			// --- 1. GLOBALS & DATA ---
-        const cloaks = {
-            default: { title: "Login", icon: "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png" },
-            google: { title: "Google", icon: "https://www.google.com/favicon.ico" },
-            drive: { title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" },
-            classroom: { title: "Classes", icon: "https://ssl.gstatic.com/classroom/ic_product_classroom_32.png" },
-            docs: { title: "Google Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" }
+			// --- 1. SETTINGS & STATE ---
+        let userSettings = JSON.parse(localStorage.getItem('edulearn_settings')) || {
+            panicKey: 'Escape',
+            panicUrl: './login.html',
+            cloakTitle: 'Login',
+            cloakIcon: 'https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png',
+            particles: true
         };
 
-        let defaultSettings = {
-            panicKeys: 'Escape', panicUrl: './login.html',
-            cloakType: 'preset', cloakValue: 'default',
-            customTitle: '', customIcon: '', theme: 'default', 
-            particles: true, customDirs: []
-        };
-
-        let savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
-        let userSettings = { ...defaultSettings, ...savedSettings };
-        if(!Array.isArray(userSettings.customDirs)) userSettings.customDirs = [];
-
-        function saveState() { localStorage.setItem('el_settings', JSON.stringify(userSettings)); }
-
-        // --- 2. LAZY LOAD & PAGE SWITCHING ---
-        function switchPage(id, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            if(document.getElementById(id)) { document.getElementById(id).classList.add('active'); }
-            
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            if(el) { el.classList.add('active'); } 
-            else {
-                const match = Array.from(document.querySelectorAll('.nav-link')).find(nav => nav.getAttribute('onclick')?.includes(id));
-                if(match) match.classList.add('active');
-            }
-
-            const iframe = document.getElementById(id)?.querySelector('iframe');
-            if (iframe && !iframe.src && iframe.dataset.src) { iframe.src = iframe.dataset.src; }
-            closeSettings();
+        function saveState() {
+            localStorage.setItem('edulearn_settings', JSON.stringify(userSettings));
         }
 
-        const quotes = [
-  "coded by the skids, for the skids", 
-  "Why Unenroll when you have this?",
-  "Classroom.lol but it's actually good",
-  "This is what you call.. a vibecoded site.",
-  "Vibecoded by Claude",
-  "This site is so good, even MOJANG is jealous",
-  "This site is so good, even the IRS is jealous",
-  "The FBI is definitely not watching you use this, nope.",
-  "This site is so good, even NASA is jealous",
-  "Jeffrey Epstein definitely did not use this site, no way.",
-  "This site is so good, even Elon Musk is jealous",
-  "Bro github copilot the quotes that u are making are so cringe [ROFL emoji]",
-  "Parrotx2 approved!",
-  "Finally beat soulmaster [pray emoji]",
-  "Daddy hu!!",
-  "daddy au is my daddy",
-  "fuck you, im not adding shell shockers [rofl emoji]",
-  "nothing.",
-  "This site is so good, even Andrew Hu is jealous",
-  "Teachers hate this one simple trick to get free games and tools on school chromebooks",
-  "This site is so good, even the SEC is jealous",
-  "This site is so good, even the WHO is jealous",
-  "This site is so good, even the CDC is jealous",
-  "This site is so good, even the UN is jealous",
-  "This site is so good, even the World Bank is jealous",
-  "This site is so good, even the IMF is jealous",
-  "This site is so good, even the US Government is jealous",
-  // github copilot ahh comments above ^
-  "Dont remove MENDING.. MOJANG PLS",
-  "I type all ts on ARCH BTW",
-  "Hndrew Au could never..",
-  "The IRS CANNOT TOUCH ME!!",
-  "67.world for more!",
-  "Andewwww huuuu is . gay!!!",
-  "teachers hate ts", 
-  "what's Nasa-dude doing, idk prob hacking on mc",
-  "effry jepstien",
-  "Have you ever played blox fruits with your life on line? while having A BUNCH of mangoes in your mouth? heh... well… this is called DARK MANGO PSYCHOLOGY 💀. Now in dark mango psychology you realize.. they arent just normal mangoes, they are DARK!",
-  "and hu, and hu, andu you",
-  "RHYMES WITH GRUG",
-  "67",
-  "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "get scammedddddd!!!",
-  "If you paid money for this u got scammed, edulearn and all of its services are FREE!!",
-  "UGS FILES VERY SOON!!",
-  "Frogiee1 please please please partner with us 🙏",
-  "MOTD: LOGI",
-  "Most Underrated shit ever",
-  "D- Daddy?",
-  "https://the-demonz.github.io (MOST VIBECODED SHIT EVER)",
-  "Arorua aRorua arOrua aroRua arorUa aroruA",
-  "UwU :333",
-  "Nonchalanttttt :D",
-  "Mrbeast Scam [Insert fire emoji]",
-  "pickle pickle pickle",
-  "alvin the walnut",
-  "Hello wsg mr mail",
-  "Fastify it, act smooth, make a discord bot, and caddy!",
-  "dont do frugs",
-  "That's racially motivated..",
-  "Interesting site u got there..",
-  "This is what you call.. Diddable material.",
-  "ADS ARE NOT MY FAULT (F*CK YOU BREADBB)",
-  "Shock my shells",
-  "mrbeast > mrbeast???",
-  "How many have you counted so far?",
-  "eat this!",
-  "woahh, thats a lot of quotes!",
-  "1167 effrey jepstein drive",
-  "your mom.. j20",
-  "furry femboy catgirl pls ride me uwu - my pronouns (ah)",
-  "Imagine using this when you literally told everyone it SUCKS HAHAHAHA",
-  "https://betadispensertest.vercel.app",
-  "https://chessisfornerds.netlify.app",
-  "Dylanmc math vibes",
-  "luminal LIGHTSPEED BYPASSES!!!",
-  "SOAP PHIAAAA MY GOATTTT",
-  "Keep Onn.. 20gb usb contains massive movie files.. I wonder who it belongs to..",
-  "Redragon gaming mouse, kawaii pack :3",
-  "Earthquakes? Must be daddy ash again :333",
-  "thefakesydney is BACKKKKKKKKKKKKK!!! 676767",
-  "When I was 1 year old.. I thought of edulearn",
-  "When faced when hndrew au, take him out - sun tzu",
-  "I see chungus. I slime him out - wise guy",
-  "Szvy I'm sorry you got doxxed..",
-  "Wsg therealfour",
-  "https://femboy.world :3",
-  "SLIME HIM OUT GUYSSS",
-  "20% ai slop",
-  "VIBE CODEEERR SUPREMEEEE",
-  "Wait... I don't have the VIBE CODER SUPREME ROLE?? YESSS!!!!!",
-  "Why do you vibecode? - A gong bell that I could ring",
-  "ring me daddy",
-  "This video is sponsored by Genshin Impact-",
-  "Oh fuhh naww",
-  "skibidi.men for more!",
-  "Every 5 year old has a story behind them!",
-  "unblocked and unlocked", 
-  "running on pure caffeine", 
-  "if you're reading this, do your homework",
-  "no admins allowed", 
-  ":333333333",
-  "Femboys 3DDDDDD",
-  "You are NEVER finding out what PROXIES are.. hahaha - Matthew guy whos black",
-  "Why tf do u have so many apps on a cb - Conall Sadako",
-  "It's.. soo.. cold - guy",
-  "4167💀💀",
-  "trust me bro.. it's not a virus.💀",
-  "Bro thinks this is a virus 💀",
-  "oh nah bro 💀💀💀💀💀💀 ",
-  "Skull emoji virus 💀",
-  "Skull emojis have hit this sector unfortunately..💀💀💀💀💀💀",
-  "I'm not taken over by the skull virus.. yet 💀💀",
-  "We are still safe-💀",
-  "Oops i js closed a tab💀💀",
-  "Montagem NO ONE CARES",
-  "💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀 back from 42",
-  "Control + Shift + T to reopen a tab",
-  "Github copilot being suchhh a goooood boy..",
-  "fcking NI-",
-  "security through obscurity", 
-  "ctrl + w to win instantly", 
-  "made with <3 and spaghetti code", 
-  "Set this up in alt tab to quickly escape",
-  "decode this: aHR0cHM6Ly9hbmRyZXdodWlzLmdheQ==", 
-  "If you don't use this, go-",
-  "I'm sorry j20, I can't fix the hk bugs (That's breadbb [aka genizy's] fault.)",
-  "need more blahaj", 
-  "typing this while going to class lol",
-  "How are you playing Hollow Knight at school bro?", 
-  "originally just a webview kajig", 
-  "frogiesarcade vibes", 
-  "This is where the fun begins! - Obi Wan Kenobi",
-  "vibecoded but it WORKS!", 
-  "Monkey find computer. Monkey type.", 
-  "goguardian is trash", 
-  "lightsped sytems", 
-  "go get the milk - therealfour, milk lover 67", 
-  "No matter how much it feels like it, I'm not gay I swear! - A random", 
-  "Wait.. I can have MULTIPLE TABS?!? HOLY SHI*", 
-  "If you use this and I know you're a skid, screw you lmfao",
-  "you're dumb", 
-  "I'm depressed typing this", 
-  "dont cry.. just.. cry", 
-  "gaming freedom!", 
-  "Go back of this ripoff by AH (https://bebby.w3spaces.com) [vibecoded by claude ofc] HAHAHAHAA [insert wemmbu laugh]",
-  "yall ready to play TS ALL DAY!?", 
-  "MF did not js say [It's down for maintainance]",
-  "Fun fact: This doesn't break your fast for Ramadan! :O",
-  "The ogs know of classroom.lol", 
-  "tyrone's stupid games", 
-  "I have securly for breakfast, gogaurdian for lunch, and lightsped for dinner", 
-  "educational.sbs", 
-  "I'm jobless fr", 
-  "Jobless for using AI? Really?",
-  "THIS SITE IS NOT FOR DEGENERATES. GO AWAY!!", 
-  "I should ring Alvin's gong - wise guy", 
-  "If you want to humiliate your enemies, do it in a way that doesn't waste your own time. Use AI - Sun Zu",
-  "albie was here", 
-  "UNBLOCKED GAMES IN DA BIG 26!", 
-  "If you made it this far, join the discord!", 
-  "skids being skids", 
-  "Dont slime me out..daddy",
-  "your a skid buddy", 
-  "toggle off particles for better performance", 
-  "I'll steal your code hahaha - J20", 
-  "Hella sick while typing this", 
-  "bro wtf - guy", 
-  "wow these are so old messages",
-  "There are some funny easter eggs!",
-  "Look for some!",
-  "I use arch btw",
-  "last message so far.. consider yourself lucky.",
-  "I bet you're here for the geo grind.",
-  "Hollow knight in the big 2026?",
-  "most recent update: Added more quotes! 3/14/2026",
-  "the wifi knows what you did last night",
-  "this tab knows too much",
-  "if this loads your wifi is valid",
-  "404 motivation not found",
-  "someone somewhere is procrastinating harder than you",
-  "your teacher probably uses this site too",
-  "this page is watching you scroll",
-  "if you see this you owe me 5 dollars",
-  "every refresh creates a new timeline",
-  "your future self is judging this tab",
-  "ctrl+s your life bro",
-  "this site runs on hopes and bad javascript",
-  "another day another tab",
-  "if it works don't touch it",
-  "half the internet is duct tape and dreams",
-  "99% of coding is googling",
-  "the other 1% is suffering",
-  "your ram is crying right now",
-  "every bug has a developer somewhere crying",
-  "the server hamster is tired",
-  "please stop opening 400 tabs",
-  "this site runs on a potato",
-  "if this breaks pretend it didn't",
-  "congratulations you found another quote",
-  "somewhere someone is counting these",
-  "how long have you been scrolling",
-  "bro go drink water",
-  "touch grass challenge: impossible",
-  "achievement unlocked: reading random quotes",
-  "this message will self destruct eventually",
-  "the internet never forgets",
-  "except when the cache clears",
-  "history will remember this tab",
-  "or maybe not",
-  "loading existential crisis...",
-  "life is just a series of loading screens",
-  "respawning in 3... 2... 1...",
-  "main character energy",
-  "side quest detected",
-  "you have discovered a useless quote",
-  "the dev definitely forgot this existed",
-  "this line of text traveled thousands of miles to reach you",
-  "meanwhile you are still procrastinating",
-  "if you read this you are legally cool",
-  "your cpu approves",
-  "your gpu disagrees",
-  "your battery fears you",
-  "low battery anxiety moment",
-  "the scroll never ends",
-  "there are always more quotes",
-  "infinite quotes glitch",
-  "someone add a quote counter",
-  "someone else will fix the bugs",
-  "future me problem",
-  "ship it and pray",
-  "works on my machine",
-  "the code compiles so it's fine",
-  "do not question the code",
-  "the code questions you",
-  "if it breaks blame the intern",
-  "there is no intern",
-  "the intern is you",
-  "congrats you're hired",
-  "your salary is 0 dollars",
-  "paid in experience",
-  "experience not included",
-  "this message was typed at 3am",
-  "sleep is optional",
-  "debugging is just detective work",
-  "except the detective is stupid",
-  "every line of code is a gamble",
-  "we gambling with the production server",
-  "please dont ddos the quote generator",
-  "or do idk",
-  "this is definitely production code",
-  "totally not spaghetti",
-  "100% professional engineering",
-  "trust me bro it works",
-  "never test in production",
-  "unless you do",
-  "this quote generator has lore",
-  "someone write the lore",
-  "the lore is lost",
-  "the lore never existed",
-  "the lore is just vibes",
-  "vibes based development",
-  "powered by vibes",
-  "vibes > documentation",
-  "documentation coming soon",
-  "soon since 2022",
-  "still soon",
-  "maybe tomorrow",
-  "definitely tomorrow",
-  "ok maybe next update",
-  "update coming soon™",
-  "soon™",
-  "tm symbol intensifies",
-  "the scroll continues",
-  "you are still reading",
-  "why are you still reading",
-  "go do homework bro",
-  "seriously",
-  "close the tab",
-  "no actually close it",
-  "ok one more quote",
-  "just one more",
-  "this is the last one",
-  "just kidding",
-  "there are more",
-  "infinite scrolling technology",
-  "this quote escaped containment",
-  "if found return to developer",
-  "developer missing since last commit",
-  "last commit: 3am",
-  "commit message: fixed stuff",
-  "nothing was fixed",
-  "the bug is now a feature",
-  "feature not documented",
-  "users discovered it anyway",
-  "accidental innovation",
-  "this is peak engineering",
-  "this quote does nothing",
-  "but it looks cool",
-  "style over substance",
-  "but mostly chaos",
-  "chaos driven development",
-  "we vibecoding today",
-  "we vibecoding tomorrow",
-  "we vibecoding forever",
-  "vibecode never dies",
-  "the vibe is strong",
-  "the vibe is unstable",
-  "vibes detected",
-  "maximum vibes reached",
-  "vibe overload",
-  "too many vibes",
-  "calm the vibes",
-  "ok vibes restored",
-  "system stable",
-  "system unstable",
-  "system vibing",
-  "system confused",
-  "system thinking",
-  "system procrastinating",
-  "system scrolling",
-  "system reading quotes",
-  "system still reading quotes",
-  "bro seriously go do homework",
-  "this message is a distraction",
-  "and it worked",
-  "congrats",
-  "achievement unlocked: procrastination",
-  "new speedrun category: quote reading",
-  "wr pace",
-  "someone submit this to speedrun.com",
-  "quote percent any%",
-  "quote percent 100%",
-  "imagine reading all of these",
-  "someone probably will",
-  "that someone might be you",
-  "this quote believes in you",
-  "maybe",
-  "probably not",
-  "ok maybe a little",
-  "never give up",
-  "unless the wifi dies",
-  "then it's over",
-  "wifi down bad",
-  "router crying",
-  "packet lost",
-  "lag detected",
-  "ping 999",
-  "skill issue",
-  "massive skill issue",
-  "internet skill issue",
-  "coding skill issue",
-  "quote writing skill issue",
-  "ok that one was rude",
-  "sorry about that",
-  "anyways",
-  "back to quotes",
-  "the quotes never end",
-  "this might be the last one",
-  "or maybe not",
-  "ok now it's the last one",
-  "final quote maybe",
-  "ok actually final quote",
-  "this time fr",
-  "no more quotes after this",
-  "unless someone adds more",
-  "they probably will",
-  "and the cycle continues"
-]
-        document.getElementById('random-quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
-
-        // --- 3. MODALS, ANNOUNCEMENTS & SETTINGS INIT ---
         function initSettings() {
-            document.getElementById('panic-key').value = userSettings.panicKeys;
+            // Populate inputs
+            document.getElementById('panic-key').value = userSettings.panicKey;
             document.getElementById('panic-url').value = userSettings.panicUrl;
-            document.getElementById('theme-select').value = userSettings.theme;
+            document.getElementById('cloak-title').value = userSettings.cloakTitle;
+            document.getElementById('cloak-icon').value = userSettings.cloakIcon;
             document.getElementById('particle-toggle').checked = userSettings.particles;
 
-            document.getElementById('custom-cloak-title').value = userSettings.customTitle;
-            document.getElementById('custom-cloak-icon').value = userSettings.customIcon;
-            
-            if(userSettings.cloakType === 'custom') {
-                document.querySelectorAll('.segmented-btn')[1].click(); updatePreview();
-            } else { updateActivePresetVisual(userSettings.cloakValue); }
-
-            applyTheme(userSettings.theme); executeCloakApply(true);
-            
-            // Check Announcement State
-            if(localStorage.getItem('announcement_20260314')) {
-                document.getElementById('bell-dot').style.display = 'none';
+            // Apply cloaking
+            document.getElementById('page-title').innerText = userSettings.cloakTitle;
+            if (userSettings.cloakIcon) {
+                document.getElementById('dynamic-favicon').href = userSettings.cloakIcon;
             }
         }
 
-        function openSettings() { 
-            document.getElementById('settings-modal').classList.add('active'); 
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            document.querySelector('.nav-link:last-child').classList.add('active');
-            initSettings(); 
+        function savePanic() {
+            userSettings.panicKey = document.getElementById('panic-key').value || 'Escape';
+            userSettings.panicUrl = document.getElementById('panic-url').value || './login.html';
+            saveState();
         }
-        
-        function openAnnouncement() { 
-            document.getElementById('announcement-modal').classList.add('active'); 
-            localStorage.setItem('announcement_20260314', 'true');
-            document.getElementById('bell-dot').style.display = 'none';
+
+        function saveCloak() {
+            userSettings.cloakTitle = document.getElementById('cloak-title').value || 'Login';
+            userSettings.cloakIcon = document.getElementById('cloak-icon').value || 'https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png';
+            saveState();
+            initSettings();
         }
-        function closeAnnouncement() { document.getElementById('announcement-modal').classList.remove('active'); }
-        
+
+        function toggleParticles() {
+            userSettings.particles = document.getElementById('particle-toggle').checked;
+            saveState();
+        }
+
+        // --- 2. MODAL LOGIC ---
+        function openSettings() { document.getElementById('settings-modal').classList.add('active'); }
         function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
-        function closeSessionPrompt() { 
-            document.getElementById('session-prompt-modal').classList.remove('active'); 
-            sessionStorage.setItem('classSessionPromptShown', 'true'); // Locks out after dismissal
+        function openSpotlight() { 
+            document.getElementById('spotlight-modal').classList.add('active'); 
+            setTimeout(() => document.getElementById('spotlight-input').focus(), 50);
         }
-        
-        function handleBackdropClick(e) { 
-            if (e.target.id === 'settings-modal') closeSettings(); 
-            if (e.target.id === 'session-prompt-modal') closeSessionPrompt();
-            if (e.target.id === 'announcement-modal') closeAnnouncement();
-            if (e.target.id === 'add-dir-modal') closeDirModal();
-        }
+        function closeSpotlight() { document.getElementById('spotlight-modal').classList.remove('active'); }
 
-        // --- 4. CUSTOM DIRECTORIES (COMMAND PALETTE) ---
-        function openDirModal() {
-            document.getElementById('add-dir-modal').classList.add('active');
-            renderDirModalList();
+        function handleBackdropClick(e) {
+            if (e.target.id === 'settings-modal') closeSettings();
         }
-        function closeDirModal() { document.getElementById('add-dir-modal').classList.remove('active'); }
-
-        function renderDirModalList() {
-            const list = document.getElementById('dir-modal-list');
-            list.innerHTML = userSettings.customDirs.length === 0 ? '<div style="color:var(--text-muted); font-size:13px; text-align:center;">No custom presets added.</div>' : '';
-            userSettings.customDirs.forEach((dir, i) => {
-                list.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--input-bg); padding:10px; border-radius:8px; border:1px solid var(--input-border);">
-                        <div style="display:flex; flex-direction:column; gap:2px;">
-                            <span style="font-size:13px; font-weight:500; color:var(--text-main);">${dir.name}</span>
-                            <span style="font-size:11px; color:var(--text-muted);">${dir.path}</span>
-                        </div>
-                        <button class="btn-close-icon" style="font-size:14px; padding:4px;" onclick="removeCustomDirectory(${i})"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
+        function handleSpotlightBackdropClick(e) {
+            if (e.target.id === 'spotlight-modal') closeSpotlight();
         }
 
-        function addCustomDirectory() {
-            const n = document.getElementById('new-dir-name').value.trim();
-            const p = document.getElementById('new-dir-path').value.trim();
-            if(!n || !p) return;
-            userSettings.customDirs.push({ name: n, path: p });
-            saveState(); renderDirModalList();
-            document.getElementById('new-dir-name').value = ''; document.getElementById('new-dir-path').value = '';
-        }
-
-        function removeCustomDirectory(i) {
-            userSettings.customDirs.splice(i, 1);
-            saveState(); renderDirModalList();
-        }
-
-        // --- 5. SPOTLIGHT / COMMAND PALETTE ---
-        const baseSpotlightData = [
-            { title: 'Home', type: 'page', target: 'home', icon: 'fa-house', badge: 'Menu' },
-            { title: 'Games', type: 'page', target: 'games-page', icon: 'fa-gamepad', badge: 'Menu' },
-			{ title: 'G2', type: 'page', target: 'g2-page', icon: 'fa-gamepad', badge: 'Menu' },
-            { title: 'Browser', type: 'page', target: 'search-page', icon: 'fa-globe', badge: 'Menu' },
-            { title: 'Tools', type: 'page', target: 'tools-page', icon: 'fa-wrench', badge: 'Menu' },
-			{ title: 'Extras', type: 'page', target: 'extras-page', icon: 'fa-solid fa-shapes', badge: 'Menu' },
-            { title: 'Settings', type: 'action', target: 'settings', icon: 'fa-gear', badge: 'Action' },
-            { title: 'Add Custom Directory Preset', type: 'action', target: 'add-dir', icon: 'fa-plus', badge: 'Manager' },
-            { title: 'OS System', type: 'iframe', target: 'x4konkor3.html', icon: 'fa-desktop', badge: 'Local HTML' },
-            { title: 'Scramjet', type: 'iframe', target: './mnhy78kpljgyun/index.html', icon: 'fa-jet-fighter', badge: 'Experimental App' }
-        ];
-
-        function getSpotlightData() {
-            let data = [...baseSpotlightData];
-            userSettings.customDirs.forEach(dir => {
-                data.push({ title: dir.name, type: 'iframe', target: dir.path, icon: 'fa-folder-open', badge: 'Custom Preset' });
-            });
-            return data;
-        }
-
-        const spotlightModal = document.getElementById('spotlight-modal');
-        const spotlightInput = document.getElementById('spotlight-input');
-        const spotlightResults = document.getElementById('spotlight-results');
-        let currentSpotlightIndex = 0;
-        let activeSpotlightItems = [];
-
-        function openSpotlight() {
-            spotlightModal.classList.add('active');
-            spotlightInput.value = ''; renderSpotlight('');
-            setTimeout(() => spotlightInput.focus(), 50);
-        }
-
-        function closeSpotlight() { spotlightModal.classList.remove('active'); spotlightInput.blur(); }
-        function handleSpotlightBackdropClick(e) { if (e.target.id === 'spotlight-modal') closeSpotlight(); }
-
-        function executeSpotlightItem(item) {
-            closeSpotlight();
-            setTimeout(() => {
-                if (item.type === 'page') {
-                    switchPage(item.target);
-                } else if (item.type === 'action' && item.target === 'settings') {
-                    openSettings();
-                } else if (item.type === 'action' && item.target === 'add-dir') {
-                    openDirModal();
-                } else if (item.type === 'iframe') {
-                    document.getElementById('dynamic-frame').src = item.target;
-                    switchPage('dynamic-iframe-page');
-                }
-            }, 100);
-        }
-
-        function renderSpotlight(query) {
-            spotlightResults.innerHTML = '';
-            let data = getSpotlightData();
-            let filtered = data.filter(item => item.title.toLowerCase().includes(query.toLowerCase()));
-            
-            if(query && (query.startsWith('http') || query.startsWith('./') || query.startsWith('/') || query.includes('.'))) {
-                filtered.unshift({ title: `Open: ${query}`, type: 'iframe', target: query, icon: 'fa-link', badge: 'Quick Link' });
-            }
-
-            activeSpotlightItems = filtered; 
-
-            if(filtered.length === 0) {
-                spotlightResults.innerHTML = '<div style="padding: 16px; color: var(--text-muted); text-align: center; font-size: 14px;">No results found.</div>';
-                return;
-            }
-
-            if (currentSpotlightIndex >= filtered.length) currentSpotlightIndex = 0;
-            if (currentSpotlightIndex < 0) currentSpotlightIndex = filtered.length - 1;
-
-            filtered.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = `spotlight-item ${index === currentSpotlightIndex ? 'active' : ''}`;
-                
-                let shortcut = index < 9 ? `<span class="spotlight-shortcut">[Y + ${index + 1}]</span>` : '';
-                
-                div.innerHTML = `<i class="fa-solid ${item.icon}"></i><span>${item.title}</span>${shortcut}<span class="spotlight-item-badge">${item.badge}</span>`;
-                div.onclick = () => executeSpotlightItem(item);
-                div.onmouseenter = () => {
-                    document.querySelectorAll('.spotlight-item').forEach(el => el.classList.remove('active'));
-                    div.classList.add('active'); currentSpotlightIndex = index;
-                };
-                spotlightResults.appendChild(div);
-            });
-        }
-
-        spotlightInput.addEventListener('input', (e) => { currentSpotlightIndex = 0; renderSpotlight(e.target.value); });
-
-        spotlightInput.addEventListener('keydown', (e) => {
-            if (activeSpotlightItems.length === 0) return;
-            if (e.key === 'ArrowDown') {
-                e.preventDefault(); currentSpotlightIndex++; renderSpotlight(spotlightInput.value);
-                const activeEl = spotlightResults.querySelector('.active'); if(activeEl) activeEl.scrollIntoView({ block: 'nearest' });
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault(); currentSpotlightIndex--; renderSpotlight(spotlightInput.value);
-                const activeEl = spotlightResults.querySelector('.active'); if(activeEl) activeEl.scrollIntoView({ block: 'nearest' });
-            } else if (e.key === 'Enter') {
-                e.preventDefault(); executeSpotlightItem(activeSpotlightItems[currentSpotlightIndex]);
-            }
-        });
-
-        // Global Shortcuts (Panic, Spotlight Trigger, Y+Number Quick Launch)
-        let yKeyHeld = false;
-        document.addEventListener('keydown', (e) => {
-            if (e.key.toLowerCase() === 'y') yKeyHeld = true;
-
-            // Global Y + [1-9] Quick Launch
-            if (yKeyHeld && e.key >= '0' && e.key <= '9') {
-                e.preventDefault();
-                let idx = parseInt(e.key) - 1;
-                
-                if (spotlightModal.classList.contains('active')) {
-                    if (activeSpotlightItems[idx]) executeSpotlightItem(activeSpotlightItems[idx]);
+        function filterSpotlight() {
+            const query = document.getElementById('spotlight-input').value.toLowerCase();
+            const items = document.querySelectorAll('.spotlight-item');
+            items.forEach(item => {
+                if (item.innerText.toLowerCase().includes(query)) {
+                    item.style.display = 'flex';
                 } else {
-                    let globalData = getSpotlightData();
-                    if (globalData[idx]) executeSpotlightItem(globalData[idx]);
+                    item.style.display = 'none';
                 }
-                return;
-            }
+            });
+        }
 
-            // Ctrl + Y Trigger
+        // --- 3. EVENT LISTENERS ---
+        window.addEventListener('keydown', (e) => {
+            // Panic Key
+            if (e.key === userSettings.panicKey && document.activeElement.tagName !== 'INPUT') {
+                window.location.replace(userSettings.panicUrl);
+            }
+            // Spotlight (Ctrl+Y)
             if (e.ctrlKey && e.key.toLowerCase() === 'y') {
                 e.preventDefault();
-                if(!spotlightModal.classList.contains('active')) openSpotlight();
-                else closeSpotlight();
-                return;
+                openSpotlight();
             }
-
-            if (e.key === 'Escape' && spotlightModal.classList.contains('active')) { closeSpotlight(); return; }
-            if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; 
-            
-            const keys = (userSettings.panicKeys || 'Escape').split(',').map(k => k.trim().toLowerCase());
-            if(keys.includes(e.key.toLowerCase())) window.location.href = userSettings.panicUrl || './login.html';
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                closeSettings();
+                closeSpotlight();
+            }
         });
 
-        document.addEventListener('keyup', (e) => { if (e.key.toLowerCase() === 'y') yKeyHeld = false; });
-
-
-        // --- 6. UI & CLOAKING LOGIC ---
-        function buttonFeedback(btn) {
-            if(!btn) return;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "Saved!"; btn.style.borderColor = "#a7f3d0"; btn.style.color = "#064e3b";
-            if(btn.classList.contains('preset-btn') || btn.classList.contains('clean-btn')) btn.style.backgroundColor = "#a7f3d0";
-            setTimeout(() => { 
-                btn.innerHTML = originalText; btn.style.backgroundColor = ""; btn.style.borderColor = ""; btn.style.color = "";
-                if(btn.classList.contains('preset-btn') && btn.dataset.preset === userSettings.cloakValue) btn.classList.add('active');
-            }, 1000);
-        }
-
-        function switchCloakTab(tab, btn) {
-            document.querySelectorAll('.segmented-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            document.querySelectorAll('.cloak-view').forEach(v => v.classList.remove('active')); document.getElementById(`cloak-${tab}-view`).classList.add('active');
-        }
-
-        function updatePreview() {
-            let title = document.getElementById('custom-cloak-title').value || "Login";
-            let icon = document.getElementById('custom-cloak-icon').value || "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png";
-            document.getElementById('custom-preview-title').innerText = title; document.getElementById('custom-preview-icon').src = icon;
-            document.getElementById('custom-preview-icon').onerror = function() { this.src = "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png"; };
-        }
-
-        function updateActivePresetVisual(presetName) {
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-            let activeBtn = document.querySelector(`.preset-btn[data-preset="${presetName}"]`);
-            if(activeBtn) activeBtn.classList.add('active');
-        }
-
-        function applyCloakPreset(presetName, event) {
-            userSettings.cloakType = 'preset'; userSettings.cloakValue = presetName;
-            updateActivePresetVisual(presetName); executeCloakApply(); buttonFeedback(event.currentTarget);
-        }
-
-        function applyCustomCloak(event) {
-            userSettings.cloakType = 'custom';
-            userSettings.customTitle = document.getElementById('custom-cloak-title').value;
-            userSettings.customIcon = document.getElementById('custom-cloak-icon').value;
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-            executeCloakApply(); buttonFeedback(event.target);
-        }
-
-        function executeCloakApply(initLoad = false) {
-            let title, icon;
-            if (userSettings.cloakType === 'custom') {
-                title = userSettings.customTitle || "Login"; icon = userSettings.customIcon || "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png";
-            } else {
-                let preset = cloaks[userSettings.cloakValue] || cloaks['default']; title = preset.title; icon = preset.icon;
-            }
-            document.title = title;
-            document.querySelectorAll("link[rel*='icon']").forEach(l => l.remove());
-            let newLink = document.createElement('link'); newLink.type = 'image/x-icon'; newLink.rel = 'icon'; newLink.href = icon;
-            document.getElementsByTagName('head')[0].appendChild(newLink);
-            if(!initLoad) saveState();
-        }
-
-        function savePanic(event) {
-            userSettings.panicKeys = document.getElementById('panic-key').value || 'Escape';
-            userSettings.panicUrl = document.getElementById('panic-url').value || './login.html';
-            saveState(); if(event && event.target) buttonFeedback(event.target);
-        }
-
-        function saveTheme(event) {
-            userSettings.theme = document.getElementById('theme-select').value;
-            saveState(); applyTheme(userSettings.theme);
-            if(event && event.target) buttonFeedback(event.target);
-        }
-
-        function previewTheme() { document.body.className = document.getElementById('theme-select').value === 'default' ? '' : `theme-${document.getElementById('theme-select').value}`; }
-        function applyTheme(t) { document.body.className = t === 'default' ? '' : `theme-${t}`; }
-
-        function getCloakDetailsForPopup() {
-            return userSettings.cloakType === 'custom' 
-                ? { title: userSettings.customTitle || "Login", icon: userSettings.customIcon || "https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png" }
-                : (cloaks[userSettings.cloakValue] || cloaks['default']);
-        }
-
-        function openAboutBlank() {
-            const win = window.open('about:blank', '_blank');
-            if(!win) return alert("Popups Blocked! Allow popups to use this feature.");
-            const iframe = win.document.createElement('iframe'); iframe.style.width = "100%"; iframe.style.height = "100%"; iframe.style.border = "none"; iframe.style.margin = "0"; iframe.style.padding = "0"; iframe.src = window.location.href;
-            win.document.body.style.margin = "0"; win.document.body.appendChild(iframe);
-            let details = getCloakDetailsForPopup(); win.document.title = details.title; 
-            const link = win.document.createElement('link'); link.rel = "icon"; link.href = details.icon; win.document.head.appendChild(link);
-            window.location.replace(userSettings.panicUrl || './login.html'); 
-        }
-
-        function openBlob() {
-            let str = `<iframe src="${window.location.href}" style="position:fixed; top:0; left:0; width:100vw; height:100vh; border:none; margin:0; padding:0;"></iframe>`;
-            let win = window.open(URL.createObjectURL(new Blob([str], {type: 'text/html'})), '_blank');
-            if (win) {
-                let details = getCloakDetailsForPopup(); win.document.title = details.title; 
-                let link = win.document.createElement('link'); link.rel = "icon"; link.href = details.icon; win.document.head.appendChild(link);
-                window.location.replace(userSettings.panicUrl || './login.html');
-            } else alert("Popups Blocked! Allow popups to use this feature.");
-        }
-
-        // --- 7. CONSTELLATION CANVAS ---
+        // --- 4. PARTICLES (Constellations) ---
         const canvas = document.getElementById('constellation-canvas');
         const ctx = canvas.getContext('2d');
-        let width, height;
         let particles = [];
-        
-        function resizeCanvas() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         class Particle {
             constructor() {
-                this.x = Math.random() * width; this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
             }
             update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
             draw() {
-                ctx.beginPath(); ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(134, 239, 172, 0.5)'; ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
             }
         }
-        for(let i=0; i<60; i++) particles.push(new Particle());
 
-        // Burst effect every 5 seconds
-        setInterval(() => {
-            if(!userSettings.particles) return;
-            particles.forEach(p => {
-                p.vx = (Math.random() - 0.5) * 3; p.vy = (Math.random() - 0.5) * 3;
-                setTimeout(() => { p.vx = (Math.random() - 0.5) * 0.5; p.vy = (Math.random() - 0.5) * 0.5; }, 800);
-            });
-        }, 5000);
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
 
         function animateCanvas() {
-            ctx.clearRect(0, 0, width, height);
-            if(userSettings.particles) {
-                particles.forEach(p => { p.update(); p.draw(); });
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (userSettings.particles) {
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
                 for(let i=0; i<particles.length; i++) {
                     for(let j=i+1; j<particles.length; j++) {
                         let dx = particles[i].x - particles[j].x;
@@ -1842,7 +610,7 @@
                         let dist = Math.sqrt(dx*dx + dy*dy);
                         if(dist < 120) {
                             ctx.beginPath();
-                            ctx.strokeStyle = `rgba(134, 239, 172, ${1 - dist/120})`;
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - dist/120)})`;
                             ctx.lineWidth = 0.5;
                             ctx.moveTo(particles[i].x, particles[i].y);
                             ctx.lineTo(particles[j].x, particles[j].y);
@@ -1855,23 +623,11 @@
         }
         animateCanvas();
 
-        function toggleParticles() {
-            userSettings.particles = document.getElementById('particle-toggle').checked;
-            saveState();
-        }
-
-        // --- 8. INITIALIZE & FOCUS ---
+        // --- 5. INITIALIZE ---
         window.addEventListener('DOMContentLoaded', () => {
-            window.focus(); // Force browser focus so hotkeys work immediately
+            window.focus();
             initSettings();
-            
-            // Check session prompt (Only shows if NOT previously dismissed)
-            if (window.self === window.top && !sessionStorage.getItem('classSessionPromptShown')) {
-                document.getElementById('session-prompt-modal').classList.add('active');
-            }
         });
-        
-        window.onload = () => window.focus(); // Backup focus grab
 		</script>
 </body>
 

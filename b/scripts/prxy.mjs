@@ -1,8 +1,8 @@
-import { registerSW } from "/active/prxy/register-sw.mjs";
-import * as BareMux from "/active/prxy/baremux/index.mjs";
+import { registerSW } from "/b/prxy/register-sw.mjs";
+import * as BareMux from "/b/prxy/baremux/index.mjs";
 import { getFavicon, rAlert } from "./utils.mjs";
 
-const connection = new BareMux.BareMuxConnection("/active/prxy/baremux/worker.js");
+const connection = new BareMux.BareMuxConnection("/b/prxy/baremux/worker.js");
 
 export function search(input, template) {
   try {
@@ -29,13 +29,13 @@ export async function getUV(input) {
   let url = search(input, "https://search.brave.com/search?q=%s");
 
   let wispUrl = "wss://scienceislife.bostoncareercounselor.com/wisp/";
-  if ((await connection.getTransport()) !== "/active/prxy/epoxy/index.mjs") {
-    await connection.setTransport("/active/prxy/epoxy/index.mjs", [
+  if ((await connection.getTransport()) !== "/b/prxy/epoxy/index.mjs") {
+    await connection.setTransport("/b/prxy/epoxy/index.mjs", [
       { wisp: wispUrl },
     ]);
   }
-  if ((await connection.getTransport()) !== "/activeprxy/libcurl/libcurl.mjs") {
-    await connection.setTransport("/active/prxy/libcurl/libcurl.mjs", [
+  if ((await connection.getTransport()) !== "/bprxy/libcurl/libcurl.mjs") {
+    await connection.setTransport("/b/prxy/libcurl/libcurl.mjs", [
       { wisp: wispUrl },
     ]);
   }
