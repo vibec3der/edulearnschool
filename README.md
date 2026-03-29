@@ -42,18 +42,6 @@ Join our community for support, updates, and discussions:
     - **Gallery:** Manage saved images and screenshots.
 - **Performance:** Optimized for lower-end Chromebooks.
 
-
-## Usage
-
-1. **Login:** Search for **"vibecoded"** (case-sensitive) in the fake ClassLink search bar.
-   - *Note: Misspelling the password redirects you to the actual ClassLink search page to fool IT staff.*
-2. **Select Mode:**
-   - Click **Edulearn Lite** for games and tools.
-   - Click **EdulearnOS** for the desktop experience.
-   - Click **"Pick one for me"** if you're feeling lucky.
-3. **Navigation:** Use the sidebar in Lite mode to switch between Home, Games, Extras, and Settings.
-4. **Cloaking:** Use the Settings gear icon to change the Tab Title and Favicon (About:Blank cloaking included).
-
 ---
 
 ## FAQ
