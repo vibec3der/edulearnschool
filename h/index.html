@@ -107,7 +107,7 @@
 			margin: 0;
 			padding: 0;
 			height: 100vh;
-			background-color: var(--bg-color);
+			background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
 			color: var(--text-main);
 			font-family: 'Inter', sans-serif;
 			display: flex;
@@ -136,6 +136,27 @@
 			font-weight: 700;
 			margin: 0 0 10px 0;
 			letter-spacing: -0.04em;
+			animation: fadeInUp 1.5s ease-out, glow 2s ease-in-out infinite alternate;
+		}
+
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes glow {
+			from {
+				text-shadow: 0 0 20px var(--accent-glow);
+			}
+			to {
+				text-shadow: 0 0 30px var(--accent-glow), 0 0 40px var(--accent-glow);
+			}
 		}
 
 		.dynamic-quote {
@@ -143,9 +164,32 @@
 			font-size: 1.1rem;
 			font-style: italic;
 			font-weight: 400;
-			margin-bottom: 40px;
+			margin-bottom: 20px;
 			max-width: 600px;
 			line-height: 1.5;
+			border-right: 2px solid var(--text-muted);
+			animation: blink 1s infinite;
+		}
+
+		@keyframes blink {
+			0%, 50% { border-color: var(--text-muted); }
+			51%, 100% { border-color: transparent; }
+		}
+
+		.tip {
+			color: var(--text-muted);
+			font-size: 0.9rem;
+			margin-bottom: 30px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			opacity: 0.8;
+			animation: fadeIn 2s ease-out 1.5s both;
+		}
+
+		@keyframes fadeIn {
+			from { opacity: 0; }
+			to { opacity: 0.8; }
 		}
 
 		nav {
@@ -178,7 +222,8 @@
 		nav a:hover {
 			color: var(--text-main);
 			background: var(--pill-hover);
-			transform: translateY(-2px);
+			transform: translateY(-2px) scale(1.05);
+			box-shadow: 0 5px 15px var(--accent-glow);
 		}
 
 		/* --- NOTIFICATION BADGE --- */
@@ -562,6 +607,10 @@
 	<div class="container">
 		<h1>edulearn</h1>
 		<div id="dynamic-quote" class="dynamic-quote">Loading wisdom...</div>
+		
+		<div class="tip">
+			<i class="fa-solid fa-lightbulb"></i> Tip: Press Ctrl+Y to open spotlight search
+		</div>
 
 		<nav>
 			<a href="#" onclick="navigateWithTransition('/h/'); return false;"
@@ -710,22 +759,23 @@
 				<input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search commands or pages..." autocomplete="off" oninput="filterSpotlight()">
             </div>
 				<div id="spotlight-results" class="spotlight-results">
-					<div class="spotlight-item" onclick="navigateWithTransition('/index.html')">
+					<div class="spotlight-item" onclick="navigateWithTransition('/h/')">
 						<i class="fa-solid fa-house" style="margin-right: 12px;"></i> Home
 					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/math/gn-math.html')">
+					<div class="spotlight-item" onclick="navigateWithTransition('/g/')">
 						<i class="fa-solid fa-gamepad" style="margin-right: 12px;"></i> Games
 					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/g2.html')">
-						<i class="fa-solid fa-rocket" style="margin-right: 12px;"></i> G2</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/active/index.html')">
+					<div class="spotlight-item" onclick="navigateWithTransition('/g2/')">
+						<i class="fa-brands fa-xbox" style="margin-right: 12px;"></i> G2
+					</div>
+					<div class="spotlight-item" onclick="navigateWithTransition('/b/')">
 						<i class="fa-solid fa-globe" style="margin-right: 12px;"></i> Browser
 					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/tools.html')">
+					<div class="spotlight-item" onclick="navigateWithTransition('/t/')">
 						<i class="fa-solid fa-wrench" style="margin-right: 12px;"></i> Tools
 					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/extras.html')">
-						<i class="fa-solid fa-shapes" style="margin-right: 12px;"></i> Extras
+					<div class="spotlight-item" onclick="navigateWithTransition('/e/')">
+						<i class="fa-solid fa-plus" style="margin-right: 12px;"></i> Extras
 					</div>
 					<div class="spotlight-item" onclick="openSettings(); closeSpotlight();">
 						<i class="fa-solid fa-gear" style="margin-right: 12px;"></i> Settings
@@ -1116,7 +1166,24 @@
         function setRandomQuote() {
             const quoteEl = document.getElementById('dynamic-quote');
             const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            quoteEl.innerText = `"${randomQuote}"`;
+            typeQuote(`"${randomQuote}"`, quoteEl);
+        }
+
+        function typeQuote(text, element) {
+            element.textContent = '';
+            element.style.borderRight = '2px solid var(--text-muted)';
+            let i = 0;
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        element.style.borderRight = 'none';
+                    }, 500);
+                }
+            }, 50);
         }
 
         // --- CLOAK PRESETS DATA ---

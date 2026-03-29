@@ -9,6 +9,12 @@ const filterOptions = document.getElementById('filterOptions');
 // Changed logic to default to true unless explicitly set to 'false'
 let showImages = localStorage.getItem('edulearn_images') !== 'false';
 
+// Ensure images are on by default if not set
+if (localStorage.getItem('edulearn_images') === null) {
+    localStorage.setItem('edulearn_images', 'true');
+    showImages = true;
+}
+
 const zonesurls = [
     "https://cdn.jsdelivr.net/%67%68/%67%6e%2d%6d%61%74%68/%61%73%73%65%74%73@%6d%61%69%6e/%7a%6f%6e%65%73%2e%6a%73%6f%6e",
     "https://cdn.jsdelivr.net/gh/gn-math/assets@latest/zones.json",
