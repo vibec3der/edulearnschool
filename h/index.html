@@ -1331,14 +1331,11 @@
             saveState();
             document.getElementById('ab-modal').classList.remove('active');
             if (enabled) {
-                // Open the current page in about:blank immediately
                 var abUrl = window.location.href;
-                var abHtml = '<!DOCTYPE html><html><head><title>Loading...</title><style>body{margin:0;padding:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;} iframe{width:100vw;height:100vh;border:none;}</style></head><body><iframe src="' + abUrl + '" allowfullscreen></iframe></body></html>';
                 var abWin = window.open('about:blank', '_blank');
                 if (abWin) {
-                    abWin.document.write(abHtml);
+                    abWin.document.write('<!DOCTYPE html><html><head><title>Stealth</title><style>body{margin:0;padding:0;background:#000;}iframe{width:100vw;height:100vh;border:none;}</style></head><body><iframe src="' + abUrl + '" allowfullscreen></iframe></body></html>');
                     abWin.document.close();
-                    // Optionally, close the original tab
                     window.close();
                 }
             }
@@ -1391,8 +1388,10 @@
                 // Open in about:blank to hide from history
                 const newWindow = window.open('about:blank', '_blank');
                 if (newWindow) {
-                    newWindow.document.write('<!DOCTYPE html><html><head><title>Loading...</title><style>body{margin:0;padding:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;} iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="' + url + '" onload="this.style.display=\'block\'"></iframe></body></html>');
+                    newWindow.document.write('<!DOCTYPE html><html><head><title>Loading...</title><style>body{margin:0;padding:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;} iframe{width:100vw;height:100vh;border:none;}</style></head><body><iframe src="' + url + '" allowfullscreen></iframe></body></html>');
                     newWindow.document.close();
+                    // Optionally, close the original tab
+                    window.close();
                 }
             } else {
                 const overlay = document.getElementById('transition-overlay');
