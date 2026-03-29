@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Edulearn | Chemistry</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+		:root {
+			--bg-color: #000000;
+			--text-main: #ffffff;
+			--text-muted: #9ca3af;
+			--modal-bg: #0a0a0a;
+			--modal-border: #222222;
+			--input-bg: #000000;
+			--input-border: #333333;
+			--pill-hover: rgba(255, 255, 255, 0.1);
+			--pill-active: #222222;
+			--accent-glow: rgba(255, 255, 255, 0.1);
+			--accent: #86efac;
+		}
+
+		[data-theme="sakura"] {
+			--bg-color: #fdf6f5;
+			--text-main: #4a3b3c;
+			--text-muted: #9e8487;
+			--modal-bg: #ffffff;
+			--modal-border: #f0e4e4;
+			--input-bg: #fdf6f5;
+			--input-border: #e6d3d3;
+			--pill-hover: rgba(255, 183, 197, 0.4);
+			--accent-glow: rgba(255, 183, 197, 0.3);
+			--accent: #ffb7c5;
+		}
+
+		[data-theme="red"] {
+			--bg-color: #0a0000;
+			--text-main: #ff4d4d;
+			--text-muted: #802b2b;
+			--modal-bg: #140000;
+			--modal-border: #330000;
+			--input-bg: #0a0000;
+			--input-border: #4d0000;
+			--pill-hover: rgba(255, 0, 0, 0.15);
+			--accent-glow: rgba(255, 77, 77, 0.2);
+			--accent: #ff4d4d;
+		}
+
+		[data-theme="azure"] {
+			--bg-color: #faf9f8;
+			--text-main: #323130;
+			--text-muted: #605e5c;
+			--modal-bg: #ffffff;
+			--modal-border: #edebe9;
+			--input-bg: #ffffff;
+			--input-border: #8a8886;
+			--pill-hover: #f3f2f1;
+			--accent-glow: rgba(0, 120, 212, 0.2);
+			--accent: #0078d4;
+		}
+
+		i,
+		svg,
+		[class^="fa-"],
+		[class*=" fa-"] {
+			color: #ffffff !important;
+			filter: brightness(1.5);
+			text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Inter', system-ui, -apple-system, sans-serif;
+			background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+			color: var(--text-main);
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			overflow-x: hidden;
+			transition: background-color 0.4s ease, color 0.4s ease;
+		}
+
+		.topbar {
+			background-color: var(--modal-bg);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-bottom: 1px solid var(--modal-border);
+			padding: 0 40px;
+			height: 80px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			box-shadow: 0 4px 20px var(--accent-glow);
+		}
+
+		.topbar-brand {
+			font-size: 24px;
+			font-weight: 700;
+			color: var(--text-main);
+			letter-spacing: -0.04em;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.topbar-brand:hover {
+			transform: translateY(-2px);
+			text-shadow: 0 0 10px var(--accent-glow);
+		}
+
+		.search-container {
+			position: relative;
+		}
+
+		.search-input {
+			background: var(--input-bg);
+			border: 1px solid var(--input-border);
+			color: var(--text-main);
+			padding: 10px 16px 10px 38px;
+			border-radius: 8px;
+			font-size: 14px;
+			width: 280px;
+			transition: 0.2s;
+			font-family: inherit;
+			outline: none;
+		}
+
+		.search-input:focus {
+			border-color: var(--text-main);
+			box-shadow: 0 0 0 2px var(--accent-glow);
+		}
+
+		.search-icon {
+			position: absolute;
+			left: 14px;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 14px;
+		}
+
+		.main-container {
+			padding: 40px;
+			max-width: 1600px;
+			margin: 0 auto;
+			width: 100%;
+			flex: 1;
+			transition: opacity 0.3s;
+		}
+
+		.category-header {
+			font-size: 13px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: var(--text-muted);
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			user-select: none;
+		}
+
+		.game-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			gap: 16px;
+			margin-bottom: 40px;
+		}
+
+		.game-card {
+			background: var(--modal-bg);
+			border: 1px solid var(--modal-border);
+			border-radius: 12px;
+			padding: 18px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			text-align: center;
+			min-height: 60px;
+		}
+
+		.game-card:hover {
+			background: var(--pill-hover);
+			transform: translateY(-4px);
+			box-shadow: 0 4px 20px var(--accent-glow);
+		}
+
+		.game-card:active {
+			transform: scale(0.98);
+		}
+
+		.game-name {
+			font-weight: 600;
+			font-size: 14px;
+			color: var(--text-main);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			transition: color 0.2s;
+		}
+
+		/* --- SANDBOX OVERLAY --- */
+		#zoneViewer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.85);
+			z-index: 9999;
+			display: none;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#zoneViewer.active {
+			display: flex;
+		}
+
+		.sandbox-container {
+			width: 85%;
+			max-width: 1000px;
+			height: 85vh;
+			background: #fbf8ef;
+			border-radius: 8px;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+		}
+
+		.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* move inside the container */
+    background: none;
+    border: none;
+    color: #ff5555;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+		#zoneFrame {
+			flex-grow: 1;
+			border: none;
+			width: 100%;
+			background: #fff;
+		}
+
+		.sandbox-toolbar {
+			background-color: #1a2327;
+			padding: 12px 20px;
+			display: flex;
+			gap: 12px;
+		}
+
+		.sandbox-toolbar button {
+			background-color: #263338;
+			color: #ffffff;
+			border: none;
+			border-radius: 6px;
+			width: 40px;
+			height: 40px;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			transition: background 0.2s;
+		}
+
+		.sandbox-toolbar button:hover {
+			background-color: #37474f;
+		}
+
+		.sandbox-toolbar button svg {
+			width: 20px;
+			height: 20px;
+			fill: white;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="topbar">
+		<div class="topbar-brand" onclick="window.location.href='/h/'">
+			<i class="fa-solid fa-house" style="font-size: 18px; margin-right: 4px;"></i> Home
+		</div>
+		<div class="search-container">
+			<i class="fa-solid fa-search search-icon"></i>
+			<input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+        </div>
+		</div>
+
+		<div class="main-container" id="libraryView">
+			<div class="category-header">
+				<i class="fa-solid fa-gamepad" style="margin-right: 4px;"></i> All Games <span id="gameCount">(0)</span>
+			</div>
+			<div class="game-grid" id="gameGrid"></div>
+		</div>
+
+		<!-- SANDBOX OVERLAY -->
+		<div id="zoneViewer">
+			<div class="sandbox-container">
+				<iframe id="zoneFrame" title="Game Content"></iframe>
+				<div class="sandbox-toolbar">
+					<button onclick="fullscreenZone()" title="Fullscreen">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+					<button onclick="refreshZone()" title="Refresh">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
+					<button onclick="copyLink()" title="Copy Link">
+                    <i class="fa-solid fa-copy"></i>
+                </button>
+					<button onclick="openAboutBlank()" title="Open in New Tab">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+					<button class="close-btn" onclick="closeZone()">✖</button>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+            const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+            if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
+        });
+
+        const gamesList = [
+            { title: "Hover Drive", url: "/g2games/clhoverracerdrive.html", controls: "Arrow Keys or WASD to Drive" },
+            { title: "Astra client", url: "/g2games/astraclientbeta.html", controls: "WASD to Move, Space to Jump" },
+            { title: "Tuff client", url: "/g2games/tuffclientwasm.html", controls: "WASD to Move, Space to Jump" },
+            { title: "Dragon X V3", url: "/g2games/dragonxv3.html", controls: "WASD to Move, Space to Jump" },
+            { title: "Monkey mart", url: "/g2games/clmonkeymart.html", controls: "WASD to Move" },
+            { title: "Beatable Hollow Knight", url: "/g2games/hkfixed.html", controls: "Custom keys for Hollow Knight" }
+        ];
+
+        const grid = document.getElementById('gameGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countLabel = document.getElementById('gameCount');
+
+        function renderGames(filter = "") {
+            grid.innerHTML = "";
+            const filtered = gamesList.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
+            countLabel.innerText = `(${filtered.length})`;
+            if (!filtered.length) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0;">No games found.</div>`;
+                return;
+            }
+            filtered.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.onclick = () => launchGame(game);
+                card.innerHTML = `<div class="game-name">${game.title}</div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        // SANDBOX FUNCTIONS
+        function launchGame(game) {
+            const overlay = document.getElementById('zoneViewer');
+            const frame = document.getElementById('zoneFrame');
+            frame.src = game.url;
+            overlay.classList.add('active');
+        }
+
+        function closeZone() {
+            const overlay = document.getElementById('zoneViewer');
+            const frame = document.getElementById('zoneFrame');
+            overlay.classList.remove('active');
+            frame.src = '';
+        }
+
+        function fullscreenZone() {
+            const frame = document.getElementById('zoneFrame');
+            if(frame.requestFullscreen) frame.requestFullscreen();
+            else if(frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+            else if(frame.msRequestFullscreen) frame.msRequestFullscreen();
+        }
+
+        function refreshZone() {
+            const frame = document.getElementById('zoneFrame');
+            frame.src = frame.src;
+        }
+
+        function copyLink() {
+            const frame = document.getElementById('zoneFrame');
+            navigator.clipboard.writeText(frame.src);
+            alert("Link copied!");
+        }
+
+        function openAboutBlank() {
+            const frame = document.getElementById('zoneFrame');
+            if(frame.src === "" || frame.src === "about:blank") return;
+            const win = window.open('about:blank', '_blank');
+            win.document.body.style.margin = '0';
+            win.document.body.style.height = '100vh';
+            win.document.body.style.overflow = 'hidden';
+            const iframe = document.createElement('iframe');
+            iframe.style.border='none';
+            iframe.style.width='100%';
+            iframe.style.height='100%';
+            iframe.src = frame.src;
+            win.document.body.appendChild(iframe);
+            closeZone();
+        }
+
+        searchInput.addEventListener('input', (e) => renderGames(e.target.value));
+        renderGames();
+		</script>
+</body>
+
+</html>

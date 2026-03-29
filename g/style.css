@@ -2,31 +2,35 @@
 
 /* --- GN-MATH: EDULEARN LITE THEME --- */
 :root {
-    /* Edulearn Lite Core Colors */
-    --primary: #6366f1;                 /* Indigo Accent */
-    --primary-hover: #818cf8;           /* Lighter Indigo */
-    --primary-light: rgba(99, 102, 241, 0.15);
-    --accent-glow: rgba(99, 102, 241, 0.4);
+    /* Edulearn Core Colors */
+    --bg-color: #000000;
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;
+    --modal-bg: #0a0a0a;
+    --modal-border: #222222;
+    --input-bg: #000000;
+    --input-border: #333333;
+    --pill-hover: rgba(255, 255, 255, 0.1);
+    --pill-active: #222222;
+    --accent-glow: rgba(255, 255, 255, 0.1);
     
-    /* Backgrounds & Modals */
-    --bg: #09090b;                      /* Edulearn Main Background */
-    --bg-secondary: rgba(18, 18, 23, 0.85); /* Sidebar/Header Navbar */
+    /* Legacy variables for compatibility */
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --primary-light: rgba(59, 130, 246, 0.15);
+    --bg: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+    --bg-secondary: rgba(18, 18, 23, 0.85);
     --nav-hover: rgba(255, 255, 255, 0.05);
-    --surface: #0f0f11;                 /* Card/Modal Background */
-    --surface-hover: #18181b;           /* Input & Card Hover */
-    
-    /* Text */
-    --text: #ffffff;                    /* Main Text */
-    --text-muted: #a1a1aa;              /* Secondary Text */
-    
-    /* Borders */
-    --border: #27272a;                  /* Modal & Card Border */
-    --border-light: #3f3f46;            /* Input Border */
-    --nav-border: rgba(255, 255, 255, 0.08);
+    --surface: #121214;
+    --surface-hover: #27272a;
+    --text: #ffffff;
+    --border: #27272a;
+    --border-light: #3f3f46;
+    --nav-border: transparent;
     
     /* Shadows */
     --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.6);
-    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
     --shadow-glow: 0 0 20px var(--accent-glow);
     
     --radius: 12px;
@@ -40,31 +44,25 @@
 
 body {
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: var(--bg);
-    /* Edulearn Lite Grid Pattern */
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-attachment: fixed;
+    background: var(--bg);
     color: var(--text);
 }
 
 /* --- HEADER --- */
 header {
-    background: var(--bg-secondary);
+    background: var(--nav-bg); /* Use transparent or appropriate var if defined, else fallback to bg-secondary */
+    background: transparent;
     border-bottom: 1px solid var(--nav-border);
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
 }
 
 .header-content {
     max-width: 1200px;
     margin: 0 auto;
-    height: 70px; /* Matched to Edulearn's topbar height */
-    padding: 0 2rem;
+    height: 80px; /* Matched to Edulearn's topbar height */
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -72,13 +70,21 @@ header {
 }
 
 .logo {
-    font-size: 20px;
+    font-family: 'Dancing Script', cursive; /* Use Edulearn's brand font */
+    font-size: 32px;
     font-weight: 700;
     color: var(--text);
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 12px;
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    transition: 0.2s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 /* Optional: Emulates the Edulearn logo glow if your logo has an icon */
@@ -99,7 +105,7 @@ header {
     padding: 10px 16px;
     border: 1px solid var(--border-light);
     border-radius: 8px; /* Sharper radius to match Edulearn */
-    background: var(--surface-hover);
+    background: var(--bg); /* Input bg */
     color: var(--text);
     font-family: inherit;
     font-size: 14px;
@@ -108,8 +114,8 @@ header {
 }
 
 #searchBar:focus, #sortOptions:focus, #filterOptions:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px var(--primary-light);
+    border-color: var(--text); /* Focus color matches edulearn */
+    /* box-shadow removed as edulearn focuses on border color change */
 }
 
 #sortOptions option, #filterOptions option {
@@ -120,22 +126,22 @@ header {
 /* --- CONTROL BUTTONS & ICONS --- */
 .control-buttons {
     display: flex;
-    gap: 12px;
+    gap: 15px; /* Matched nav-actions gap */
     align-items: center;
 }
 
 .control-buttons button {
     background: transparent;
     border: none;
-    color: var(--text-muted);
+    color: var(--text); /* Main text color for icons */
     cursor: pointer;
-    padding: 8px;
-    border-radius: 6px;
+    padding: 10px;
+    border-radius: 50%; /* Fully rounded buttons */
     display: flex;
     align-items: center;
     justify-content: center;
     transition: 0.2s ease;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .control-buttons button img, .control-buttons button svg {
@@ -146,7 +152,7 @@ header {
 
 .control-buttons button:hover {
     color: var(--text);
-    background: var(--nav-hover);
+    background: var(--pill-hover);
 }
 
 /* --- MAIN GRID --- */
@@ -158,11 +164,11 @@ main {
 }
 
 #zoneCount {
-    color: var(--primary);
+    color: var(--text-muted); /* Changed to muted to fit better */
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-weight: 700;
+    font-weight: 600; /* Adjusted weight */
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
@@ -186,7 +192,7 @@ main {
 
 /* --- GAME CARD (ZONE ITEM) --- */
 .zone-item {
-    background: var(--surface);
+    background: rgba(255, 255, 255, 0.02); /* Matches setting card bg */
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
@@ -194,13 +200,14 @@ main {
     transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-sm);
+    box-shadow: none; /* Removed sm shadow to match flatter look */
 }
 
 .zone-item:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px) scale(1.02);
     border-color: var(--primary);
-    box-shadow: var(--shadow-glow);
+    background: rgba(134, 239, 172, 0.05); /* Slight mint tint on hover */
+    box-shadow: 0 8px 25px rgba(134, 239, 172, 0.3);
 }
 
 .zone-item img {
@@ -223,8 +230,8 @@ main {
     color: var(--text);
     border: 0;
     padding: 0.85rem;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: 500; /* Matched preset-btn font weight */
+    font-size: 13px; /* Matched preset-btn font size */
     text-align: center;
     width: 100%;
     cursor: pointer;
@@ -236,19 +243,55 @@ main {
 }
 
 .zone-item:hover button {
-    background: var(--primary-light);
-    border-top-color: rgba(99, 102, 241, 0.2);
-    color: var(--primary-hover);
+    /* Specific hover styling handled by parent .zone-item:hover */
+    color: var(--primary);
+}
+
+/* --- TEXT-ONLY STYLING --- */
+.zone-item.text-only {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    min-height: 80px;
+    justify-content: center;
+    align-items: center;
+}
+
+.zone-item.text-only button {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.zone-item.text-only:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-color: var(--primary);
+    box-shadow: 0 8px 25px rgba(134, 239, 172, 0.3);
 }
 
 /* --- VIEWER MODAL --- */
 #zoneViewer {
     position: fixed;
     inset: 0;
-    background: #000;
+    background: rgba(0, 0, 0, 0.9);
     z-index: 1000;
     display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.sandbox-container {
+    display: flex;
     flex-direction: column;
+    width: 90vw;
+    height: 90vh;
+    max-width: 1200px;
+    max-height: 800px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
 }
 
 .zone-header {
@@ -280,35 +323,58 @@ main {
 }
 
 .zone-controls button {
-    background: var(--surface-hover);
+    background: transparent; /* Changed to match clean-btn */
     border: 1px solid var(--border-light);
     color: var(--text);
-    padding: 8px 16px;
-    border-radius: 8px;
+    padding: 8px 18px;
+    border-radius: 9999px; /* Pill shape */
     cursor: pointer;
     transition: 0.2s;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .zone-controls button:hover {
-    background: var(--border);
+    background: var(--pill-hover);
+}
+
+.sandbox-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.sandbox-toolbar button {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sandbox-toolbar button:hover {
+    background: var(--pill-hover);
     border-color: var(--primary);
 }
 
-#zoneFrame {
-    flex-grow: 1;
-    border: none;
-    width: 100%;
-    height: 100%;
-    background: var(--bg);
+.sandbox-toolbar button svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
 }
 
 /* --- SETTINGS POPUP --- */
 #popupOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5); /* Matched modal-overlay */
     backdrop-filter: blur(8px);
     z-index: 2000;
     display: none;
@@ -319,25 +385,28 @@ main {
 .popup {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: 16px; /* Matched settings-box */
     width: 100%;
-    max-width: 680px; /* Widened to match Edulearn settings box */
+    max-width: 850px; /* Matched settings-box */
     box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
+    transform: scale(0.98);
+    transition: transform 0.2s ease;
+    /* When active, add transform: scale(1); in JS if desired */
 }
 
 .popup-header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 24px 32px 20px 32px;
+    padding: 24px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
-    letter-spacing: -0.5px;
+    letter-spacing: normal; /* Removed letter spacing */
 }
 
 #popupClose {
@@ -349,19 +418,24 @@ main {
     transition: 0.2s;
 }
 
-#popupClose:hover { color: var(--text); }
+#popupClose:hover { 
+    color: var(--text); 
+    transform: scale(1.1); /* Matched btn-close-icon */
+}
 
 #popupBody { 
-    padding: 32px; 
+    padding: 0 32px 32px 32px; /* Matched settings-content padding */
+    padding-top: 32px; /* Add some top padding since it's the body */
 }
 
 #popupBody input[type="text"],
-#popupBody input[type="file"] {
+#popupBody input[type="file"],
+#popupBody select {
     width: 100%;
-    padding: 12px 16px;
-    margin-bottom: 16px;
+    padding: 10px 16px;
+    margin-bottom: 12px;
     border: 1px solid var(--border-light);
-    background: var(--surface-hover);
+    background: var(--bg); /* Use input bg */
     color: var(--text);
     border-radius: 8px;
     outline: none;
@@ -370,22 +444,26 @@ main {
     transition: 0.2s;
 }
 
-#popupBody input:focus { 
-    border-color: var(--primary); 
+#popupBody input:focus, #popupBody select:focus { 
+    border-color: var(--text); 
 }
 
 .settings-button {
     width: auto;
-    display: inline-block;
-    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 8px 18px;
     background: var(--text);
-    color: var(--surface);
+    color: var(--bg);
     border: none;
-    border-radius: 8px;
+    border-radius: 9999px; /* Pill shape */
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
-    font-size: 14px;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 .settings-button:hover {

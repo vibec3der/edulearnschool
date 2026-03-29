@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edulearn | Extras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            /* --- NEW EDULEARN THEME VARIABLES --- */
+            --bg-color: #000000;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --modal-bg: #0a0a0a;
+            --modal-border: #222222;
+            --input-bg: #000000;
+            --input-border: #333333;
+            --pill-hover: rgba(255, 255, 255, 0.1);
+            --pill-active: #222222;
+            --accent-glow: rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- THEMES --- */
+        [data-theme="sakura"] {
+            --bg-color: #fdf6f5;
+            --text-main: #4a3b3c;
+            --text-muted: #9e8487;
+            --modal-bg: #ffffff;
+            --modal-border: #f0e4e4;
+            --input-bg: #fdf6f5;
+            --input-border: #e6d3d3;
+            --pill-hover: rgba(255, 183, 197, 0.4);
+            --accent-glow: rgba(255, 183, 197, 0.3);
+        }
+
+        [data-theme="red"] {
+            --bg-color: #0a0000;
+            --text-main: #ff4d4d;
+            --text-muted: #802b2b;
+            --modal-bg: #140000;
+            --modal-border: #330000;
+            --input-bg: #0a0000;
+            --input-border: #4d0000;
+            --pill-hover: rgba(255, 0, 0, 0.15);
+            --accent-glow: rgba(255, 77, 77, 0.2);
+        }
+
+        [data-theme="azure"] {
+            --bg-color: #faf9f8;
+            --text-main: #323130;
+            --text-muted: #605e5c;
+            --modal-bg: #ffffff;
+            --modal-border: #edebe9;
+            --input-bg: #ffffff;
+            --input-border: #8a8886;
+            --pill-hover: #f3f2f1;
+            --accent-glow: rgba(0, 120, 212, 0.2);
+        }
+
+        /* --- FORCE ALL ICONS VERY WHITE --- */
+        i, svg, [class^="fa-"], [class*=" fa-"] {
+            color: #ffffff !important;
+            filter: brightness(1.5);
+            text-shadow: 0 0 8px rgba(255,255,255,0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* --- TOP BAR --- */
+        .topbar {
+            background-color: var(--modal-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--modal-border);
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .topbar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.04em;
+            cursor: pointer;
+            transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar-brand:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            padding: 10px 16px 10px 38px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 280px;
+            transition: 0.2s;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--text-main);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            padding: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            transition: opacity 0.3s;
+        }
+
+        .category-header {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+
+        /* --- GRID & CARDS --- */
+        .extras-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .extra-card {
+            background: var(--modal-bg);
+            border: 1px solid var(--modal-border);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            min-height: 60px;
+        }
+
+        .extra-card:hover {
+            background: var(--pill-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .extra-card:active {
+            transform: scale(0.98);
+        }
+
+        .extra-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.2s;
+        }
+
+        /* --- APP OVERLAY (IFRAME VIEW) --- */
+        .app-view-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .app-view-overlay.active {
+            display: flex;
+        }
+
+        .app-header-bar {
+            height: 60px;
+            background: var(--modal-bg);
+            border-bottom: 1px solid var(--modal-border);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            gap: 20px;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-back:hover {
+            background: var(--pill-hover);
+        }
+
+        .app-title {
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .app-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #000; /* Darker iframe background to fit theme */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbar-brand" onclick="window.location.href='/h/'">
+            <i class="fa-solid fa-house" style="font-size: 18px; margin-right: 4px;"></i> Home
+        </div>
+        <div class="search-container">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search extras...">
+        </div>
+    </div>
+
+    <div class="main-container" id="mainContainer">
+        <div class="category-header">
+            <i class="fa-solid fa-star" style="margin-right: 4px;"></i> All Extras <span id="extraCount">(0)</span>
+        </div>
+        
+        <div class="extras-grid" id="extrasGrid"></div>
+    </div>
+
+    <div id="appOverlay" class="app-view-overlay">
+        <div class="app-header-bar">
+            <button class="btn-back" onclick="closeApp()">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <div class="app-title" id="appTitle">Application</div>
+        </div>
+        <iframe id="appFrame" class="app-frame" src=""></iframe>
+    </div>
+
+    <script>
+        // Apply theme from local storage automatically
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+            if (savedData.theme) {
+                document.body.setAttribute('data-theme', savedData.theme);
+            }
+        });
+
+        // Data Configuration
+        const extras = [
+            { name: "Music Player", url: "/musicplayer.html" },
+            { name: "Image Gallery", url: "/images.html" },
+            { name: "AI Games", url: "/aigames.html" },
+            { name: "More links (highlight with cursor)", url: "/linklist.txt" }
+        ];
+
+        const grid = document.getElementById('extrasGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countLabel = document.getElementById('extraCount');
+
+        // Render Cards
+        function renderExtras(filter = "") {
+            grid.innerHTML = "";
+            const filtered = extras.filter(e => 
+                e.name.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            countLabel.innerText = `(${filtered.length})`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); font-size: 14px; text-align: center; padding: 40px 0;">No extras found.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'extra-card';
+                card.onclick = () => openApp(item.url, item.name);
+                card.title = 'Click to open';
+                
+                card.innerHTML = `<div class="extra-name">${item.name}</div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        // Open App Logic
+        function openApp(url, title) {
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
+            const appTitle = document.getElementById('appTitle');
+            
+            appTitle.innerText = title;
+            frame.src = url;
+            overlay.classList.add('active');
+        }
+
+        // Close App Logic
+        function closeApp() {
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
+            
+            overlay.classList.remove('active');
+            frame.src = "about:blank"; // Stop background scripts/audio
+        }
+
+        // Search Listener
+        searchInput.addEventListener('input', (e) => {
+            renderExtras(e.target.value);
+        });
+
+        // Initial Load
+        renderExtras();
+    </script>
+</body>
+</html>

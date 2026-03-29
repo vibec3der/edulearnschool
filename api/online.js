@@ -1,29 +1,32 @@
 // api/online.js
-
-// Use a global variable to store users in memory.
-// NOTE: On Vercel, this memory resets if the site hasn't been visited in a while.
-const store = global.onlineUsers || (global.onlineUsers = new Map());
+let activeUsers = {};
 
 export default function handler(req, res) {
-  const { id } = req.query;
-  const now = Date.now();
+    const { id } = req.query; 
+    const now = Date.now();
 
-  // 1. If the user has an ID, update their "last seen" time
-  if (id) {
-    store.set(id, now);
-  }
-
-  // 2. Remove users who haven't pinged in the last 30 seconds
-  // (The client pings every 15s, so 30s gives them a buffer)
-  for (const [key, lastSeen] of store) {
-    if (now - lastSeen > 30000) {
-      store.delete(key);
+    // If a user ID is provided, update their last active timestamp
+    if (id) {
+        activeUsers[id] = now;
     }
-  }
 
-  // 3. tell the browser NEVER to cache this response
-  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    // Clean up users who haven't pinged in the last 60 seconds (60000 ms)
+    const activeThreshold = now - 60000;
+    let count = 0;
+    
+    for (const userId in activeUsers) {
+        if (activeUsers[userId] > activeThreshold) {
+            count++;
+        } else {
+            // Delete inactive users from memory
+            delete activeUsers[userId];
+        }
+    }
 
-  // 4. Return the count as plain text
-  res.status(200).send(String(store.size));
+    // Set CORS headers so your frontend can read the data
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    
+    // Return the active user count
+    res.status(200).json({ online: count });
 }

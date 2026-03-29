@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>edulearn vms</title>
+<link rel="icon" href="https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #09090b;
+  --grid-color: rgba(255,255,255,0.02);
+  --pill-hover: rgba(255,255,255,0.05);
+  --pill-active: #27272a;
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+  --input-bg: #09090b;
+  --input-border: #3f3f46;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+body { 
+  font-family:'Inter', system-ui, sans-serif; 
+  background-color: var(--bg-color); 
+  color: var(--text-main); 
+  overflow:hidden; 
+  display:flex; 
+  flex-direction:column; 
+  height:100vh; 
+}
+
+.grid-bg {
+  position:absolute; inset:0; z-index:-2;
+  background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.topbar { 
+  position:fixed; 
+  top:0; 
+  left:0; 
+  width:100%; 
+  height:80px; 
+  display:flex; 
+  align-items:center; 
+  justify-content:space-between; 
+  padding:0 40px; 
+  z-index:100; 
+  background: rgba(9,9,11,0.95);
+  backdrop-filter: blur(20px);
+}
+.brand { 
+  font-family:'Dancing Script', cursive; 
+  font-size:32px; 
+  color: var(--text-main); 
+  text-decoration:none; 
+  cursor:default; 
+  display:flex; 
+  align-items:center; 
+  letter-spacing:1px; 
+  text-transform:lowercase; 
+}
+.controls { display:flex; gap:12px; align-items:center; }
+.clean-btn { 
+  background:transparent; 
+  color:var(--text-main); 
+  border:1px solid var(--input-border); 
+  padding:8px 18px; 
+  border-radius:9999px; 
+  font-size:13px; 
+  font-weight:500; 
+  cursor:pointer; 
+  transition:0.2s; 
+  display:inline-flex; 
+  align-items:center; 
+  justify-content:center; 
+  height:38px; 
+}
+.clean-btn:hover { background:var(--pill-hover); }
+.clean-btn:disabled { opacity:0.5; cursor:not-allowed; }
+.btn-primary { background:var(--text-main); color:var(--bg-color); border:none; font-weight:600; }
+.btn-primary:hover { background:var(--text-muted); }
+
+.main-content { 
+  flex:1; 
+  margin-top:80px; 
+  position:relative; 
+  z-index:10; 
+  display:flex; 
+  flex-direction:column; 
+  width:100%; 
+  height:calc(100vh - 80px); 
+  padding:20px; 
+  align-items:center;
+  gap:12px;
+}
+
+.header-section { 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  gap:8px; 
+  margin-bottom:0;
+  flex-shrink: 0;
+}
+.hero-title { 
+  font-family:'Dancing Script', cursive; 
+  font-size:clamp(32px, 5vw, 56px);
+  font-weight:700; 
+  margin:0; 
+  color:var(--text-main); 
+  letter-spacing:2px; 
+  text-transform:lowercase; 
+  text-shadow:0 4px 20px rgba(0,0,0,0.5); 
+  line-height:1; 
+}
+
+.resize-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+.resize-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--input-border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.resize-btn:hover { background: var(--pill-hover); }
+.resize-btn.active { background: var(--text-main); color: var(--bg-color); }
+.resize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.key-selector-container { 
+  display:flex; 
+  flex-direction:column; 
+  gap:4px; 
+  margin-bottom:12px; 
+  width:200px; 
+  position:relative;
+  flex-shrink: 0;
+  align-self: center;
+}
+.key-selector-container input { 
+  padding:6px 10px; 
+  border-radius:8px; 
+  border:1px solid var(--input-border); 
+  background: var(--input-bg); 
+  color: var(--text-main); 
+  width:100%; 
+  font-size: 14px;
+}
+.key-options { 
+  position:absolute; 
+  top:38px; 
+  width:100%; 
+  background:var(--bg-color); 
+  border:1px solid var(--input-border); 
+  max-height:150px; 
+  overflow-y:auto; 
+  display:none; 
+  z-index:1000; 
+  border-radius:6px; 
+}
+.key-options div { padding:6px 10px; cursor:pointer; }
+.key-options div.highlight { background:var(--pill-hover); }
+
+.timer { 
+  color: var(--text-muted); 
+  font-size:14px; 
+  margin-bottom:8px; 
+  letter-spacing:0.5px; 
+  text-align:center;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+#container { 
+  width: 100%;
+  height: 400px;
+  background: #000; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  position: relative; 
+  transition: height 0.3s ease;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  max-width: 100%;
+}
+#container iframe { 
+  width: 100% !important; 
+  height: 100% !important; 
+  border: none; 
+  display: block; 
+}
+
+.session-expired {
+  color: #ff4444 !important;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (max-width: 768px) {
+  .topbar { padding: 0 20px; }
+  .main-content { padding: 10px; }
+  .key-selector-container { width: 180px; }
+  .hero-title { font-size: 36px !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav class="topbar">
+  <div class="brand">edulearn vms</div>
+  <div class="controls">
+    <button class="clean-btn btn-primary" id="startBtn" onclick="start()">
+      <i class="fa-solid fa-play" style="margin-right:8px;"></i> Start Session
+    </button>
+    <button class="clean-btn" id="stopBtn" onclick="stop()" disabled>
+      <i class="fa-solid fa-stop" style="margin-right:8px;"></i> Stop Session
+    </button>
+  </div>
+</nav>
+
+<main class="main-content">
+  <div class="header-section">
+    <h1 class="hero-title">edulearn vms</h1>
+    <p style="color: var(--text-muted); font-size:14px;">Powered by Hyperbeam</p>
+  </div>
+
+  <div class="resize-controls">
+    <button class="resize-btn active" id="small-btn" onclick="setContainerSize('small')" title="Small view">
+      <i class="fa-solid fa-window-minimize"></i> Small
+    </button>
+    <button class="resize-btn" id="medium-btn" onclick="setContainerSize('medium')" title="Medium view">
+      <i class="fa-solid fa-window-maximize"></i> Medium
+    </button>
+    <button class="resize-btn" id="large-btn" onclick="setContainerSize('large')" title="Full size">
+      <i class="fa-solid fa-expand"></i> Max
+    </button>
+  </div>
+
+  <div class="key-selector-container">
+    <input type="text" id="key-search" placeholder="Type or use arrows..." autocomplete="off">
+    <div class="key-options" id="key-options"></div>
+  </div>
+
+  <div class="timer" id="timer">Session time: 15:00</div>
+
+  <div id="container"></div>
+</main>
+
+<script type="module">
+import Hyperbeam from 'https://unpkg.com/@hyperbeam/web@latest/dist/index.js';
+
+let hb = null, sessionId = null, selectedKey = null, countdownInterval = null;
+let resizeObserver = null;
+const SESSION_DURATION = 900; // 15 min in seconds
+
+const keys = [
+  {number:"1", label:"Key 1"},
+  {number:"2", label:"Key 2"},
+  {number:"3", label:"Key 3"},
+  {number:"4", label:"Key 4"},
+  {number:"5", label:"Key 5"}
+];
+
+const searchInput = document.getElementById('key-search');
+const optionsContainer = document.getElementById('key-options');
+const timerElement = document.getElementById('timer');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+let highlightedIndex = -1;
+
+function renderOptions(filteredKeys) {
+  optionsContainer.innerHTML = "";
+  filteredKeys.forEach((k, i) => {
+    const div = document.createElement('div');
+    div.innerText = k.label;
+    div.dataset.key = k.number;
+    div.onclick = () => selectKey(k);
+    optionsContainer.appendChild(div);
+  });
+  if (filteredKeys.length > 0) {
+    optionsContainer.style.display = "block";
+    highlightedIndex = -1;
+  } else optionsContainer.style.display = "none";
+}
+
+function selectKey(k) {
+  selectedKey = k.number;
+  searchInput.value = k.label;
+  optionsContainer.style.display = "none";
+  updateButtons();
+}
+
+function filterKeys() {
+  const query = searchInput.value.toLowerCase();
+  const filtered = keys.filter(k => k.number.includes(query) || k.label.toLowerCase().includes(query));
+  renderOptions(filtered);
+}
+
+searchInput.addEventListener('input', filterKeys);
+
+searchInput.addEventListener('keydown', e => {
+  const visibleOptions = Array.from(optionsContainer.children);
+  if (e.key === "ArrowDown") { 
+    e.preventDefault(); 
+    highlightedIndex = (highlightedIndex + 1) % visibleOptions.length; 
+    updateHighlight(visibleOptions);
+  }
+  if (e.key === "ArrowUp") { 
+    e.preventDefault(); 
+    highlightedIndex = (highlightedIndex - 1 + visibleOptions.length) % visibleOptions.length; 
+    updateHighlight(visibleOptions);
+  }
+  if (e.key === "Enter") { 
+    e.preventDefault(); 
+    if (highlightedIndex >= 0) {
+      selectKey(keys.find(k => k.number === visibleOptions[highlightedIndex].dataset.key));
+    }
+  }
+});
+
+function updateHighlight(options) {
+  options.forEach(o => o.classList.remove('highlight'));
+  if (highlightedIndex >= 0) options[highlightedIndex].classList.add('highlight');
+}
+
+function updateButtons() {
+  const sessionActive = !!sessionId;
+  startBtn.disabled = sessionActive || !selectedKey;
+  stopBtn.disabled = !sessionActive;
+}
+
+function startCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+  }
+  
+  let remaining = SESSION_DURATION;
+  
+  const updateTimer = () => {
+    const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
+    const seconds = (remaining % 60).toString().padStart(2, '0');
+    timerElement.textContent = `Session time: ${minutes}:${seconds}`;
+    
+    if (remaining <= 0) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+      timerElement.textContent = 'Session expired!';
+      timerElement.classList.add('session-expired');
+      stop();
+      return;
+    }
+    remaining--;
+  };
+  
+  updateTimer();
+  countdownInterval = setInterval(updateTimer, 1000);
+}
+
+const sizePresets = {
+  small: { height: '250px' },
+  medium: { height: '450px' },
+  large: { height: 'calc(100vh - 400px)' }
+};
+
+window.setContainerSize = function(size) {
+  if (!hb) {
+    alert('Start a session first!');
+    return;
+  }
+  
+  const container = document.getElementById('container');
+  const preset = sizePresets[size];
+  
+  document.querySelectorAll('.resize-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(size + '-btn').classList.add('active');
+  
+  container.style.height = preset.height;
+  
+  setTimeout(() => {
+    resizeHyperbeam();
+  }, 100);
+};
+
+function resizeHyperbeam() {
+  if (!hb) return;
+  const container = document.getElementById('container');
+  const rect = container.getBoundingClientRect();
+  let width = Math.floor(rect.width);
+  let height = Math.floor(rect.height);
+  
+  if (hb.maxArea && width * height > hb.maxArea) {
+    const scale = Math.sqrt(hb.maxArea / (width * height));
+    width = Math.floor(width * scale);
+    height = Math.floor(height * scale);
+  }
+  
+  hb.resize(width, height);
+}
+
+async function start() {
+  if (!selectedKey) { 
+    alert("Please select a key first!"); 
+    return;
+  }
+  
+  startBtn.disabled = true;
+  
+  try {
+    console.log('Creating session with key:', selectedKey);
+    
+    const res = await fetch('/api/vmkey', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'create', keyNumber: selectedKey})
+    });
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`API Error ${res.status}: ${errorText}`);
+    }
+    
+    const data = await res.json();
+    
+    if (!data.session_id || !data.embed_url) {
+      throw new Error('Server response missing session_id or embed_url');
+    }
+
+    sessionId = data.session_id;
+    const container = document.getElementById('container');
+    container.innerHTML = '';
+    
+    hb = await Hyperbeam(container, data.embed_url);
+
+    if (resizeObserver) resizeObserver.disconnect();
+    resizeObserver = new ResizeObserver(resizeHyperbeam);
+    resizeObserver.observe(container);
+    
+    timerElement.classList.remove('session-expired');
+    setContainerSize('large');
+    startCountdown();
+
+    const iframe = container.querySelector('iframe');
+    if (iframe) {
+      iframe.setAttribute('allow', 'fullscreen; clipboard-read; clipboard-write');
+      iframe.setAttribute('allowfullscreen', 'true');
+    }
+    
+    updateButtons();
+    
+  } catch (error) {
+    console.error('Session error:', error);
+    alert('Failed to start session:\n' + error.message);
+    updateButtons();
+  }
+}
+
+async function stop() {
+  if (!sessionId) return;
+  
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+  
+  timerElement.classList.remove('session-expired');
+  timerElement.textContent = 'Session time: 15:00';
+
+  try {
+    await fetch('/api/vmkey', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'delete', sessionId, keyNumber: selectedKey})
+    });
+  } catch (e) {
+    console.error('Stop API error:', e);
+  }
+
+  if (hb) { 
+    hb.destroy(); 
+    hb = null;
+  }
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
+  
+  sessionId = null;
+  selectedKey = null;
+  searchInput.value = '';
+  document.getElementById('container').style.height = '400px';
+  document.getElementById('container').innerHTML = '';
+  filterKeys();
+  
+  updateButtons();
+}
+
+// Initialize
+filterKeys();
+updateButtons();
+window.start = start;
+window.stop = stop;
+</script>
+</body>
+</html>

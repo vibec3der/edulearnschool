@@ -1,14 +1,11 @@
-# Edulearn V5.3.0 (Beta Channel)
+# Edulearn
+![Edulearn Lite V6](./imgs/example2.png)
 
-![Edulearn OS V5.3.0](./imgs/example.png)
-
-*Edulearn V5.3.0 - The best unblocked "OS" with many features.* ![Edulearn Lite V6](./imgs/example2.png)
-
-*Edulearn Lite V6 - The Best Gaming Site.*
+*Edulearn Lite - The Best Gaming Site.*
 
 ---
 
-## What's New in V5
+## What's New
 
 - **Dual Architecture:** A brand new entry point allowing you to choose between **Edulearn Lite** (Streamlined for Gaming) and **EdulearnOS** (Built for Productivity).
 - **Extras Hub:** A new integrated dashboard in Lite mode allowing you to launch tools like the Graphing Calculator and Music Player without leaving your current session.
@@ -21,7 +18,7 @@
 
 ## Deployment Options
 
-You can deploy Edulearn V5 on multiple static hosting platforms:
+You can deploy Edulearn V9 on multiple static hosting platforms:
 
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/new/clone?repository-url=https://github.com/POX-dev/edulearnschool)  
 [![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://app.netlify.com/start/deploy?repository=https://github.com/POX-dev/edulearnschool)  
@@ -87,13 +84,15 @@ Join our community for support, updates, and discussions:
 
 ## Credits
 
-- **Neo** – Lead Developer & Creator  
+- **Vibec3der** – Lead Developer & Creator  
 - **Claude, ChatGPT, Gemini** – AI Assistance & Refactoring
 - **Conall Sadako** – Main Site Fixer  
 - **genizy/breadbb** – GN-Math Library Developer  
 - **RHW** – Scramjet-static Integration  
 - **Albie** – Main Domain Provider
+- **Ultimate games stash** - some games
 - **Night Network / AmplifyDev** - CSS taken from popular site service "[Space](https://gointospace.app)"
+- **Fern proxy** - CSS taken from site service "[fern](https://fern.best)"
 
 *If we missed you in the credits, feel free to contact vibec3der at `fernproxys3@proton.me`*
 
