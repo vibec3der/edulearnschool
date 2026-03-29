@@ -4,60 +4,37 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title id="page-title">Edulearn | Login</title>
+	<title id="page-title">Edulearn | Terminal</title>
 	<link id="dynamic-favicon" rel="icon" href="">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-		/* --- ADAPTIVE ICONS --- */
-		nav a i {
-			color: inherit;
-			text-shadow: 0 0 8px var(--accent-glow);
-		}
-
-		.setting-info h3 i,
-		.spotlight-item i {
-			color: var(--text-muted);
-		}
-
-		.spotlight-input-wrapper i,
-		.settings-header-top i,
-		.btn-close-icon i {
-			color: var(--text-muted);
-		}
-
-		.btn-close-icon:hover i {
-			color: var(--text-main);
-		}
-
-		[class^="ph-"],
-		[class*=" ph-"] {
-			color: inherit;
-			text-shadow: 0 0 10px var(--accent-glow);
-		}
-
 		:root {
-			--bg-color: #000000;
-			--text-main: #ffffff;
-			--text-muted: #9ca3af;
-			--modal-bg: #0a0a0a;
-			--modal-border: #222222;
+			/* Terminal Theme Defaults */
+			--bg-color: #05050b;
+			--text-main: #e0e0e0;
+			--text-muted: #888888;
+			--term-green: #5cf2a3;
+			--term-error: #ff5555;
+			--modal-bg: #0a0a0f;
+			--modal-border: #1f2937;
 			--input-bg: #000000;
 			--input-border: #333333;
-			--pill-hover: rgba(255, 255, 255, 0.1);
+			--pill-hover: rgba(92, 242, 163, 0.1);
 			--pill-active: #222222;
 			--toggle-track-off: #333333;
-			--toggle-track-on: #ffffff;
+			--toggle-track-on: #5cf2a3;
 			--toggle-knob-off: #ffffff;
 			--toggle-knob-on: #000000;
-			--accent-glow: rgba(255, 255, 255, 0.1);
+			--accent-glow: rgba(92, 242, 163, 0.15);
 		}
 
 		/* --- THEMES --- */
 		[data-theme="sakura"] {
 			--bg-color: #fdf6f5;
 			--text-main: #4a3b3c;
+			--term-green: #ff8da1;
 			--text-muted: #9e8487;
 			--modal-bg: #ffffff;
 			--modal-border: #f0e4e4;
@@ -74,6 +51,7 @@
 		[data-theme="red"] {
 			--bg-color: #0a0000;
 			--text-main: #ff4d4d;
+			--term-green: #ff4d4d;
 			--text-muted: #802b2b;
 			--modal-bg: #140000;
 			--modal-border: #330000;
@@ -90,6 +68,7 @@
 		[data-theme="azure"] {
 			--bg-color: #faf9f8;
 			--text-main: #323130;
+			--term-green: #0078d4;
 			--text-muted: #605e5c;
 			--modal-bg: #ffffff;
 			--modal-border: #edebe9;
@@ -105,150 +84,135 @@
 
 		body {
 			margin: 0;
-			padding: 0;
+			padding: 50px;
 			height: 100vh;
-			background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+			background-color: var(--bg-color);
 			color: var(--text-main);
-			font-family: 'Inter', sans-serif;
+			font-family: 'Courier New', Courier, monospace;
 			display: flex;
-			justify-content: center;
-			align-items: center;
-			overflow: hidden;
-			position: relative;
+			flex-direction: column;
+			align-items: flex-start;
+			overflow-y: auto;
+			overflow-x: hidden;
+			box-sizing: border-box;
 			transition: background-color 0.4s ease, color 0.4s ease;
 		}
 
 		#constellation-canvas {
-			position: absolute;
+			position: fixed;
 			inset: 0;
 			z-index: 0;
 			pointer-events: none;
 		}
 
-		.container {
-			text-align: center;
-			margin-top: -5vh;
+		/* --- TERMINAL UI --- */
+		.terminal-container {
 			z-index: 10;
+			position: relative;
+			width: 100%;
+			max-width: 900px;
+		}
+		#ascii-art {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: clamp(4px, 0.7vw, 11px);
+    line-height: 1;
+    white-space: pre;
+    margin: 0;
+    display: inline-block;
+    text-align: left;
+}
+
+		pre {
+			color: var(--text-main);
+			font-weight: bold;
+			margin-bottom: 25px;
+			line-height: 1.1;
+			font-size: 14px;
+			text-shadow: 0 0 10px var(--accent-glow);
 		}
 
-		h1 {
-			font-size: 6rem;
-			font-weight: 700;
-			margin: 0 0 10px 0;
-			letter-spacing: -0.04em;
-			animation: fadeInUp 1.5s ease-out, glow 2s ease-in-out infinite alternate;
-		}
-
-		@keyframes fadeInUp {
-			from {
-				opacity: 0;
-				transform: translateY(30px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
-		}
-
-		@keyframes glow {
-			from {
-				text-shadow: 0 0 20px var(--accent-glow);
-			}
-			to {
-				text-shadow: 0 0 30px var(--accent-glow), 0 0 40px var(--accent-glow);
-			}
+		.terminal-text {
+			color: var(--term-green);
+			margin-bottom: 4px;
+			font-size: 16px;
 		}
 
 		.dynamic-quote {
 			color: var(--text-muted);
-			font-size: 1.1rem;
 			font-style: italic;
-			font-weight: 400;
 			margin-bottom: 20px;
-			max-width: 600px;
-			line-height: 1.5;
 			border-right: 2px solid var(--text-muted);
+			display: inline-block;
 			animation: blink 1s infinite;
 		}
 
 		@keyframes blink {
-			0%, 50% { border-color: var(--text-muted); }
-			51%, 100% { border-color: transparent; }
+
+			0%,
+			50% {
+				border-color: var(--text-muted);
+			}
+
+			51%,
+			100% {
+				border-color: transparent;
+			}
 		}
 
-		.tip {
-			color: var(--text-muted);
-			font-size: 0.9rem;
-			margin-bottom: 30px;
+		.prompt-container {
 			display: flex;
 			align-items: center;
-			gap: 8px;
-			opacity: 0.8;
-			animation: fadeIn 2s ease-out 1.5s both;
+			margin-top: 20px;
+			width: 100%;
 		}
 
-		@keyframes fadeIn {
-			from { opacity: 0; }
-			to { opacity: 0.8; }
+		.prompt-label {
+			color: var(--term-green);
+			margin-right: 10px;
+			white-space: nowrap;
 		}
 
-		nav {
-			display: flex;
-			gap: 25px;
-			justify-content: center;
-			flex-wrap: wrap;
-			background: var(--modal-bg);
-			padding: 15px 30px;
-			border-radius: 999px;
-			border: 1px solid var(--modal-border);
-			box-shadow: 0 4px 20px var(--accent-glow);
-		}
-
-		nav a {
-			color: var(--text-muted);
-			text-decoration: none;
-			font-size: 1.4rem;
-			transition: all 0.2s ease;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 45px;
-			height: 45px;
-			border-radius: 50%;
-			position: relative;
-		}
-
-		nav a:hover {
+		#cmd-input {
+			background: transparent;
+			border: none;
 			color: var(--text-main);
-			background: var(--pill-hover);
-			transform: translateY(-2px) scale(1.05);
-			box-shadow: 0 5px 15px var(--accent-glow);
+			font-family: inherit;
+			font-size: inherit;
+			outline: none;
+			flex-grow: 1;
+			caret-color: var(--text-main);
+		}
+
+		#output-container {
+			margin-top: 15px;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
 		}
 
 		/* --- NOTIFICATION BADGE --- */
-		.badge {
-			position: absolute;
-			top: 8px;
-			right: 8px;
-			width: 10px;
-			height: 10px;
+		#bell-badge {
+			display: inline-block;
+			width: 8px;
+			height: 8px;
 			background-color: #ff4d4d;
 			border-radius: 50%;
-			display: none;
+			margin-left: 5px;
 			box-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
-			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.3s;
 		}
 
-		.badge.active {
-			display: block;
+		#bell-badge.active {
+			opacity: 1;
 		}
 
 		/* --- MODALS --- */
 		.modal-overlay {
 			position: fixed;
 			inset: 0;
-			background: rgba(0, 0, 0, 0.5);
+			background: rgba(0, 0, 0, 0.6);
 			backdrop-filter: blur(8px);
 			z-index: 2000;
 			display: none;
@@ -256,6 +220,7 @@
 			justify-content: center;
 			opacity: 0;
 			transition: opacity 0.2s ease;
+			font-family: 'Inter', sans-serif;
 		}
 
 		.modal-overlay.active {
@@ -269,7 +234,7 @@
 			max-height: 85vh;
 			background: var(--modal-bg);
 			border: 1px solid var(--modal-border);
-			border-radius: 16px;
+			border-radius: 12px;
 			display: flex;
 			flex-direction: column;
 			box-shadow: 0 25px 50px -12px var(--accent-glow);
@@ -304,11 +269,13 @@
 			border: none;
 			font-size: 20px;
 			cursor: pointer;
+			color: var(--text-muted);
 			transition: 0.2s;
 		}
 
 		.btn-close-icon:hover {
 			transform: scale(1.1);
+			color: var(--text-main);
 		}
 
 		.settings-content {
@@ -333,7 +300,7 @@
 		.settings-card {
 			background: transparent;
 			border: 1px solid var(--modal-border);
-			border-radius: 12px;
+			border-radius: 8px;
 			display: flex;
 			flex-direction: column;
 			overflow: hidden;
@@ -378,6 +345,7 @@
 
 		.setting-info h3 i {
 			font-size: 14px;
+			color: var(--term-green);
 		}
 
 		.setting-info p {
@@ -402,7 +370,7 @@
 			border: 1px solid var(--input-border);
 			color: var(--text-main);
 			padding: 10px 16px;
-			border-radius: 8px;
+			border-radius: 6px;
 			font-family: inherit;
 			font-size: 14px;
 			outline: none;
@@ -411,7 +379,7 @@
 
 		.dark-input:focus,
 		select.dark-input:focus {
-			border-color: var(--text-main);
+			border-color: var(--term-green);
 			box-shadow: 0 0 0 2px var(--accent-glow);
 		}
 
@@ -429,7 +397,7 @@
 			color: var(--text-main);
 			border: 1px solid var(--input-border);
 			padding: 8px 18px;
-			border-radius: 9999px;
+			border-radius: 6px;
 			font-size: 13px;
 			font-weight: 500;
 			cursor: pointer;
@@ -443,6 +411,7 @@
 
 		.clean-btn:hover {
 			background: var(--pill-hover);
+			border-color: var(--term-green);
 		}
 
 		.btn-primary {
@@ -453,8 +422,8 @@
 		}
 
 		.btn-primary:hover {
-			opacity: 0.85;
-			transform: scale(1.05);
+			opacity: 0.9;
+			transform: scale(1.02);
 		}
 
 		/* --- TOGGLE SWITCHES --- */
@@ -503,96 +472,6 @@
 			transform: translateX(20px);
 			background-color: var(--toggle-knob-on);
 		}
-
-		/* --- SPOTLIGHT --- */
-		.spotlight-box {
-			width: 600px;
-			max-width: 95%;
-			background: var(--modal-bg);
-			border: 1px solid var(--modal-border);
-			border-radius: 16px;
-			display: flex;
-			flex-direction: column;
-			box-shadow: 0 30px 60px -15px var(--accent-glow);
-			transform: scale(0.98);
-			transition: transform 0.2s ease;
-			overflow: hidden;
-			align-self: flex-start;
-			margin-top: 15vh;
-		}
-
-		.spotlight-input-wrapper {
-			position: relative;
-			display: flex;
-			align-items: center;
-			padding: 0 24px;
-			border-bottom: 1px solid var(--modal-border);
-		}
-
-		.spotlight-input-wrapper i {
-			font-size: 20px;
-			margin-right: 16px;
-		}
-
-		.spotlight-input {
-			width: 100%;
-			background: transparent;
-			border: none;
-			color: var(--text-main);
-			padding: 24px 0;
-			font-family: 'Inter', sans-serif;
-			font-size: 20px;
-			outline: none;
-		}
-
-		.spotlight-results {
-			max-height: 350px;
-			overflow-y: auto;
-			padding: 12px;
-			display: flex;
-			flex-direction: column;
-			gap: 4px;
-		}
-
-		.spotlight-item {
-			display: flex;
-			align-items: center;
-			padding: 12px 16px;
-			border-radius: 8px;
-			color: var(--text-main);
-			cursor: pointer;
-			transition: background 0.1s;
-			font-size: 15px;
-			font-weight: 500;
-		}
-
-		.spotlight-item:hover,
-		.spotlight-item.active {
-			background: var(--pill-hover);
-		}
-
-		/* --- IFRAME TRANSITION OVERLAY --- */
-		#transition-overlay {
-			position: fixed;
-			inset: 0;
-			z-index: 99999;
-			background: var(--bg-color);
-			display: none;
-			opacity: 0;
-			transition: opacity 0.4s ease;
-		}
-
-		#transition-overlay.active {
-			display: block;
-			opacity: 1;
-		}
-
-		#transition-overlay iframe {
-			width: 100%;
-			height: 100%;
-			border: none;
-			background: transparent;
-		}
 	</style>
 </head>
 
@@ -600,114 +479,120 @@
 
 	<canvas id="constellation-canvas"></canvas>
 
-	<div id="transition-overlay">
-		<iframe src="" id="transition-iframe"></iframe>
-	</div>
+	<div class="terminal-container">
+		<pre id="ascii-art">
+              _____                    _____                    _____                    _____            _____                    _____                    _____                    _____          
+         /\    \                  /\    \                  /\    \                  /\    \          /\    \                  /\    \                  /\    \                  /\    \         
+        /::\    \                /::\    \                /::\____\                /::\____\        /::\    \                /::\    \                /::\    \                /::\____\        
+       /::::\    \              /::::\    \              /:::/    /               /:::/    /       /::::\    \              /::::\    \              /::::\    \              /::::|   |        
+      /::::::\    \            /::::::\    \            /:::/    /               /:::/    /       /::::::\    \            /::::::\    \            /::::::\    \            /:::::|   |        
+     /:::/\:::\    \          /:::/\:::\    \          /:::/    /               /:::/    /       /:::/\:::\    \          /:::/\:::\    \          /:::/\:::\    \          /::::::|   |        
+    /:::/__\:::\    \        /:::/  \:::\    \        /:::/    /               /:::/    /       /:::/__\:::\    \        /:::/__\:::\    \        /:::/__\:::\    \        /:::/|::|   |        
+   /::::\   \:::\    \      /:::/    \:::\    \      /:::/    /               /:::/    /       /::::\   \:::\    \      /::::\   \:::\    \      /::::\   \:::\    \      /:::/ |::|   |        
+  /::::::\   \:::\    \    /:::/    / \:::\    \    /:::/    /      _____    /:::/    /       /::::::\   \:::\    \    /::::::\   \:::\    \    /::::::\   \:::\    \    /:::/  |::|   | _____  
+ /:::/\:::\   \:::\    \  /:::/    /   \:::\ ___\  /:::/____/      /\    \  /:::/    /       /:::/\:::\   \:::\    \  /:::/\:::\   \:::\    \  /:::/\:::\   \:::\____\  /:::/   |::|   |/\    \ 
+/:::/__\:::\   \:::\____\/:::/____/     \:::|    ||:::|    /      /::\____\/:::/____/       /:::/__\:::\   \:::\____\/:::/  \:::\   \:::\____\/:::/  \:::\   \:::|    |/:: /    |::|   /::\____\
+\:::\   \:::\   \::/    /\:::\    \     /:::|____||:::|____\     /:::/    /\:::\    \       \:::\   \:::\   \::/    /\::/    \:::\  /:::/    /\::/   |::::\  /:::|____|\::/    /|::|  /:::/    /
+ \:::\   \:::\   \/____/  \:::\    \   /:::/    /  \:::\    \   /:::/    /  \:::\    \       \:::\   \:::\   \/____/  \/____/ \:::\/:::/    /  \/____|:::::\/:::/    /  \/____/ |::| /:::/    / 
+  \:::\   \:::\    \       \:::\    \ /:::/    /    \:::\    \ /:::/    /    \:::\    \       \:::\   \:::\    \               \::::::/    /         |:::::::::/    /           |::|/:::/    /  
+   \:::\   \:::\____\       \:::\    /:::/    /      \:::\    /:::/    /      \:::\    \       \:::\   \:::\____\               \::::/    /          |::|\::::/    /            |::::::/    /   
+    \:::\   \::/    /        \:::\  /:::/    /        \:::\__/:::/    /        \:::\    \       \:::\   \::/    /               /:::/    /           |::| \::/____/             |:::::/    /    
+     \:::\   \/____/          \:::\/:::/    /          \::::::::/    /          \:::\    \       \:::\   \/____/               /:::/    /            |::|  ~|                   |::::/    /     
+      \:::\    \               \::::::/    /            \::::::/    /            \:::\    \       \:::\    \                  /:::/    /             |::|   |                   /:::/    /      
+       \:::\____\               \::::/    /              \::::/    /              \:::\____\       \:::\____\                /:::/    /              \::|   |                  /:::/    /       
+        \::/    /                \::/____/                \::/____/                \::/    /        \::/    /                \::/    /                \:|   |                  \::/    /        
+         \/____/                  ~~                       ~~                       \/____/          \/____/                  \/____/                  \|___|                   \/____/         
+                                                                                                                                                                                                
+        </pre>
 
-	<div class="container">
-		<h1>edulearn</h1>
+		<div class="terminal-text">[Announcement] Give suggestions here: https://forms.gle/siDC34KDQn59Lmn69 <span id="bell-badge"></span></div>
+		<div class="terminal-text">Welcome to edulearn [T3rminal edition] </div>
+		<div class="terminal-text">created and maintained by vibec3der and hackercat</div>
+		<div class="terminal-text">Inspired by splash.best</div>
 		<div id="dynamic-quote" class="dynamic-quote">Loading wisdom...</div>
-		
-		<div class="tip">
-			<i class="fa-solid fa-lightbulb"></i> Tip: Press Ctrl+Y to open spotlight search
+		<br>
+		<div class="terminal-text">Type 'help' for a list of available commands and apps.</div>
+
+		<div id="output-container"></div>
+
+		<div class="prompt-container">
+			<span class="prompt-label">root@edulearn:~$</span>
+			<input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
+        </div>
 		</div>
 
-		<nav>
-			<a href="#" onclick="navigateWithTransition('/h/'); return false;"
-				title="Home"><i class="fa-solid fa-house"></i></a>
-			<a href="#" onclick="navigateWithTransition('/g/'); return false;"
-				title="Games"><i class="fa-solid fa-gamepad"></i></a>
-			<a href="#" onclick="navigateWithTransition('/g2/'); return false;"
-				title="G2"><i class="fa-brands fa-xbox"></i></a>
-			<a href="#" onclick="navigateWithTransition('/b/'); return false;"
-				title="Browser"><i class="fa-solid fa-globe"></i></a>
-			<a href="#" onclick="navigateWithTransition('/t/'); return false;"
-				title="Tools"><i class="fa-solid fa-wrench"></i></a>
-			<a href="#" onclick="navigateWithTransition('/e/'); return false;"
-				title="Extras"><i class="fa-solid fa-plus"></i></a>
-
-			<a href="#" onclick="openAnnouncements(); return false;" title="Announcements">
-				<i class="fa-solid fa-bell"></i>
-				<span id="bell-badge" class="badge"></span>
-			</a>
-
-			<a href="#" onclick="openSettings(); return false;" title="Settings"><i class="fa-solid fa-gear"></i></a>
-		</nav>
-	</div>
-
-	<div class="modal-overlay" id="announcement-modal" onclick="handleBackdropClick(event)">
-		<div class="settings-box" style="width: 500px; min-height: 200px;">
-			<div class="settings-header-top">
-				<h2><i class="fa-solid fa-bullhorn" style="margin-right: 10px;"></i> Updates
-				</h2>
-				<button class="btn-close-icon" onclick="closeAnnouncements()"><i class="fa-solid fa-xmark"></i></button>
+		<div class="modal-overlay" id="announcement-modal" onclick="handleBackdropClick(event)">
+			<div class="settings-box" style="width: 500px; min-height: 200px;">
+				<div class="settings-header-top">
+					<h2><i class="fa-solid fa-bullhorn" style="margin-right: 10px; color: var(--term-green);"></i>
+						Updates</h2>
+					<button class="btn-close-icon" onclick="closeAnnouncements()"><i class="fa-solid fa-xmark"></i></button>
+				</div>
+				<div class="settings-content" style="padding-top: 24px;">
+					<div class="settings-card" style="padding: 24px; text-align: left;">
+						<h3 style="margin-top: 0; font-size: 18px;">We want to hear from you!</h3>
+						<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; font-size: 14px;">
+							Here at edulearn, we value your feedback. We are constantly looking for ways to improve your
+							experience. Let us know what features you want to see next.
+						</p>
+						<a href="https://forms.gle/siDC34KDQn59Lmn69" target="_blank" class="clean-btn btn-primary"
+							onclick="closeAnnouncements()">Submit Suggestions</a>
+					</div>
+				</div>
 			</div>
-			<div class="settings-content" style="padding-top: 24px;">
-				<div class="settings-card" style="padding: 24px; text-align: left;">
-					<h3 style="margin-top: 0; font-size: 18px;">We want to hear from you!</h3>
-					<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; font-size: 14px;">
-						Here at edulearn, we value your feedback. We are constantly looking for ways to improve your
-						experience. Let us know what features you want to see next.
+		</div>
+
+		<div class="modal-overlay" id="ab-modal" onclick="handleBackdropClick(event)">
+			<div class="settings-box" style="width: 400px; min-height: 150px;">
+				<div class="settings-content" style="padding: 32px; text-align: center;">
+					<h3 style="margin-top: 0; font-size: 18px; color: var(--text-main);">Enable Stealth Mode?</h3>
+					<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
+						Do you want to enable AB to hide this session from your history?
 					</p>
-					<a href="https://forms.gle/siDC34KDQn59Lmn69" target="_blank" class="clean-btn btn-primary"
-						onclick="closeAnnouncements()">Submit Suggestions</a>
+					<div style="display: flex; gap: 12px; justify-content: center;">
+						<button class="clean-btn btn-primary" onclick="enableAB(true)">Yes</button>
+						<button class="clean-btn" onclick="enableAB(false)">No</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="modal-overlay" id="ab-modal" onclick="handleBackdropClick(event)">
-		<div class="settings-box" style="width: 400px; min-height: 150px;">
-			<div class="settings-content" style="padding: 32px; text-align: center;">
-				<h3 style="margin-top: 0; font-size: 18px;">Enable About Blank?</h3>
-				<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
-					Do you want to enable AB to hide this page from your history?
-				</p>
-				<div style="display: flex; gap: 12px; justify-content: center;">
-					<button class="clean-btn btn-primary" onclick="enableAB(true)">Yes</button>
-					<button class="clean-btn" onclick="enableAB(false)">No</button>
+		<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
+			<div class="settings-box">
+				<div class="settings-header-top">
+					<h2>Settings</h2>
+					<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
 				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
-		<div class="settings-box">
-			<div class="settings-header-top">
-				<h2>Settings</h2>
-				<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
-			</div>
-			<div class="settings-content">
-
-				<div class="settings-section-title">Stealth & Privacy</div>
-				<div class="settings-card">
-					<div class="setting-row">
-						<div class="setting-info">
-							<h3><i class="fa-solid fa-window-restore"></i> About Blank (AB)</h3>
-							<p>Hide pages from browser history by opening in about:blank.</p>
+				<div class="settings-content">
+					<div class="settings-section-title">Stealth & Privacy</div>
+					<div class="settings-card">
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3><i class="fa-solid fa-window-restore"></i> About Blank (AB)</h3>
+								<p>Hide pages from browser history by opening in about:blank.</p>
+							</div>
+							<div class="setting-action">
+								<label class="switch"><input type="checkbox" id="ab-toggle" onchange="toggleAB()"><span class="slider"></span></label>
+							</div>
 						</div>
-						<div class="setting-action">
-							<label class="switch"><input type="checkbox" id="ab-toggle" onchange="toggleAB()"><span class="slider"></span></label>
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3><i class="fa-solid fa-user-secret"></i> Panic Button</h3>
+								<p>Quickly hide the screen. Triggered by a keypress.</p>
+							</div>
+							<div class="setting-action">
+								<input type="text" id="panic-key" class="dark-input" placeholder="Key (e.g. `)" style="width: 80px; text-align: center;">
+								<input type="text" id="panic-url" class="dark-input" placeholder="Redirect URL" style="width: 180px;">
+								<button class="clean-btn btn-primary" onclick="savePanic()">Save</button>
+							</div>
 						</div>
-					</div>
-					<div class="setting-row">
-						<div class="setting-info">
-							<h3><i class="fa-solid fa-user-secret"></i> Panic Button</h3>
-							<p>Quickly hide the screen. Triggered by a keypress.</p>
-						</div>
-						<div class="setting-action">
-							<input type="text" id="panic-key" class="dark-input" placeholder="Key (e.g. `)" style="width: 80px; text-align: center;">
-							<input type="text" id="panic-url" class="dark-input" placeholder="Redirect URL" style="width: 180px;">
-							<button class="clean-btn btn-primary" onclick="savePanic()">Save</button>
-						</div>
-					</div>
-					<div class="setting-row">
-						<div class="setting-info">
-							<h3><i class="fa-solid fa-mask"></i> Tab Cloak</h3>
-							<p>Disguise the current tab title and icon from prying eyes.</p>
-						</div>
-						<div class="setting-action">
-							<select id="cloak-preset" class="dark-input" onchange="loadCloakPreset()" style="width: 130px; margin-right: 4px;">
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3><i class="fa-solid fa-mask"></i> Tab Cloak</h3>
+								<p>Disguise the current tab title and icon from prying eyes.</p>
+							</div>
+							<div class="setting-action">
+								<select id="cloak-preset" class="dark-input" onchange="loadCloakPreset()" style="width: 130px; margin-right: 4px;">
                                 <option value="custom">Custom...</option>
                                 <option value="classroom">Google Classroom</option>
                                 <option value="canvas">Canvas</option>
@@ -717,475 +602,85 @@
                                 <option value="docs">Google Docs</option>
                                 <option value="clever">Clever</option>
                             </select>
-							<input type="text" id="cloak-title" class="dark-input" placeholder="Page Title" style="width: 100px;">
-							<input type="text" id="cloak-icon" class="dark-input" placeholder="Icon URL" style="width: 100px;">
-							<button class="clean-btn btn-primary" onclick="saveCloak()">Apply</button>
+								<input type="text" id="cloak-title" class="dark-input" placeholder="Page Title" style="width: 100px;">
+								<input type="text" id="cloak-icon" class="dark-input" placeholder="Icon URL" style="width: 100px;">
+								<button class="clean-btn btn-primary" onclick="saveCloak()">Apply</button>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="settings-section-title">Appearance</div>
-				<div class="settings-card">
-					<div class="setting-row">
-						<div class="setting-info">
-							<h3><i class="fa-solid fa-palette"></i> UI Theme</h3>
-							<p>Customize the color palette of the application.</p>
-						</div>
-						<div class="setting-action">
-							<select id="theme-select" class="dark-input" onchange="changeTheme()" style="width: 200px;">
-                                <option value="default">Default Dark</option>
+					<div class="settings-section-title">Appearance</div>
+					<div class="settings-card">
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3><i class="fa-solid fa-palette"></i> UI Theme</h3>
+								<p>Customize the color palette of the application.</p>
+							</div>
+							<div class="setting-action">
+								<select id="theme-select" class="dark-input" onchange="changeTheme()" style="width: 200px;">
+                                <option value="default">Terminal Dark</option>
                                 <option value="sakura">Sakura Pink</option>
                                 <option value="red">Crimson Red</option>
                                 <option value="azure">Microsoft Azure Slop</option>
                             </select>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="settings-section-title">Preferences</div>
-				<div class="settings-card">
-					<div class="setting-row">
-						<div class="setting-info">
-							<h3><i class="fa-solid fa-diagram-project"></i> Constellations</h3>
-							<p>Toggle floating animated background network.</p>
+					<div class="settings-section-title">Preferences</div>
+					<div class="settings-card">
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3><i class="fa-solid fa-diagram-project"></i> Constellations</h3>
+								<p>Toggle floating animated background network.</p>
+							</div>
+							<div class="setting-action">
+								<label class="switch"><input type="checkbox" id="particle-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
+							</div>
 						</div>
-						<div class="setting-action">
-							<label class="switch"><input type="checkbox" id="particle-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
+						<div class="setting-row">
+							<div class="setting-info">
+								<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Smooth UI Transitions</h3>
+								<p>Enable fluid animations across the interface.</p>
+							</div>
+							<div class="setting-action">
+								<label class="switch"><input type="checkbox" id="smooth-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
+							</div>
 						</div>
-					</div>
-					<div class="setting-row">
-						<div class="setting-info">
-							<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Smooth UI Transitions</h3>
-							<p>Enable fluid animations across the interface.</p>
-						</div>
-						<div class="setting-action">
-							<label class="switch"><input type="checkbox" id="smooth-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
-						</div>
-					</div>
-					<div class="setting-row">
-						<div class="setting-info">
-							<h3><i class="fa-solid fa-magnifying-glass-chart"></i> Spotlight Indexing</h3>
-							<p>Pre-cache pages for instant spotlight search results.</p>
-						</div>
-						<div class="setting-action">
-							<label class="switch"><input type="checkbox" id="index-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="modal-overlay" id="spotlight-modal" onclick="handleSpotlightBackdropClick(event)">
-		<div class="spotlight-box">
-			<div class="spotlight-input-wrapper">
-				<i class="fa-solid fa-magnifying-glass"></i>
-				<input type="text" id="spotlight-input" class="spotlight-input" placeholder="Search commands or pages..." autocomplete="off" oninput="filterSpotlight()">
-            </div>
-				<div id="spotlight-results" class="spotlight-results">
-					<div class="spotlight-item" onclick="navigateWithTransition('/h/')">
-						<i class="fa-solid fa-house" style="margin-right: 12px;"></i> Home
-					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/g/')">
-						<i class="fa-solid fa-gamepad" style="margin-right: 12px;"></i> Games
-					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/g2/')">
-						<i class="fa-brands fa-xbox" style="margin-right: 12px;"></i> G2
-					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/b/')">
-						<i class="fa-solid fa-globe" style="margin-right: 12px;"></i> Browser
-					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/t/')">
-						<i class="fa-solid fa-wrench" style="margin-right: 12px;"></i> Tools
-					</div>
-					<div class="spotlight-item" onclick="navigateWithTransition('/e/')">
-						<i class="fa-solid fa-plus" style="margin-right: 12px;"></i> Extras
-					</div>
-					<div class="spotlight-item" onclick="openSettings(); closeSpotlight();">
-						<i class="fa-solid fa-gear" style="margin-right: 12px;"></i> Settings
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<script>
-			// --- 0. RANDOM QUOTES ---
+			// --- 0. APP CONFIGURATION ---
+        const apps = {
+            'home': { path: '/h/', desc: 'Navigate to Home' },
+            'games': { path: '/g/', desc: 'Open Games hub' },
+            'g2': { path: '/g2/', desc: 'Open G2 hub' },
+            'uv': { path: '/b/', desc: 'Open UV' },
+			'sj': { path: '/s/', desc: 'Open SJ' },
+		
+            'tools': { path: '/t/', desc: 'Open Tools hub' },
+            'extras': { path: '/e/', desc: 'Open Extras' }
+        };
+
+        const systemCommands = {
+            'help': 'Show this list of commands',
+            'clear': 'Clear terminal output',
+            'stealth': 'Launch this current page in a stealth (about:blank) window',
+            'settings': 'Open Edulearn Settings',
+            'updates': 'Open Announcements',
+            'discord': 'Open discord server'
+        };
+
+        // --- 1. RANDOM QUOTES (Truncated as requested) ---
         const quotes = [
-  "Learning is a treasure that will follow its owner everywhere.",
-  "The beautiful thing about learning is that no one can take it away from you.",
-  "Education is the most powerful weapon which you can use to change the world.",
-  "Wisdom is not a product of schooling but of the lifelong attempt to acquire it.",
-  "Curiosity is the wick in the candle of learning.",
-  "Knowledge speaks, but wisdom listens.",
-  "coded by the skids, for the skids", 
-  "Why Unenroll when you have this?",
-  "Classroom.lol but it's actually good",
-  "This is what you call.. a vibecoded site.",
-  "Vibecoded by Claude",
-  "This site is so good, even MOJANG is jealous",
-  "This site is so good, even the IRS is jealous",
-  "The FBI is definitely not watching you use this, nope.",
-  "This site is so good, even NASA is jealous",
-  "Jeffrey Epstein definitely did not use this site, no way.",
-  "This site is so good, even Elon Musk is jealous",
-  "Bro github copilot the quotes that u are making are so cringe [ROFL emoji]",
-  "Parrotx2 approved!",
-  "Finally beat soulmaster [pray emoji]",
-  "Daddy hu!!",
-  "daddy au is my daddy",
-  "fuck you, im not adding shell shockers [rofl emoji]",
-  "nothing.",
-  "This site is so good, even Andrew Hu is jealous",
-  "Teachers hate this one simple trick to get free games and tools on school chromebooks",
-  "This site is so good, even the SEC is jealous",
-  "This site is so good, even the WHO is jealous",
-  "This site is so good, even the CDC is jealous",
-  "This site is so good, even the UN is jealous",
-  "This site is so good, even the World Bank is jealous",
-  "This site is so good, even the IMF is jealous",
-  "This site is so good, even the US Government is jealous",
-  // github copilot ahh comments above ^
-  "Dont remove MENDING.. MOJANG PLS",
-  "I type all ts on ARCH BTW",
-  "Hndrew Au could never..",
-  "The IRS CANNOT TOUCH ME!!",
-  "67.world for more!",
-  "Andewwww huuuu is . gay!!!",
-  "teachers hate ts", 
-  "what's Nasa-dude doing, idk prob hacking on mc",
-  "effry jepstien",
-  "Have you ever played blox fruits with your life on line? while having A BUNCH of mangoes in your mouth? heh... well… this is called DARK MANGO PSYCHOLOGY 💀. Now in dark mango psychology you realize.. they arent just normal mangoes, they are DARK!",
-  "and hu, and hu, andu you",
-  "RHYMES WITH GRUG",
-  "67",
-  "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "get scammedddddd!!!",
-  "If you paid money for this u got scammed, edulearn and all of its services are FREE!!",
-  "UGS FILES VERY SOON!!",
-  "Frogiee1 please please please partner with us 🙏",
-  "MOTD: LOGI",
-  "Most Underrated shit ever",
-  "D- Daddy?",
-  "https://the-demonz.github.io (MOST VIBECODED SHIT EVER)",
-  "Arorua aRorua arOrua aroRua arorUa aroruA",
-  "UwU :333",
-  "Nonchalanttttt :D",
-  "Mrbeast Scam [Insert fire emoji]",
-  "pickle pickle pickle",
-  "alvin the walnut",
-  "Hello wsg mr mail",
-  "Fastify it, act smooth, make a discord bot, and caddy!",
-  "dont do frugs",
-  "That's racially motivated..",
-  "Interesting site u got there..",
-  "This is what you call.. Diddable material.",
-  "ADS ARE NOT MY FAULT (F*CK YOU BREADBB)",
-  "Shock my shells",
-  "mrbeast > mrbeast???",
-  "How many have you counted so far?",
-  "eat this!",
-  "woahh, thats a lot of quotes!",
-  "1167 effrey jepstein drive",
-  "your mom.. j20",
-  "furry femboy catgirl pls ride me uwu - my pronouns (ah)",
-  "Imagine using this when you literally told everyone it SUCKS HAHAHAHA",
-  "https://betadispensertest.vercel.app",
-  "https://chessisfornerds.netlify.app",
-  "Dylanmc math vibes",
-  "luminal LIGHTSPEED BYPASSES!!!",
-  "SOAP PHIAAAA MY GOATTTT",
-  "Keep Onn.. 20gb usb contains massive movie files.. I wonder who it belongs to..",
-  "Redragon gaming mouse, kawaii pack :3",
-  "Earthquakes? Must be daddy ash again :333",
-  "thefakesydney is BACKKKKKKKKKKKKK!!! 676767",
-  "When I was 1 year old.. I thought of edulearn",
-  "When faced when hndrew au, take him out - sun tzu",
-  "I see chungus. I slime him out - wise guy",
-  "Szvy I'm sorry you got doxxed..",
-  "Wsg therealfour",
-  "https://femboy.world :3",
-  "SLIME HIM OUT GUYSSS",
-  "20% ai slop",
-  "VIBE CODEEERR SUPREMEEEE",
-  "Wait... I don't have the VIBE CODER SUPREME ROLE?? YESSS!!!!!",
-  "Why do you vibecode? - A gong bell that I could ring",
-  "ring me daddy",
-  "This video is sponsored by Genshin Impact-",
-  "Oh fuhh naww",
-  "skibidi.men for more!",
-  "Every 5 year old has a story behind them!",
-  "unblocked and unlocked", 
-  "running on pure caffeine", 
-  "if you're reading this, do your homework",
-  "no admins allowed", 
-  ":333333333",
-  "Femboys 3DDDDDD",
-  "You are NEVER finding out what PROXIES are.. hahaha - Matthew guy whos black",
-  "Why tf do u have so many apps on a cb - Conall Sadako",
-  "It's.. soo.. cold - guy",
-  "4167💀💀",
-  "trust me bro.. it's not a virus.💀",
-  "Bro thinks this is a virus 💀",
-  "oh nah bro 💀💀💀💀💀💀 ",
-  "Skull emoji virus 💀",
-  "Skull emojis have hit this sector unfortunately..💀💀💀💀💀💀",
-  "I'm not taken over by the skull virus.. yet 💀💀",
-  "We are still safe-💀",
-  "Oops i js closed a tab💀💀",
-  "Montagem NO ONE CARES",
-  "💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀 back from 42",
-  "Control + Shift + T to reopen a tab",
-  "Github copilot being suchhh a goooood boy..",
-  "fcking NI-",
-  "security through obscurity", 
-  "ctrl + w to win instantly", 
-  "made with <3 and spaghetti code", 
-  "Set this up in alt tab to quickly escape",
-  "decode this: aHR0cHM6Ly9hbmRyZXdodWlzLmdheQ==", 
-  "If you don't use this, go-",
-  "I'm sorry j20, I can't fix the hk bugs (That's breadbb [aka genizy's] fault.)",
-  "need more blahaj", 
-  "typing this while going to class lol",
-  "How are you playing Hollow Knight at school bro?", 
-  "originally just a webview kajig", 
-  "frogiesarcade vibes", 
-  "This is where the fun begins! - Obi Wan Kenobi",
-  "vibecoded but it WORKS!", 
-  "Monkey find computer. Monkey type.", 
-  "goguardian is trash", 
-  "lightsped sytems", 
-  "go get the milk - therealfour, milk lover 67", 
-  "No matter how much it feels like it, I'm not gay I swear! - A random", 
-  "Wait.. I can have MULTIPLE TABS?!? HOLY SHI*", 
-  "If you use this and I know you're a skid, screw you lmfao",
-  "you're dumb", 
-  "I'm depressed typing this", 
-  "dont cry.. just.. cry", 
-  "gaming freedom!", 
-  "Go back of this ripoff by AH (https://bebby.w3spaces.com) [vibecoded by claude ofc] HAHAHAHAA [insert wemmbu laugh]",
-  "yall ready to play TS ALL DAY!?", 
-  "MF did not js say [It's down for maintainance]",
-  "Fun fact: This doesn't break your fast for Ramadan! :O",
-  "The ogs know of classroom.lol", 
-  "tyrone's stupid games", 
-  "I have securly for breakfast, gogaurdian for lunch, and lightsped for dinner", 
-  "educational.sbs", 
-  "I'm jobless fr", 
-  "Jobless for using AI? Really?",
-  "THIS SITE IS NOT FOR DEGENERATES. GO AWAY!!", 
-  "I should ring Alvin's gong - wise guy", 
-  "If you want to humiliate your enemies, do it in a way that doesn't waste your own time. Use AI - Sun Zu",
-  "albie was here", 
-  "UNBLOCKED GAMES IN DA BIG 26!", 
-  "If you made it this far, join the discord!", 
-  "skids being skids", 
-  "Dont slime me out..daddy",
-  "your a skid buddy", 
-  "toggle off particles for better performance", 
-  "I'll steal your code hahaha - J20", 
-  "Hella sick while typing this", 
-  "bro wtf - guy", 
-  "wow these are so old messages",
-  "There are some funny easter eggs!",
-  "Look for some!",
-  "I use arch btw",
-  "last message so far.. consider yourself lucky.",
-  "I bet you're here for the geo grind.",
-  "Hollow knight in the big 2026?",
-  "most recent update: Added more quotes! 3/14/2026",
-  "the wifi knows what you did last night",
-  "this tab knows too much",
-  "if this loads your wifi is valid",
-  "404 motivation not found",
-  "someone somewhere is procrastinating harder than you",
-  "your teacher probably uses this site too",
-  "this page is watching you scroll",
-  "if you see this you owe me 5 dollars",
-  "every refresh creates a new timeline",
-  "your future self is judging this tab",
-  "ctrl+s your life bro",
-  "this site runs on hopes and bad javascript",
-  "another day another tab",
-  "if it works don't touch it",
-  "half the internet is duct tape and dreams",
-  "99% of coding is googling",
-  "the other 1% is suffering",
-  "your ram is crying right now",
-  "every bug has a developer somewhere crying",
-  "the server hamster is tired",
-  "please stop opening 400 tabs",
-  "this site runs on a potato",
-  "if this breaks pretend it didn't",
-  "congratulations you found another quote",
-  "somewhere someone is counting these",
-  "how long have you been scrolling",
-  "bro go drink water",
-  "touch grass challenge: impossible",
-  "achievement unlocked: reading random quotes",
-  "this message will self destruct eventually",
-  "the internet never forgets",
-  "except when the cache clears",
-  "history will remember this tab",
-  "or maybe not",
-  "loading existential crisis...",
-  "life is just a series of loading screens",
-  "respawning in 3... 2... 1...",
-  "main character energy",
-  "side quest detected",
-  "you have discovered a useless quote",
-  "the dev definitely forgot this existed",
-  "this line of text traveled thousands of miles to reach you",
-  "meanwhile you are still procrastinating",
-  "if you read this you are legally cool",
-  "your cpu approves",
-  "your gpu disagrees",
-  "your battery fears you",
-  "low battery anxiety moment",
-  "the scroll never ends",
-  "there are always more quotes",
-  "infinite quotes glitch",
-  "someone add a quote counter",
-  "someone else will fix the bugs",
-  "future me problem",
-  "ship it and pray",
-  "works on my machine",
-  "the code compiles so it's fine",
-  "do not question the code",
-  "the code questions you",
-  "if it breaks blame the intern",
-  "there is no intern",
-  "the intern is you",
-  "congrats you're hired",
-  "your salary is 0 dollars",
-  "paid in experience",
-  "experience not included",
-  "this message was typed at 3am",
-  "sleep is optional",
-  "debugging is just detective work",
-  "except the detective is stupid",
-  "every line of code is a gamble",
-  "we gambling with the production server",
-  "please dont ddos the quote generator",
-  "or do idk",
-  "this is definitely production code",
-  "totally not spaghetti",
-  "100% professional engineering",
-  "trust me bro it works",
-  "never test in production",
-  "unless you do",
-  "this quote generator has lore",
-  "someone write the lore",
-  "the lore is lost",
-  "the lore never existed",
-  "the lore is just vibes",
-  "vibes based development",
-  "powered by vibes",
-  "vibes > documentation",
-  "documentation coming soon",
-  "soon since 2022",
-  "still soon",
-  "maybe tomorrow",
-  "definitely tomorrow",
-  "ok maybe next update",
-  "update coming soon™",
-  "soon™",
-  "tm symbol intensifies",
-  "the scroll continues",
-  "you are still reading",
-  "why are you still reading",
-  "go do homework bro",
-  "seriously",
-  "close the tab",
-  "no actually close it",
-  "ok one more quote",
-  "just one more",
-  "this is the last one",
-  "just kidding",
-  "there are more",
-  "infinite scrolling technology",
-  "this quote escaped containment",
-  "if found return to developer",
-  "developer missing since last commit",
-  "last commit: 3am",
-  "commit message: fixed stuff",
-  "nothing was fixed",
-  "the bug is now a feature",
-  "feature not documented",
-  "users discovered it anyway",
-  "accidental innovation",
-  "this is peak engineering",
-  "this quote does nothing",
-  "but it looks cool",
-  "style over substance",
-  "but mostly chaos",
-  "chaos driven development",
-  "we vibecoding today",
-  "we vibecoding tomorrow",
-  "we vibecoding forever",
-  "vibecode never dies",
-  "the vibe is strong",
-  "the vibe is unstable",
-  "vibes detected",
-  "maximum vibes reached",
-  "vibe overload",
-  "too many vibes",
-  "calm the vibes",
-  "ok vibes restored",
-  "system stable",
-  "system unstable",
-  "system vibing",
-  "system confused",
-  "system thinking",
-  "system procrastinating",
-  "system scrolling",
-  "system reading quotes",
-  "system still reading quotes",
-  "bro seriously go do homework",
-  "this message is a distraction",
-  "and it worked",
-  "congrats",
-  "achievement unlocked: procrastination",
-  "new speedrun category: quote reading",
-  "wr pace",
-  "someone submit this to speedrun.com",
-  "quote percent any%",
-  "quote percent 100%",
-  "imagine reading all of these",
-  "someone probably will",
-  "that someone might be you",
-  "this quote believes in you",
-  "maybe",
-  "probably not",
-  "ok maybe a little",
-  "never give up",
-  "unless the wifi dies",
-  "then it's over",
-  "wifi down bad",
-  "router crying",
-  "packet lost",
-  "lag detected",
-  "ping 999",
-  "skill issue",
-  "massive skill issue",
-  "internet skill issue",
-  "coding skill issue",
-  "quote writing skill issue",
-  "ok that one was rude",
-  "sorry about that",
-  "anyways",
-  "back to quotes",
-  "the quotes never end",
-  "this might be the last one",
-  "or maybe not",
-  "ok now it's the last one",
-  "final quote maybe",
-  "ok actually final quote",
-  "this time fr",
-  "no more quotes after this",
-  "unless someone adds more",
-  "they probably will",
-  "and the cycle continues",
-  ];
+            "Learning is a treasure that will follow its owner everywhere.",
+            "The beautiful thing about learning is that no one can take it away from you.",
+            "Education is the most powerful weapon which you can use to change the world.",
+            // Add the rest of your quotes here manually
+        ];
 
         function setRandomQuote() {
             const quoteEl = document.getElementById('dynamic-quote');
@@ -1195,7 +690,6 @@
 
         function typeQuote(text, element) {
             element.textContent = '';
-            element.style.borderRight = '2px solid var(--text-muted)';
             let i = 0;
             const timer = setInterval(() => {
                 if (i < text.length) {
@@ -1203,9 +697,7 @@
                     i++;
                 } else {
                     clearInterval(timer);
-                    setTimeout(() => {
-                        element.style.borderRight = 'none';
-                    }, 500);
+                    setTimeout(() => { element.style.borderRight = 'none'; }, 500);
                 }
             }, 50);
         }
@@ -1229,66 +721,51 @@
             }
         }
 
-        // --- 1. SETTINGS & STATE ---
+        // --- 2. SETTINGS & STATE ---
         const defaultSettings = {
             panicKey: 'Escape',
-            panicUrl: '/login.html',
-            cloakTitle: 'Login',
-            cloakIcon: 'https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png',
+            panicUrl: 'https://classroom.google.com',
+            cloakTitle: 'Classes',
+            cloakIcon: 'https://ssl.gstatic.com/classroom/favicon.png',
             theme: 'default',
             particles: true,
             smoothUI: true,
-            devMode: false,
-            spotlightIndex: true,
             announcementRead: false,
-            abEnabled: null // null means not asked yet
+            abEnabled: null
         };
 
         let savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
         let userSettings = { ...defaultSettings, ...savedData };
 
-        function saveState() {
-            localStorage.setItem('edulearn_settings', JSON.stringify(userSettings));
-        }
+        function saveState() { localStorage.setItem('edulearn_settings', JSON.stringify(userSettings)); }
 
         function initSettings() {
-            // Populate text inputs
             document.getElementById('panic-key').value = userSettings.panicKey;
             document.getElementById('panic-url').value = userSettings.panicUrl;
             document.getElementById('cloak-title').value = userSettings.cloakTitle;
             document.getElementById('cloak-icon').value = userSettings.cloakIcon;
             
-            // Populate toggles & dropdowns
             document.getElementById('theme-select').value = userSettings.theme || 'default';
             document.getElementById('particle-toggle').checked = userSettings.particles;
             document.getElementById('smooth-toggle').checked = userSettings.smoothUI;
-            document.getElementById('index-toggle').checked = userSettings.spotlightIndex;
             document.getElementById('ab-toggle').checked = userSettings.abEnabled || false;
 
-            // Apply cloaking
             document.getElementById('page-title').innerText = userSettings.cloakTitle;
-            if (userSettings.cloakIcon) {
-                document.getElementById('dynamic-favicon').href = userSettings.cloakIcon;
-            }
+            if (userSettings.cloakIcon) document.getElementById('dynamic-favicon').href = userSettings.cloakIcon;
 
-            // Apply theme
             applyTheme(userSettings.theme || 'default');
 
-            // Handle Announcements
             if (!userSettings.announcementRead) {
                 document.getElementById('bell-badge').classList.add('active');
                 setTimeout(openAnnouncements, 800); 
             }
 
-            // Handle AB popup
             if (userSettings.abEnabled === null) {
                 setTimeout(() => document.getElementById('ab-modal').classList.add('active'), 1000);
             }
         }
 
-        function applyTheme(themeName) {
-            document.body.setAttribute('data-theme', themeName);
-        }
+        function applyTheme(themeName) { document.body.setAttribute('data-theme', themeName); }
 
         function changeTheme() {
             const newTheme = document.getElementById('theme-select').value;
@@ -1299,51 +776,151 @@
 
         function savePanic() {
             userSettings.panicKey = document.getElementById('panic-key').value || 'Escape';
-            userSettings.panicUrl = document.getElementById('panic-url').value || '/login.html';
+            userSettings.panicUrl = document.getElementById('panic-url').value || 'https://classroom.google.com';
             saveState();
         }
 
         function saveCloak() {
-            userSettings.cloakTitle = document.getElementById('cloak-title').value || 'Login';
-            userSettings.cloakIcon = document.getElementById('cloak-icon').value || 'https://cdn.classlink.com/production/launchpad/resources/images/favicon/favicon-32x32.png';
+            userSettings.cloakTitle = document.getElementById('cloak-title').value || 'Classes';
+            userSettings.cloakIcon = document.getElementById('cloak-icon').value || 'https://ssl.gstatic.com/classroom/favicon.png';
             saveState();
             initSettings();
-            
-            // Reset preset dropdown to custom if they manually saved
             document.getElementById('cloak-preset').value = 'custom';
         }
 
         function togglePreferences() {
             userSettings.particles = document.getElementById('particle-toggle').checked;
             userSettings.smoothUI = document.getElementById('smooth-toggle').checked;
-            userSettings.spotlightIndex = document.getElementById('index-toggle').checked;
             saveState();
         }
 
         function toggleAB() {
-            userSettings.abEnabled = document.getElementById('ab-toggle').checked;
-            saveState();
+            const isEnabled = document.getElementById('ab-toggle').checked;
+            enableAB(isEnabled);
         }
+
+        // Launches the CURRENT page inside an about:blank iframe
+        function launchStealth() {
+    let win = window.open('about:blank', '_blank');
+    if (!win) return;
+
+    win.opener = null;
+    win.document.title = "about:blank";
+    win.document.body.style.margin = "0";
+
+    let iframe = win.document.createElement("iframe");
+    iframe.style.width = "100vw";
+    iframe.style.height = "100vh";
+    iframe.style.border = "none";
+    iframe.src = window.location.origin + "/h/";
+
+    win.document.body.appendChild(iframe);
+
+    // Random safe redirect list
+    const panicLinks = [
+        "https://classroom.google.com",
+        "https://docs.google.com",
+        "https://drive.google.com",
+        "https://slides.google.com",
+        "https://mail.google.com",
+        "https://calendar.google.com",
+        "https://google.com",
+        "https://wikipedia.org"
+    ];
+
+    // Pick random link
+    const randomLink = panicLinks[Math.floor(Math.random() * panicLinks.length)];
+
+    setTimeout(() => {
+        window.location.replace(randomLink);
+    }, 500);
+}
 
         function enableAB(enabled) {
             userSettings.abEnabled = enabled;
             document.getElementById('ab-toggle').checked = enabled;
             saveState();
             document.getElementById('ab-modal').classList.remove('active');
+            
             if (enabled) {
-                var abUrl = window.location.href;
-                var abWin = window.open('about:blank', '_blank');
-                if (abWin) {
-                    abWin.document.write('<!DOCTYPE html><html><head><title>Stealth</title><style>body{margin:0;padding:0;background:#000;}iframe{width:100vw;height:100vh;border:none;}</style></head><body><iframe src="' + abUrl + '" allowfullscreen></iframe></body></html>');
-                    abWin.document.close();
-                    window.close();
-                }
+                launchStealth();
             }
         }
 
-        // --- 2. MODAL & NAVIGATION LOGIC ---
+        // --- 3. TERMINAL LOGIC ---
+        const input = document.getElementById('cmd-input');
+        const outputContainer = document.getElementById('output-container');
+
+        document.body.addEventListener('click', (e) => {
+            if (!document.querySelector('.modal-overlay.active')) {
+                input.focus();
+            }
+        });
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.trim();
+                if (val) {
+                    appendLine(`<span style="color: var(--term-green)">root@edulearn:~$</span> <span style="color: var(--text-main)">${val}</span>`);
+                    processCommand(val);
+                }
+                this.value = '';
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        });
+
+        function processCommand(cmd) {
+            const command = cmd.toLowerCase();
+
+            // 1. Check if it's a known app
+            if (apps[command]) {
+                navigateWithTransition(apps[command].path);
+                return;
+            }
+
+            // 2. Check system commands
+            switch (command) {
+                case 'help':
+                    appendLine('--- System Commands ---', 'var(--term-green)');
+                    for (const [cmdName, desc] of Object.entries(systemCommands)) {
+                        appendLine(`  ${cmdName.padEnd(10)} - ${desc}`, 'var(--text-muted)');
+                    }
+                    appendLine('<br>--- Applications ---', 'var(--term-green)');
+                    for (const [appName, config] of Object.entries(apps)) {
+                        appendLine(`  ${appName.padEnd(10)} - ${config.desc}`, 'var(--text-muted)');
+                    }
+                    break;
+                case 'clear':
+                    outputContainer.innerHTML = '';
+                    break;
+                case 'stealth':
+                    launchStealth();
+                    break;
+                case 'settings':
+                    openSettings();
+                    break;
+                case 'updates':
+                    openAnnouncements();
+                    break;
+                case 'discord':
+                    window.open('https://discord.gg/n5AfXS5eTP', '_blank');
+                    break;
+                default:
+                    appendLine(`Command not found: ${command}. Type 'help' for a list of commands.`, 'var(--term-error)');
+                    break;
+            }
+        }
+
+        function appendLine(htmlContent, color = '') {
+            const div = document.createElement('div');
+            if (color) div.style.color = color;
+            div.innerHTML = htmlContent;
+            outputContainer.appendChild(div);
+        }
+
+        // --- 4. MODAL & NAVIGATION LOGIC ---
         function openSettings() { document.getElementById('settings-modal').classList.add('active'); }
-        function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
+        function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); input.focus(); }
         
         function openAnnouncements() {
             document.getElementById('announcement-modal').classList.add('active');
@@ -1353,84 +930,35 @@
                 document.getElementById('bell-badge').classList.remove('active');
             }
         }
-        function closeAnnouncements() { document.getElementById('announcement-modal').classList.remove('active'); }
-
-        function openSpotlight() { 
-            document.getElementById('spotlight-modal').classList.add('active'); 
-            setTimeout(() => document.getElementById('spotlight-input').focus(), 50);
-        }
-        function closeSpotlight() { document.getElementById('spotlight-modal').classList.remove('active'); }
+        function closeAnnouncements() { document.getElementById('announcement-modal').classList.remove('active'); input.focus(); }
 
         function handleBackdropClick(e) {
             if (e.target.id === 'settings-modal') closeSettings();
             if (e.target.id === 'announcement-modal') closeAnnouncements();
             if (e.target.id === 'ab-modal') document.getElementById('ab-modal').classList.remove('active');
         }
-        function handleSpotlightBackdropClick(e) {
-            if (e.target.id === 'spotlight-modal') closeSpotlight();
-        }
-
-        function filterSpotlight() {
-            const query = document.getElementById('spotlight-input').value.toLowerCase();
-            const items = document.querySelectorAll('.spotlight-item');
-            items.forEach(item => {
-                if (item.innerText.toLowerCase().includes(query)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
 
         function navigateWithTransition(url) {
-            closeSpotlight(); // Close spotlight if open
-            if (userSettings.abEnabled) {
-                // Open in about:blank to hide from history
-                const newWindow = window.open('about:blank', '_blank');
-                if (newWindow) {
-                    newWindow.document.write('<!DOCTYPE html><html><head><title>Loading...</title><style>body{margin:0;padding:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;} iframe{width:100vw;height:100vh;border:none;}</style></head><body><iframe src="' + url + '" allowfullscreen></iframe></body></html>');
-                    newWindow.document.close();
-                    // Optionally, close the original tab
-                    window.close();
-                }
-            } else {
-                const overlay = document.getElementById('transition-overlay');
-                const iframe = document.getElementById('transition-iframe');
-                
-                iframe.src = '/index.html';
-                overlay.style.display = 'block';
-                
-                setTimeout(() => {
-                    overlay.classList.add('active');
-                }, 10);
-
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 1400); // Wait time
-            }
+            appendLine(`Loading ${url}...`, 'var(--term-green)');
+            // Minimal terminal delay for aesthetic
+            setTimeout(() => { window.location.href = url; }, 400); 
         }
 
-        // --- 3. EVENT LISTENERS ---
+        // --- 5. EVENT LISTENERS ---
         window.addEventListener('keydown', (e) => {
             // Panic Key
             if (e.key === userSettings.panicKey && document.activeElement.tagName !== 'INPUT') {
                 window.location.replace(userSettings.panicUrl);
             }
-            // Spotlight (Ctrl+Y)
-            if (e.ctrlKey && e.key.toLowerCase() === 'y') {
-                e.preventDefault();
-                openSpotlight();
-            }
             // Escape to close modals
             if (e.key === 'Escape') {
                 closeSettings();
-                closeSpotlight();
                 closeAnnouncements();
                 document.getElementById('ab-modal').classList.remove('active');
             }
         });
 
-        // --- 4. PARTICLES (Constellations) ---
+        // --- 6. PARTICLES (Constellations) ---
         const canvas = document.getElementById('constellation-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -1469,8 +997,7 @@
         function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (userSettings.particles) {
-                
-                const dotColor = `rgba(150, 150, 150, 0.3)`; 
+                const dotColor = `rgba(150, 150, 150, 0.2)`; 
                 const lineColorBase = `rgba(150, 150, 150, `;
 
                 particles.forEach(p => {
@@ -1484,7 +1011,7 @@
                         let dist = Math.sqrt(dx*dx + dy*dy);
                         if(dist < 120) {
                             ctx.beginPath();
-                            ctx.strokeStyle = `${lineColorBase}${0.15 * (1 - dist/120)})`;
+                            ctx.strokeStyle = `${lineColorBase}${0.1 * (1 - dist/120)})`;
                             ctx.lineWidth = 0.5;
                             ctx.moveTo(particles[i].x, particles[i].y);
                             ctx.lineTo(particles[j].x, particles[j].y);
@@ -1497,11 +1024,11 @@
         }
         animateCanvas();
 
-        // --- 5. INITIALIZE ---
+        // --- 7. INITIALIZE ---
         window.addEventListener('DOMContentLoaded', () => {
-            window.focus();
             initSettings();
             setRandomQuote();
+            input.focus();
         });
 		</script>
 </body>

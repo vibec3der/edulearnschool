@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>New Tab</title>
+
+  <script src="../config.js"></script>
+  <script src="../scripts/settings.js"></script>
+  <script src="../scripts/quotes.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Importing Nunito, a very rounded and bubbly font */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+    :root {
+      --bg-gradient-1: #1a0b2e;
+      --bg-gradient-2: #30174c;
+      --bubble-glass: rgba(255, 255, 255, 0.12);
+      --bubble-glass-hover: rgba(255, 255, 255, 0.2);
+      --bubble-border: rgba(255, 255, 255, 0.2);
+      --bubble-highlight: rgba(255, 255, 255, 0.4);
+      --bubble-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.6);
+      
+      /* Bouncy transition for all interactive elements */
+      --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start; /* Changed from center to allow scrolling without cutting off the top */
+      padding: 10vh 20px 120px 20px; /* Added 120px bottom padding so apps don't hide behind the quote */
+      overflow-x: hidden;
+      overflow-y: auto; /* Allows scrolling! */
+    }
+
+    /* ================= BACKGROUND BUBBLES ================= */
+    .bg-bubbles {
+      position: fixed; /* Fixed so it stays in place when scrolling */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden; /* Moved here to hide bubbles going off-screen */
+    }
+
+    .bg-bubble {
+      position: absolute;
+      bottom: -150px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      animation: floatUp infinite ease-in;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Generated specific bubble properties for variety */
+    .bg-bubble:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-duration: 12s; animation-delay: 0s; }
+    .bg-bubble:nth-child(2) { left: 30%; width: 120px; height: 120px; animation-duration: 16s; animation-delay: 2s; }
+    .bg-bubble:nth-child(3) { left: 55%; width: 60px; height: 60px; animation-duration: 10s; animation-delay: 4s; }
+    .bg-bubble:nth-child(4) { left: 75%; width: 150px; height: 150px; animation-duration: 20s; animation-delay: 1s; }
+    .bg-bubble:nth-child(5) { left: 90%; width: 90px; height: 90px; animation-duration: 14s; animation-delay: 5s; }
+
+    /* ================= CLOCK ================= */
+    .clock {
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 0;
+      text-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .date {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      background: var(--bubble-glass);
+      padding: 6px 20px;
+      border-radius: 999px; /* Pill shape */
+      border: 1px solid var(--bubble-border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* ================= SEARCH ================= */
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      max-width: 550px;
+      padding: 10px 10px 10px 24px;
+      
+      background: var(--bubble-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--bubble-highlight);
+      border-radius: 9999px; /* Ultra circly pill */
+
+      box-shadow: var(--bubble-shadow);
+      transition: all 0.3s var(--bounce);
+    }
+
+    .search-box:focus-within {
+      transform: scale(1.02);
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255,255,255,0.1);
+    }
+
+    .search-box i {
+      font-size: 18px;
+      color: var(--text-main);
+    }
+
+    .search-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 600;
+    }
+
+    .search-box input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 500;
+    }
+
+    .search-box select {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--bubble-border);
+      border-radius: 999px; /* Circly select */
+      padding: 12px 16px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      outline: none;
+      transition: background 0.2s;
+      appearance: none;
+    }
+
+    .search-box select:hover {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    /* ================= SHORTCUT GRID ================= */
+    .shortcuts {
+      margin-top: 50px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 25px;
+      max-width: 550px;
+      width: 100%;
+    }
+
+    .shortcut {
+      text-decoration: none;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      group: hover;
+    }
+
+    .shortcut-icon {
+      width: 70px;
+      height: 70px;
+      
+      /* Perfect circle bubbles */
+      background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      
+      border: 1px solid var(--bubble-highlight);
+      border-bottom-color: rgba(0,0,0,0.2);
+      border-radius: 50%; 
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2), inset 0 4px 6px rgba(255,255,255,0.2);
+      transition: all 0.4s var(--bounce);
+    }
+
+    /* The bouncy hover effect */
+    .shortcut:hover .shortcut-icon {
+      transform: scale(1.15) translateY(-8px);
+      background: linear-gradient(145deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3), inset 0 6px 10px rgba(255,255,255,0.4);
+    }
+
+    .shortcut-icon img {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+      transition: transform 0.4s var(--bounce);
+    }
+
+    .shortcut:hover .shortcut-icon img {
+      transform: scale(1.1);
+    }
+
+    .shortcut-icon i {
+      font-size: 24px;
+      color: var(--text-main);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+    }
+
+    .shortcut-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      background: rgba(0,0,0,0.2);
+      padding: 4px 12px;
+      border-radius: 999px; /* Circly labels */
+      white-space: nowrap;
+      transition: all 0.4s var(--bounce);
+    }
+
+    .shortcut:hover .shortcut-label {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ================= QUOTE ================= */
+    .quote {
+      position: fixed;
+      bottom: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      max-width: 420px;
+      text-align: center;
+      background: var(--bubble-glass);
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ================= LOADER (Bouncing Bubbles) ================= */
+    .loader {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 8, 28, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .loader.show {
+      display: flex;
+    }
+
+    .loader-bubble {
+      width: 24px;
+      height: 24px;
+      background: var(--text-main);
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
+      animation: bounceLoader 0.6s infinite alternate var(--bounce);
+    }
+
+    .loader-bubble:nth-child(2) { animation-delay: 0.2s; }
+    .loader-bubble:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounceLoader {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-20px) scale(1.2); }
+    }
+  </style>
+  </head>
+<body>
+
+  <div class="bg-bubbles">
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+  </div>
+
+  <div class="loader" id="loader">
+    <div class="loader-bubble"></div>
+    <div class="loader-bubble"></div>
+    <div class="loader-bubble"></div>
+  </div>
+
+  <div class="clock" id="clock">00:00</div>
+  <div class="date" id="date"></div>
+
+  <form class="search-box" id="searchForm">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="searchInput" placeholder="Search the web..." autocomplete="off">
+    <select id="engine">
+      <option value="https://search.brave.com/search?q=">Brave</option>
+      <option value="https://duckduckgo.com/?q=">Duck</option>
+      <option value="https://www.google.com/search?q=">Google</option>
+    </select>
+  </form>
+
+  <div class="shortcuts" id="shortcuts">
+    <a class="shortcut" data-url="https://youtube.com">
+      <div class="shortcut-icon"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg"></div>
+      <span class="shortcut-label">YouTube</span>
+    </a>
+    <a class="shortcut" data-url="https://github.com">
+      <div class="shortcut-icon"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg"></div>
+      <span class="shortcut-label">GitHub</span>
+    </a>
+    <a class="shortcut" data-url="https://discord.com">
+      <div class="shortcut-icon"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg"></div>
+      <span class="shortcut-label">Discord</span>
+    </a>
+    <a class="shortcut" data-url="https://twitter.com">
+      <div class="shortcut-icon"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg"></div>
+      <span class="shortcut-label">Twitter</span>
+    </a>
+    <a class="shortcut" data-url="https://netflix.com">
+      <div class="shortcut-icon"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/netflix.svg"></div>
+      <span class="shortcut-label">Netflix</span>
+    </a>
+    <a class="shortcut" data-url="https://blooketbot.com">
+      <div class="shortcut-icon"><img src="https://help.blooket.com/hc/theming_assets/01HZPJJC8GWK2HT69EMDP59ZDY" style="border-radius: 50%;"></div>
+      <span class="shortcut-label">Bhacks</span>
+    </a>
+     <a class="shortcut" data-url="https://killhoot.xyz">
+      <div class="shortcut-icon"><img src="https://play-lh.googleusercontent.com/OOTBPTiGOs6jDhZSLCfwzXTSkELqoo5DBNcpl0O3pRXCwHcPCQ_-z0Yk8BpT45nu_A=w600-h300-pc0xffffff-pd" style="border-radius: 50%;"></div>
+      <span class="shortcut-label">Khacks</span>
+    </a>
+    <a class="shortcut" data-url="https://duck.ai">
+      <div class="shortcut-icon"><img src="https://upload.wikimedia.org/wikipedia/en/9/90/The_DuckDuckGo_Duck.png" style="border-radius: 50%;"></div>
+      <span class="shortcut-label">AI</span>
+    </a>
+    <div class="shortcut" id="addShortcut">
+      <div class="shortcut-icon"><i class="fa-solid fa-plus"></i></div>
+      <span class="shortcut-label">Add</span>
+    </div>
+  </div>
+
+  <div class="quote" id="quote"></div>
+
+  <script>
+    const $ = s => document.querySelector(s);
+    
+    // Navigation logic (Fallback if iframe/stealth isn't wrapping it)
+    const nav = url => {
+      $('#loader').classList.add('show');
+      
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'navigate', url }, '*');
+      } else {
+        // Fallback standard navigation
+        setTimeout(() => { window.location.href = url; }, 600);
+      }
+    };
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      $('#clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+      $('#date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Search
+    $('#searchForm').onsubmit = e => {
+      e.preventDefault();
+      const q = $('#searchInput').value.trim();
+      if (q) nav($('#engine').value + encodeURIComponent(q));
+    };
+
+    // Shortcuts
+    $('#shortcuts').onclick = e => {
+      const shortcut = e.target.closest('.shortcut[data-url]');
+      const addBtn = e.target.closest('#addShortcut');
+
+      if (shortcut) {
+        e.preventDefault();
+        nav(shortcut.dataset.url);
+      } else if (addBtn) {
+        const name = prompt("Shortcut name:");
+        if (!name) return;
+        let url = prompt("URL:");
+        if (!url) return;
+        if (!url.startsWith('http')) url = 'https://' + url;
+
+        const shortcuts = JSON.parse(localStorage.getItem('shortcuts') || '[]');
+        shortcuts.push({ name, url });
+        localStorage.setItem('shortcuts', JSON.stringify(shortcuts));
+        renderCustom();
+      }
+    };
+
+    function renderCustom() {
+      document.querySelectorAll('.custom-shortcut').forEach(e => e.remove());
+      const shortcuts = JSON.parse(localStorage.getItem('shortcuts') || '[]');
+      const addBtn = $('#addShortcut');
+
+      shortcuts.forEach(s => {
+        const div = document.createElement('a');
+        div.className = 'shortcut custom-shortcut';
+        div.dataset.url = s.url;
+        div.innerHTML = `
+          <div class="shortcut-icon"><i class="fa-solid fa-link"></i></div>
+          <span class="shortcut-label">${s.name}</span>
+        `;
+        addBtn.before(div);
+      });
+    }
+
+    // Quote
+    if (window.QUOTES?.length) {
+      $('#quote').textContent = window.QUOTES[Math.floor(Math.random() * window.QUOTES.length)];
+    }
+
+    renderCustom();
+  </script>
+</body>
+
+</html>
