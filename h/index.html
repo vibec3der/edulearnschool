@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title id="page-title">edulearn</title>
+	<title id="page-title">Edulearn | Login</title>
 	<link id="dynamic-favicon" rel="icon" href="">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<style>
@@ -656,6 +656,21 @@
 		</div>
 	</div>
 
+	<div class="modal-overlay" id="ab-modal" onclick="handleBackdropClick(event)">
+		<div class="settings-box" style="width: 400px; min-height: 150px;">
+			<div class="settings-content" style="padding: 32px; text-align: center;">
+				<h3 style="margin-top: 0; font-size: 18px;">Enable About Blank?</h3>
+				<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
+					Do you want to enable AB to hide this page from your history?
+				</p>
+				<div style="display: flex; gap: 12px; justify-content: center;">
+					<button class="clean-btn btn-primary" onclick="enableAB(true)">Yes</button>
+					<button class="clean-btn" onclick="enableAB(false)">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
 		<div class="settings-box">
 			<div class="settings-header-top">
@@ -666,6 +681,15 @@
 
 				<div class="settings-section-title">Stealth & Privacy</div>
 				<div class="settings-card">
+					<div class="setting-row">
+						<div class="setting-info">
+							<h3><i class="fa-solid fa-window-restore"></i> About Blank (AB)</h3>
+							<p>Hide pages from browser history by opening in about:blank.</p>
+						</div>
+						<div class="setting-action">
+							<label class="switch"><input type="checkbox" id="ab-toggle" onchange="toggleAB()"><span class="slider"></span></label>
+						</div>
+					</div>
 					<div class="setting-row">
 						<div class="setting-info">
 							<h3><i class="fa-solid fa-user-secret"></i> Panic Button</h3>
@@ -1216,7 +1240,8 @@
             smoothUI: true,
             devMode: false,
             spotlightIndex: true,
-            announcementRead: false
+            announcementRead: false,
+            abEnabled: null // null means not asked yet
         };
 
         let savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
@@ -1238,6 +1263,7 @@
             document.getElementById('particle-toggle').checked = userSettings.particles;
             document.getElementById('smooth-toggle').checked = userSettings.smoothUI;
             document.getElementById('index-toggle').checked = userSettings.spotlightIndex;
+            document.getElementById('ab-toggle').checked = userSettings.abEnabled || false;
 
             // Apply cloaking
             document.getElementById('page-title').innerText = userSettings.cloakTitle;
@@ -1252,6 +1278,11 @@
             if (!userSettings.announcementRead) {
                 document.getElementById('bell-badge').classList.add('active');
                 setTimeout(openAnnouncements, 800); 
+            }
+
+            // Handle AB popup
+            if (userSettings.abEnabled === null) {
+                setTimeout(() => document.getElementById('ab-modal').classList.add('active'), 1000);
             }
         }
 
@@ -1289,6 +1320,30 @@
             saveState();
         }
 
+        function toggleAB() {
+            userSettings.abEnabled = document.getElementById('ab-toggle').checked;
+            saveState();
+        }
+
+        function enableAB(enabled) {
+            userSettings.abEnabled = enabled;
+            document.getElementById('ab-toggle').checked = enabled;
+            saveState();
+            document.getElementById('ab-modal').classList.remove('active');
+            if (enabled) {
+                // Open the current page in about:blank immediately
+                var abUrl = window.location.href;
+                var abHtml = '<!DOCTYPE html><html><head><title>Loading...</title><style>body{margin:0;padding:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;} iframe{width:100vw;height:100vh;border:none;}</style></head><body><iframe src="' + abUrl + '" allowfullscreen></iframe></body></html>';
+                var abWin = window.open('about:blank', '_blank');
+                if (abWin) {
+                    abWin.document.write(abHtml);
+                    abWin.document.close();
+                    // Optionally, close the original tab
+                    window.close();
+                }
+            }
+        }
+
         // --- 2. MODAL & NAVIGATION LOGIC ---
         function openSettings() { document.getElementById('settings-modal').classList.add('active'); }
         function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
@@ -1312,6 +1367,7 @@
         function handleBackdropClick(e) {
             if (e.target.id === 'settings-modal') closeSettings();
             if (e.target.id === 'announcement-modal') closeAnnouncements();
+            if (e.target.id === 'ab-modal') document.getElementById('ab-modal').classList.remove('active');
         }
         function handleSpotlightBackdropClick(e) {
             if (e.target.id === 'spotlight-modal') closeSpotlight();
@@ -1331,19 +1387,28 @@
 
         function navigateWithTransition(url) {
             closeSpotlight(); // Close spotlight if open
-            const overlay = document.getElementById('transition-overlay');
-            const iframe = document.getElementById('transition-iframe');
-            
-            iframe.src = '/index.html';
-            overlay.style.display = 'block';
-            
-            setTimeout(() => {
-                overlay.classList.add('active');
-            }, 10);
+            if (userSettings.abEnabled) {
+                // Open in about:blank to hide from history
+                const newWindow = window.open('about:blank', '_blank');
+                if (newWindow) {
+                    newWindow.document.write('<!DOCTYPE html><html><head><title>Loading...</title><style>body{margin:0;padding:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:Arial;} iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="' + url + '" onload="this.style.display=\'block\'"></iframe></body></html>');
+                    newWindow.document.close();
+                }
+            } else {
+                const overlay = document.getElementById('transition-overlay');
+                const iframe = document.getElementById('transition-iframe');
+                
+                iframe.src = '/index.html';
+                overlay.style.display = 'block';
+                
+                setTimeout(() => {
+                    overlay.classList.add('active');
+                }, 10);
 
-            setTimeout(() => {
-                window.location.href = url;
-            }, 1400); // Wait time
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 1400); // Wait time
+            }
         }
 
         // --- 3. EVENT LISTENERS ---
@@ -1362,6 +1427,7 @@
                 closeSettings();
                 closeSpotlight();
                 closeAnnouncements();
+                document.getElementById('ab-modal').classList.remove('active');
             }
         });
 
