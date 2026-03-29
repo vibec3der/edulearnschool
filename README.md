@@ -1,24 +1,18 @@
 # Edulearn
-![Edulearn Lite V6](./imgs/example2.png)
+![Edulearn V2](./imgs/example2.png)
 
-*Edulearn Lite - The Best Gaming Site.*
+*Edulearn - The Best Gaming Site.*
 
 ---
 
 ## What's New
-
-- **Dual Architecture:** A brand new entry point allowing you to choose between **Edulearn Lite** (Streamlined for Gaming) and **EdulearnOS** (Built for Productivity).
-- **Extras Hub:** A new integrated dashboard in Lite mode allowing you to launch tools like the Graphing Calculator and Music Player without leaving your current session.
-- **Midnight Theme:** A complete visual overhaul featuring deep black backgrounds (`#050505`), crisp white accents, Inter typography, and ambient particle backgrounds.
-- **RNG Launcher:** Can't decide? Use the new **"Pick one for me"** button on the selection screen to launch a random environment.
-- **Smart Navigation:** Intelligent history handling—going "Back" from the OS or tools returns you to the selection screen instead of kicking you out.
-- **Enhanced Info Center:** A beautiful, glassmorphism-based info page with version tracking and visual counters.
+**Splash like look** 
 
 ---
 
 ## Deployment Options
 
-You can deploy Edulearn V9 on multiple static hosting platforms:
+You can deploy Edulearn V2 on multiple static hosting platforms:
 
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/new/clone?repository-url=https://github.com/POX-dev/edulearnschool)  
 [![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://app.netlify.com/start/deploy?repository=https://github.com/POX-dev/edulearnschool)  
@@ -39,9 +33,7 @@ Join our community for support, updates, and discussions:
 
 ## Modes & Features
 
-**Edulearn V5** is split into two distinct experiences to suit your needs:
-
-### ⚡ Edulearn Lite (Default)
+### ⚡ Edulearn
 *Built for speed, gaming, and quick access tools.*
 - **Fullscreen Focus:** No distractions, edge-to-edge content.
 - **Extras Hub:** A built-in launcher for utility apps:
@@ -49,15 +41,7 @@ Join our community for support, updates, and discussions:
     - **Music Player:** "Only Lofi-Tunes" & local file support.
     - **Gallery:** Manage saved images and screenshots.
 - **Performance:** Optimized for lower-end Chromebooks.
-- **Live Counters:** Real-time online user tracking.
 
-### 🖥️ EdulearnOS (Beta)
-*Built for multitasking and desktop simulation.*
-- **Windowed Interface:** Run multiple apps at once in a desktop environment.
-- **Taskbar Navigation:** Classic OS-style start menu and window management.
-- **Dual Proxies:** Ultraviolet & Scramjet integration.
-
----
 
 ## Usage
 
@@ -91,8 +75,7 @@ Join our community for support, updates, and discussions:
 - **RHW** – Scramjet-static Integration  
 - **Albie** – Main Domain Provider
 - **Ultimate games stash** - some games
-- **Night Network / AmplifyDev** - CSS taken from popular site service "[Space](https://gointospace.app)"
-- **Fern proxy** - CSS taken from site service "[fern](https://fern.best)"
+- **Splash proxy** - CSS taken from site service "[Splash](https://splash.best)"
 
 *If we missed you in the credits, feel free to contact vibec3der at `fernproxys3@proton.me`*
 
