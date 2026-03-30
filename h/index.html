@@ -1,1453 +1,632 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<!-- Hi Andrew hu! We know you're reading this and you love gooning to furry femboys! keep gooning ;)-->
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title id="page-title">EduLearn— Academic Courses & Resources</title>
-	<link id="dynamic-favicon" rel="icon" href="">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">EduLearn</title>
+  <link id="dynamic-favicon" rel="icon" href="">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
+    :root {
+      --bg-gradient-1: #1a0b2e;
+      --bg-gradient-2: #30174c;
+      --bubble-glass: rgba(255, 255, 255, 0.12);
+      --bubble-glass-hover: rgba(255, 255, 255, 0.2);
+      --bubble-border: rgba(255, 255, 255, 0.2);
+      --bubble-highlight: rgba(255, 255, 255, 0.4);
+      --bubble-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.6);
+      
+      /* Smoothed the bounce to prevent intense shaking */
+      --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.2);
+    }
 
-		:root {
-			/* Terminal Theme Defaults */
-			--bg-color: #05050b;
-			--text-main: #e0e0e0;
-			--text-muted: #888888;
-			--term-green: #5cf2a3;
-			--term-error: #ff5555;
-			--modal-bg: #0a0a0f;
-			--modal-border: #1f2937;
-			--input-bg: #000000;
-			--input-border: #333333;
-			--pill-hover: rgba(92, 242, 163, 0.1);
-			--pill-active: #222222;
-			--toggle-track-off: #333333;
-			--toggle-track-on: #5cf2a3;
-			--toggle-knob-off: #ffffff;
-			--toggle-knob-on: #000000;
-			--accent-glow: rgba(92, 242, 163, 0.15);
-		}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-		/* --- THEMES --- */
-		[data-theme="sakura"] {
-			--bg-color: #fdf6f5;
-			--text-main: #4a3b3c;
-			--term-green: #ff8da1;
-			--text-muted: #9e8487;
-			--modal-bg: #ffffff;
-			--modal-border: #f0e4e4;
-			--input-bg: #fdf6f5;
-			--input-border: #e6d3d3;
-			--pill-hover: rgba(255, 183, 197, 0.4);
-			--toggle-track-off: #e6d3d3;
-			--toggle-track-on: #ffb7c5;
-			--toggle-knob-off: #ffffff;
-			--toggle-knob-on: #ffffff;
-			--accent-glow: rgba(255, 183, 197, 0.3);
-		}
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
 
-		[data-theme="red"] {
-			--bg-color: #0a0000;
-			--text-main: #ff4d4d;
-			--term-green: #ff4d4d;
-			--text-muted: #802b2b;
-			--modal-bg: #140000;
-			--modal-border: #330000;
-			--input-bg: #0a0000;
-			--input-border: #4d0000;
-			--pill-hover: rgba(255, 0, 0, 0.15);
-			--toggle-track-off: #4d0000;
-			--toggle-track-on: #ff4d4d;
-			--toggle-knob-off: #ffb3b3;
-			--toggle-knob-on: #0a0000;
-			--accent-glow: rgba(255, 77, 77, 0.2);
-		}
+    /* ================= BACKGROUND BUBBLES ================= */
+    .bg-bubbles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
 
-		[data-theme="azure"] {
-			--bg-color: #faf9f8;
-			--text-main: #323130;
-			--term-green: #0078d4;
-			--text-muted: #605e5c;
-			--modal-bg: #ffffff;
-			--modal-border: #edebe9;
-			--input-bg: #ffffff;
-			--input-border: #8a8886;
-			--pill-hover: #f3f2f1;
-			--toggle-track-off: #8a8886;
-			--toggle-track-on: #0078d4;
-			--toggle-knob-off: #ffffff;
-			--toggle-knob-on: #ffffff;
-			--accent-glow: rgba(0, 120, 212, 0.2);
-		}
+    .bg-bubble {
+      position: absolute;
+      bottom: -150px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      animation: floatUp infinite ease-in;
+    }
 
-		body {
-			margin: 0;
-			padding: 50px;
-			height: 100vh;
-			background-color: var(--bg-color);
-			color: var(--text-main);
-			font-family: 'Courier New', Courier, monospace;
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			overflow-y: auto;
-			overflow-x: hidden;
-			box-sizing: border-box;
-			transition: background-color 0.4s ease, color 0.4s ease;
-		}
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+    }
 
-		#constellation-canvas {
-			position: fixed;
-			inset: 0;
-			z-index: 0;
-			pointer-events: none;
-		}
+    .bg-bubble:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-duration: 12s; animation-delay: 0s; }
+    .bg-bubble:nth-child(2) { left: 30%; width: 120px; height: 120px; animation-duration: 16s; animation-delay: 2s; }
+    .bg-bubble:nth-child(3) { left: 55%; width: 60px; height: 60px; animation-duration: 10s; animation-delay: 4s; }
+    .bg-bubble:nth-child(4) { left: 75%; width: 150px; height: 150px; animation-duration: 20s; animation-delay: 1s; }
+    .bg-bubble:nth-child(5) { left: 90%; width: 90px; height: 90px; animation-duration: 14s; animation-delay: 5s; }
 
-		/* --- TERMINAL UI --- */
-		.terminal-container {
-			z-index: 10;
-			position: relative;
-			width: 100%;
-			max-width: 900px;
-		}
+    /* ================= BUBBLY NAVBAR ================= */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(26, 11, 46, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--bubble-border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
 
-		#ascii-art {
-			font-family: Consolas, "Courier New", monospace;
-			font-size: clamp(4px, 0.7vw, 11px);
-			line-height: 1;
-			white-space: pre;
-			margin: 0;
-			display: inline-block;
-			text-align: left;
-		}
+    .nav-brand {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
 
-		pre {
-			color: var(--text-main);
-			font-weight: bold;
-			margin-bottom: 25px;
-			line-height: 1.1;
-			font-size: 14px;
-			text-shadow: 0 0 10px var(--accent-glow);
-		}
+    .nav-links {
+      display: flex;
+      gap: 10px;
+    }
 
-		.terminal-text {
-			color: var(--term-green);
-			margin-bottom: 4px;
-			font-size: 16px;
-		}
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: transparent;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 999px;
+      /* Fixed: Added transparent border to stop 1px layout shift shaking */
+      border: 1px solid transparent; 
+      transition: all 0.3s var(--bounce);
+      cursor: pointer;
+    }
 
-		.terminal-link {
-			color: inherit;
-			/* makes the link the same color as surrounding text */
-			text-decoration: none;
-			/* removes underline */
-		}
+    .nav-item:hover, .nav-item.active {
+      background: var(--bubble-glass-hover);
+      color: var(--text-main);
+      /* Fixed: Swapped translateY for scale to stop edge jitter */
+      transform: scale(1.05);
+      box-shadow: var(--bubble-shadow);
+      border: 1px solid var(--bubble-highlight);
+    }
 
-		.terminal-link:hover {
-			text-decoration: underline;
-			/* optional: underline on hover for clarity */
-		}
+    .nav-icons {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
 
-		.dynamic-quote {
-			color: var(--text-muted);
-			font-style: italic;
-			margin-bottom: 20px;
-			border-right: 2px solid var(--text-muted);
-			display: inline-block;
-			animation: blink 1s infinite;
-		}
+    .nav-icon {
+      color: var(--text-main);
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s var(--bounce);
+      position: relative;
+    }
 
-		@keyframes blink {
+    .nav-icon:hover {
+      transform: scale(1.15) rotate(5deg);
+      color: var(--bubble-highlight);
+    }
 
-			0%,
-			50% {
-				border-color: var(--text-muted);
-			}
+    #bell-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      background-color: #ff4d4d;
+      border-radius: 50%;
+      display: none;
+      box-shadow: 0 0 10px #ff4d4d;
+    }
+    #bell-badge.active { display: block; }
 
-			51%,
-			100% {
-				border-color: transparent;
-			}
-		}
+    /* ================= MAIN CONTENT ================= */
+    .hero-container {
+      margin-top: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
 
-		.prompt-container {
-			display: flex;
-			align-items: center;
-			margin-top: 20px;
-			width: 100%;
-		}
+    .hero-title {
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+      text-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      background: linear-gradient(to bottom, #fff, #d1c4e9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-		.prompt-label {
-			color: var(--term-green);
-			margin-right: 10px;
-			white-space: nowrap;
-		}
+    .quote-pill {
+      background: var(--bubble-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--bubble-border);
+      padding: 12px 24px;
+      border-radius: 999px;
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: var(--bubble-shadow);
+      max-width: 600px;
+    }
 
-		#cmd-input {
-			background: transparent;
-			border: none;
-			color: var(--text-main);
-			font-family: inherit;
-			font-size: inherit;
-			outline: none;
-			flex-grow: 1;
-			caret-color: var(--text-main);
-		}
+    /* ================= BUBBLY MODALS ================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 8, 28, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-		#output-container {
-			margin-top: 15px;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			gap: 4px;
-		}
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
 
-		/* --- NOTIFICATION BADGE --- */
-		#bell-badge {
-			display: inline-block;
-			width: 8px;
-			height: 8px;
-			background-color: #ff4d4d;
-			border-radius: 50%;
-			margin-left: 5px;
-			box-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
-			opacity: 0;
-			transition: opacity 0.3s;
-		}
+    .settings-box {
+      width: 600px;
+      max-width: 95%;
+      max-height: 85vh;
+      background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border: 1px solid var(--bubble-highlight);
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 4px 10px rgba(255,255,255,0.2);
+      transform: scale(0.9);
+      transition: all 0.3s var(--bounce);
+      overflow: hidden;
+    }
 
-		#bell-badge.active {
-			opacity: 1;
-		}
+    .modal-overlay.active .settings-box {
+      transform: scale(1);
+    }
 
-		/* --- MODALS --- */
-		.modal-overlay {
-			position: fixed;
-			inset: 0;
-			background: rgba(0, 0, 0, 0.6);
-			backdrop-filter: blur(8px);
-			z-index: 2000;
-			display: none;
-			align-items: center;
-			justify-content: center;
-			opacity: 0;
-			transition: opacity 0.2s ease;
-			font-family: 'Inter', sans-serif;
-		}
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.2);
+    }
 
-		.modal-overlay.active {
-			display: flex;
-			opacity: 1;
-		}
+    .settings-header h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
 
-		.settings-box {
-			width: 750px;
-			max-width: 95%;
-			max-height: 85vh;
-			background: var(--modal-bg);
-			border: 1px solid var(--modal-border);
-			border-radius: 12px;
-			display: flex;
-			flex-direction: column;
-			box-shadow: 0 25px 50px -12px var(--accent-glow);
-			transform: scale(0.98);
-			transition: transform 0.2s ease, background-color 0.4s ease, border-color 0.4s ease;
-			overflow: hidden;
-		}
+    .btn-close {
+      background: var(--bubble-glass);
+      border: 1px solid var(--bubble-border);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s var(--bounce);
+    }
+    .btn-close:hover { 
+      background: #ff4d4d; 
+      transform: scale(1.1) rotate(90deg);
+      border-color: #ff4d4d;
+    }
 
-		.modal-overlay.active .settings-box {
-			transform: scale(1);
-		}
+    .settings-content {
+      padding: 30px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-		.settings-header-top {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 24px 32px;
-			border-bottom: 1px solid var(--modal-border);
-			background: var(--modal-bg);
-			flex-shrink: 0;
-		}
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: var(--bubble-glass);
+      border: 1px solid var(--bubble-border);
+      border-radius: 20px;
+      transition: all 0.3s var(--bounce);
+    }
 
-		.settings-header-top h2 {
-			font-size: 20px;
-			font-weight: 600;
-			color: var(--text-main);
-			margin: 0;
-		}
+    .setting-row:hover {
+      transform: scale(1.02); /* Fixed bounding jitter */
+      background: var(--bubble-glass-hover);
+      border-color: var(--bubble-highlight);
+    }
 
-		.btn-close-icon {
-			background: transparent;
-			border: none;
-			font-size: 20px;
-			cursor: pointer;
-			color: var(--text-muted);
-			transition: 0.2s;
-		}
+    .setting-info h3 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+    .setting-info p { font-size: 13px; color: var(--text-muted); font-weight: 600;}
 
-		.btn-close-icon:hover {
-			transform: scale(1.1);
-			color: var(--text-main);
-		}
+    /* Bubbly Inputs */
+    .dark-input {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--bubble-border);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+      transition: all 0.3s var(--bounce);
+    }
+    .dark-input:focus {
+      background: rgba(0,0,0,0.5);
+      border-color: var(--bubble-highlight);
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
 
-		.settings-content {
-			padding: 0 32px 32px 32px;
-			display: flex;
-			flex-direction: column;
-			flex: 1;
-			min-height: 0;
-			overflow-y: auto;
-		}
+    /* Bubbly Buttons */
+    .clean-btn {
+      background: var(--text-main);
+      color: #1a0b2e;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s var(--bounce);
+      box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+    }
+    .clean-btn:hover {
+      transform: scale(1.08); /* Fixed jitter */
+      box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+    }
 
-		.settings-section-title {
-			font-size: 13px;
-			font-weight: 700;
-			text-transform: uppercase;
-			color: var(--text-muted);
-			margin: 32px 0 12px 4px;
-			letter-spacing: 0.5px;
-			flex-shrink: 0;
-		}
-
-		.settings-card {
-			background: transparent;
-			border: 1px solid var(--modal-border);
-			border-radius: 8px;
-			display: flex;
-			flex-direction: column;
-			overflow: hidden;
-			flex-shrink: 0;
-		}
-
-		.setting-row {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 20px;
-			border-bottom: 1px solid var(--modal-border);
-			gap: 20px;
-			background: rgba(128, 128, 128, 0.02);
-			transition: background 0.2s;
-		}
-
-		.setting-row:hover {
-			background: var(--pill-hover);
-		}
-
-		.setting-row:last-child {
-			border-bottom: none;
-		}
-
-		.setting-info {
-			display: flex;
-			flex-direction: column;
-			gap: 6px;
-			flex: 1;
-		}
-
-		.setting-info h3 {
-			font-size: 16px;
-			font-weight: 600;
-			color: var(--text-main);
-			margin: 0;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-		}
-
-		.setting-info h3 i {
-			font-size: 14px;
-			color: var(--term-green);
-		}
-
-		.setting-info p {
-			font-size: 13px;
-			color: var(--text-muted);
-			line-height: 1.5;
-			margin: 0;
-		}
-
-		.setting-action {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			flex-shrink: 0;
-			flex-wrap: wrap;
-			justify-content: flex-end;
-		}
-
-		.dark-input,
-		select.dark-input {
-			background: var(--input-bg);
-			border: 1px solid var(--input-border);
-			color: var(--text-main);
-			padding: 10px 16px;
-			border-radius: 6px;
-			font-family: inherit;
-			font-size: 14px;
-			outline: none;
-			transition: 0.2s;
-		}
-
-		.dark-input:focus,
-		select.dark-input:focus {
-			border-color: var(--term-green);
-			box-shadow: 0 0 0 2px var(--accent-glow);
-		}
-
-		select.dark-input {
-			appearance: none;
-			padding-right: 36px;
-			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='gray' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-			background-repeat: no-repeat;
-			background-position: right 12px center;
-			cursor: pointer;
-		}
-
-		.clean-btn {
-			background: transparent;
-			color: var(--text-main);
-			border: 1px solid var(--input-border);
-			padding: 8px 18px;
-			border-radius: 6px;
-			font-size: 13px;
-			font-weight: 500;
-			cursor: pointer;
-			transition: all 0.2s;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			height: 38px;
-			text-decoration: none;
-		}
-
-		.clean-btn:hover {
-			background: var(--pill-hover);
-			border-color: var(--term-green);
-		}
-
-		.btn-primary {
-			background: var(--text-main);
-			color: var(--bg-color);
-			border: none;
-			font-weight: 600;
-		}
-
-		.btn-primary:hover {
-			opacity: 0.9;
-			transform: scale(1.02);
-		}
-
-		/* --- TOGGLE SWITCHES --- */
-		.switch {
-			position: relative;
-			display: inline-block;
-			width: 44px;
-			height: 24px;
-		}
-
-		.switch input {
-			opacity: 0;
-			width: 0;
-			height: 0;
-		}
-
-		.slider {
-			position: absolute;
-			cursor: pointer;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: var(--toggle-track-off);
-			transition: .3s;
-			border-radius: 9999px;
-		}
-
-		.slider:before {
-			position: absolute;
-			content: "";
-			height: 18px;
-			width: 18px;
-			left: 3px;
-			bottom: 3px;
-			background-color: var(--toggle-knob-off);
-			transition: .3s;
-			border-radius: 50%;
-		}
-
-		input:checked+.slider {
-			background-color: var(--toggle-track-on);
-		}
-
-		input:checked+.slider:before {
-			transform: translateX(20px);
-			background-color: var(--toggle-knob-on);
-		}
-	</style>
+    /* Bubbly Switch */
+    .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); border-radius: 999px; transition: .4s var(--bounce); border: 1px solid var(--bubble-border); }
+    .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 3px; background-color: white; border-radius: 50%; transition: .4s var(--bounce); box-shadow: 0 2px 5px rgba(0,0,0,0.3);}
+    input:checked + .slider { background-color: #5cf2a3; border-color: #5cf2a3; }
+    input:checked + .slider:before { transform: translateX(22px); }
+  </style>
 </head>
-
 <body>
 
-	<canvas id="constellation-canvas"></canvas>
+  <div class="bg-bubbles">
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+    <div class="bg-bubble"></div>
+  </div>
 
-	<div class="terminal-container">
-		<pre id="ascii-art">
-              _____                    _____                    _____                    _____            _____                    _____                    _____                    _____          
-         /\    \                  /\    \                  /\    \                  /\    \          /\    \                  /\    \                  /\    \                  /\    \         
-        /::\    \                /::\    \                /::\____\                /::\____\        /::\    \                /::\    \                /::\    \                /::\____\        
-       /::::\    \              /::::\    \              /:::/    /               /:::/    /       /::::\    \              /::::\    \              /::::\    \              /::::|   |        
-      /::::::\    \            /::::::\    \            /:::/    /               /:::/    /       /::::::\    \            /::::::\    \            /::::::\    \            /:::::|   |        
-     /:::/\:::\    \          /:::/\:::\    \          /:::/    /               /:::/    /       /:::/\:::\    \          /:::/\:::\    \          /:::/\:::\    \          /::::::|   |        
-    /:::/__\:::\    \        /:::/  \:::\    \        /:::/    /               /:::/    /       /:::/__\:::\    \        /:::/__\:::\    \        /:::/__\:::\    \        /:::/|::|   |        
-   /::::\   \:::\    \      /:::/    \:::\    \      /:::/    /               /:::/    /       /::::\   \:::\    \      /::::\   \:::\    \      /::::\   \:::\    \      /:::/ |::|   |        
-  /::::::\   \:::\    \    /:::/    / \:::\    \    /:::/    /      _____    /:::/    /       /::::::\   \:::\    \    /::::::\   \:::\    \    /::::::\   \:::\    \    /:::/  |::|   | _____  
- /:::/\:::\   \:::\    \  /:::/    /   \:::\ ___\  /:::/____/      /\    \  /:::/    /       /:::/\:::\   \:::\    \  /:::/\:::\   \:::\    \  /:::/\:::\   \:::\____\  /:::/   |::|   |/\    \ 
-/:::/__\:::\   \:::\____\/:::/____/     \:::|    ||:::|    /      /::\____\/:::/____/       /:::/__\:::\   \:::\____\/:::/  \:::\   \:::\____\/:::/  \:::\   \:::|    |/:: /    |::|   /::\____\
-\:::\   \:::\   \::/    /\:::\    \     /:::|____||:::|____\     /:::/    /\:::\    \       \:::\   \:::\   \::/    /\::/    \:::\  /:::/    /\::/   |::::\  /:::|____|\::/    /|::|  /:::/    /
- \:::\   \:::\   \/____/  \:::\    \   /:::/    /  \:::\    \   /:::/    /  \:::\    \       \:::\   \:::\   \/____/  \/____/ \:::\/:::/    /  \/____|:::::\/:::/    /  \/____/ |::| /:::/    / 
-  \:::\   \:::\    \       \:::\    \ /:::/    /    \:::\    \ /:::/    /    \:::\    \       \:::\   \:::\    \               \::::::/    /         |:::::::::/    /           |::|/:::/    /  
-   \:::\   \:::\____\       \:::\    /:::/    /      \:::\    /:::/    /      \:::\    \       \:::\   \:::\____\               \::::/    /          |::|\::::/    /            |::::::/    /   
-    \:::\   \::/    /        \:::\  /:::/    /        \:::\__/:::/    /        \:::\    \       \:::\   \::/    /               /:::/    /           |::| \::/____/             |:::::/    /    
-     \:::\   \/____/          \:::\/:::/    /          \::::::::/    /          \:::\    \       \:::\   \/____/               /:::/    /            |::|  ~|                   |::::/    /     
-      \:::\    \               \::::::/    /            \::::::/    /            \:::\    \       \:::\    \                  /:::/    /             |::|   |                   /:::/    /      
-       \:::\____\               \::::/    /              \::::/    /              \:::\____\       \:::\____\                /:::/    /              \::|   |                  /:::/    /       
-        \::/    /                \::/____/                \::/____/                \::/    /        \::/    /                \::/    /                \:|   |                  \::/    /        
-         \/____/                  ~~                       ~~                       \/____/          \/____/                  \/____/                  \|___|                   \/____/         
-                                                                                                                                                                                                
-        </pre>
+  <nav class="navbar">
+    <a href="/h/" class="nav-brand">edulearn</a>
+    
+    <div class="nav-links">
+      <a href="/h/" class="nav-item active"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="/g/" class="nav-item"><i class="fa-solid fa-gamepad"></i> Games</a>
+      <a href="/g2/" class="nav-item"><i class="fa-solid fa-dice-d20"></i> G2</a>
+      <a href="/b/" class="nav-item"><i class="fa-solid fa-globe"></i> Browser</a>
+      <a href="/t/" class="nav-item"><i class="fa-solid fa-wrench"></i> Tools</a>
+      <a href="/e/" class="nav-item"><i class="fa-solid fa-shapes"></i> Extras</a>
+      <a onclick="openModal('settings-modal')" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+    </div>
 
-		<div class="terminal-text">
-			[Announcement] Give suggestions here:
-			<a href="https://forms.gle/siDC34KDQn59Lmn69" target="_blank" class="terminal-link">
-				https://forms.gle/siDC34KDQn59Lmn69
-			</a>
-			<span id="bell-badge"></span>
-		</div>
-		<div class="terminal-text">Welcome to edulearn [T3rminal edition] </div>
-		<div class="terminal-text">created and maintained by vibec3der and hackercat</div>
-		<div class="terminal-text">Inspired by splash.best</div>
-		<div class="terminal-text">Here for the games only? Type games or g2 (more games)</div>
-		<div id="dynamic-quote" class="dynamic-quote">Loading wisdom...</div>
-		<br>
-		<div class="terminal-text">Type 'help' for a list of available commands and apps.</div>
+    <div class="nav-icons">
+      <div class="nav-icon" onclick="openModal('announcement-modal')">
+        <i class="fa-solid fa-bell"></i>
+        <span id="bell-badge"></span>
+      </div>
+      <i class="fa-brands fa-discord nav-icon" onclick="window.open('https://discord.gg/n5AfXS5eTP', '_blank')"></i>
+    </div>
+  </nav>
 
-		<div id="output-container"></div>
+  <main class="hero-container">
+    <h1 class="hero-title">edulearn</h1>
+    <div class="quote-pill" id="quote-display">loading wisdom...</div>
+  </main>
 
-		<div class="prompt-container">
-			<span class="prompt-label">root@edulearn:~$</span>
-			<input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
+  <div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
+    <div class="settings-box">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button class="btn-close" onclick="closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="settings-content">
+        <div class="setting-row">
+          <div class="setting-info">
+            <h3><i class="fa-solid fa-window-restore"></i> About Blank (AB)</h3>
+            <p>Hide pages from browser history by opening in about:blank.</p>
+          </div>
+          <label class="switch"><input type="checkbox" id="ab-toggle" onchange="toggleAB()"><span class="slider"></span></label>
         </div>
-		</div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <h3><i class="fa-solid fa-user-secret"></i> Panic Button</h3>
+            <p>Quickly hide the screen. Triggered by a keypress.</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="panic-key" class="dark-input" placeholder="Key (e.g. `)" style="width: 70px; text-align: center;">
+            <input type="text" id="panic-url" class="dark-input" placeholder="URL" style="width: 130px;">
+            <button class="clean-btn" onclick="savePanic()">Save</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <h3><i class="fa-solid fa-mask"></i> Tab Cloak</h3>
+            <p>Disguise the current tab title and icon.</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="cloak-title" class="dark-input" placeholder="Title" style="width: 100px;">
+            <input type="text" id="cloak-icon" class="dark-input" placeholder="Icon URL" style="width: 100px;">
+            <button class="clean-btn" onclick="saveCloak()">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-		<div class="modal-overlay" id="announcement-modal" onclick="handleBackdropClick(event)">
-			<div class="settings-box" style="width: 500px; min-height: 200px;">
-				<div class="settings-header-top">
-					<h2><i class="fa-solid fa-bullhorn" style="margin-right: 10px; color: var(--term-green);"></i>
-						Updates</h2>
-					<button class="btn-close-icon" onclick="closeAnnouncements()"><i class="fa-solid fa-xmark"></i></button>
-				</div>
-				<div class="settings-content" style="padding-top: 24px;">
-					<div class="settings-card" style="padding: 24px; text-align: left;">
-						<h3 style="margin-top: 0; font-size: 18px;">We want to hear from you!</h3>
-						<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; font-size: 14px;">
-							[UPDATE] 1716 games added! Can't find your dream game in g? look in g2!!] Here at edulearn,
-							we value your feedback. We are constantly looking for ways to improve your
-							experience. Let us know what features you want to see next.
-						</p>
-						<a href="https://forms.gle/siDC34KDQn59Lmn69" target="_blank" class="clean-btn btn-primary"
-							onclick="closeAnnouncements()">Submit Suggestions</a>
-					</div>
-				</div>
-			</div>
-		</div>
+  <div class="modal-overlay" id="announcement-modal" onclick="handleBackdropClick(event)">
+    <div class="settings-box" style="width: 450px;">
+      <div class="settings-header">
+        <h2><i class="fa-solid fa-bullhorn" style="color: #5cf2a3;"></i> Updates</h2>
+        <button class="btn-close" onclick="closeModals()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="settings-content" style="text-align: center;">
+        <h3>We want to hear from you!</h3>
+        <p style="color: var(--text-muted); margin: 15px 0;">
+          [UPDATE] 1716 games added! Can't find your dream game in g? look in g2! Here at edulearn, we value your feedback. Let us know what features you want to see next.
+        </p>
+        <button class="clean-btn" onclick="window.open('https://forms.gle/siDC34KDQn59Lmn69', '_blank'); closeModals();">Submit Suggestions</button>
+      </div>
+    </div>
+  </div>
 
-		<div class="modal-overlay" id="ab-modal" onclick="handleBackdropClick(event)">
-			<div class="settings-box" style="width: 400px; min-height: 150px;">
-				<div class="settings-content" style="padding: 32px; text-align: center;">
-					<h3 style="margin-top: 0; font-size: 18px; color: var(--text-main);">Enable Stealth Mode?</h3>
-					<p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
-						Do you want to enable AB to hide this session from your history?
-					</p>
-					<div style="display: flex; gap: 12px; justify-content: center;">
-						<button class="clean-btn btn-primary" onclick="enableAB(true)">Yes</button>
-						<button class="clean-btn" onclick="enableAB(false)">No</button>
-					</div>
-				</div>
-			</div>
-		</div>
+  <script>
+    // --- AUTOMATIC INTERSTELLAR-STYLE ABOUT:BLANK ---
+    (function autoLaunchAB() {
+      // 1. Check if we are already safely hidden in an iframe OR inside about:blank
+      if (window !== window.top || window.location.protocol === "about:") return;
 
-		<div class="modal-overlay" id="settings-modal" onclick="handleBackdropClick(event)">
-			<div class="settings-box">
-				<div class="settings-header-top">
-					<h2>Settings</h2>
-					<button class="btn-close-icon" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
-				</div>
-				<div class="settings-content">
-					<div class="settings-section-title">Stealth & Privacy</div>
-					<div class="settings-card">
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3><i class="fa-solid fa-window-restore"></i> About Blank (AB)</h3>
-								<p>Hide pages from browser history by opening in about:blank.</p>
-							</div>
-							<div class="setting-action">
-								<label class="switch"><input type="checkbox" id="ab-toggle" onchange="toggleAB()"><span class="slider"></span></label>
-							</div>
-						</div>
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3><i class="fa-solid fa-user-secret"></i> Panic Button</h3>
-								<p>Quickly hide the screen. Triggered by a keypress.</p>
-							</div>
-							<div class="setting-action">
-								<input type="text" id="panic-key" class="dark-input" placeholder="Key (e.g. `)" style="width: 80px; text-align: center;">
-								<input type="text" id="panic-url" class="dark-input" placeholder="Redirect URL" style="width: 180px;">
-								<button class="clean-btn btn-primary" onclick="savePanic()">Save</button>
-							</div>
-						</div>
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3><i class="fa-solid fa-mask"></i> Tab Cloak</h3>
-								<p>Disguise the current tab title and icon from prying eyes.</p>
-							</div>
-							<div class="setting-action">
-								<select id="cloak-preset" class="dark-input" onchange="loadCloakPreset()" style="width: 130px; margin-right: 4px;">
-                                <option value="custom">Default</option>
-                                <option value="classroom">Google Classroom</option>
-                                <option value="canvas">Canvas</option>
-                                <option value="iready">i-Ready</option>
-                                <option value="drive">Google Drive</option>
-                                <option value="gmail">Gmail</option>
-                                <option value="docs">Google Docs</option>
-                                <option value="clever">Clever</option>
-                            </select>
-								<input type="text" id="cloak-title" class="dark-input" placeholder="Page Title" style="width: 100px;">
-								<input type="text" id="cloak-icon" class="dark-input" placeholder="Icon URL" style="width: 100px;">
-								<button class="clean-btn btn-primary" onclick="saveCloak()">Apply</button>
-							</div>
-						</div>
-					</div>
-
-					<div class="settings-section-title">Appearance</div>
-					<div class="settings-card">
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3><i class="fa-solid fa-palette"></i> UI Theme</h3>
-								<p>Customize the color palette of the application.</p>
-							</div>
-							<div class="setting-action">
-								<select id="theme-select" class="dark-input" onchange="changeTheme()" style="width: 200px;">
-                                <option value="default">Terminal Dark</option>
-                                <option value="sakura">Sakura Pink</option>
-                                <option value="red">Crimson Red</option>
-                                <option value="azure">Microsoft Azure Slop</option>
-                            </select>
-							</div>
-						</div>
-					</div>
-
-					<div class="settings-section-title">Preferences</div>
-					<div class="settings-card">
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3><i class="fa-solid fa-diagram-project"></i> Constellations</h3>
-								<p>Toggle floating animated background network.</p>
-							</div>
-							<div class="setting-action">
-								<label class="switch"><input type="checkbox" id="particle-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
-							</div>
-						</div>
-						<div class="setting-row">
-							<div class="setting-info">
-								<h3><i class="fa-solid fa-wand-magic-sparkles"></i> Smooth UI Transitions</h3>
-								<p>Enable fluid animations across the interface.</p>
-							</div>
-							<div class="setting-action">
-								<label class="switch"><input type="checkbox" id="smooth-toggle" onchange="togglePreferences()"><span class="slider"></span></label>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<script>
-			// --- 0. APP CONFIGURATION ---
-        const apps = {
-            'home': { path: '/h/', desc: 'Navigate to Home' },
-            'games': { path: '/g/', desc: 'Open Games hub (754 total) ' },
-            'g2': { path: '/g2/', desc: 'Open G2 hub (1716 total)' },
-            'uv': { path: '/b/', desc: 'Open UV' },
-			'sj': { path: '/s/', desc: 'Open SJ' },
-            'ai': { path: '/a/', desc: 'Open AI chat' },
-		
-            'tools': { path: '/t/', desc: 'Open Tools hub' },
-            'extras': { path: '/e/', desc: 'Open Extras' }
-        };
-
-        const systemCommands = {
-            'help': 'Show this list of commands',
-            'clear': 'Clear terminal output',
-            'stealth': 'Launch this current page in a stealth (about:blank) window',
-            'settings': 'Open Edulearn Settings',
-            'updates': 'Open Announcements',
-            'discord': 'Open discord server'
-        };
-
-        // --- 1. RANDOM QUOTES (Truncated as requested) ---
-        const quotes = [
-            "Learning is a treasure that will follow its owner everywhere.",
-            "The beautiful thing about learning is that no one can take it away from you.",
-            "Education is the most powerful weapon which you can use to change the world.",
-            "Wisdom is not a product of schooling but of the lifelong attempt to acquire it.",
-  "Curiosity is the wick in the candle of learning.",
-  "Knowledge speaks, but wisdom listens.",
-  "coded by the skids, for the skids", 
-  "Why Unenroll when you have this?",
-  "Classroom.lol but it's actually good",
-  "This is what you call.. a vibecoded site.",
-  "Vibecoded by Claude",
-  "This site is so good, even MOJANG is jealous",
-  "This site is so good, even the IRS is jealous",
-  "The FBI is definitely not watching you use this, nope.",
-  "This site is so good, even NASA is jealous",
-  "Jeffrey Epstein definitely did not use this site, no way.",
-  "This site is so good, even Elon Musk is jealous",
-  "Bro github copilot the quotes that u are making are so cringe [ROFL emoji]",
-  "Parrotx2 approved!",
-  "Finally beat soulmaster [pray emoji]",
-  "Daddy hu!!",
-  "daddy au is my daddy",
-  "fuck you, im not adding shell shockers [rofl emoji]",
-  "nothing.",
-  "This site is so good, even Andrew Hu is jealous",
-  "Teachers hate this one simple trick to get free games and tools on school chromebooks",
-  "This site is so good, even the SEC is jealous",
-  "This site is so good, even the WHO is jealous",
-  "This site is so good, even the CDC is jealous",
-  "This site is so good, even the UN is jealous",
-  "This site is so good, even the World Bank is jealous",
-  "This site is so good, even the IMF is jealous",
-  "This site is so good, even the US Government is jealous",
-  // github copilot ahh comments above ^
-  "Dont remove MENDING.. MOJANG PLS",
-  "I type all ts on ARCH BTW",
-  "Hndrew Au could never..",
-  "The IRS CANNOT TOUCH ME!!",
-  "67.world for more!",
-  "Andewwww huuuu is . gay!!!",
-  "teachers hate ts", 
-  "what's Nasa-dude doing, idk prob hacking on mc",
-  "effry jepstien",
-  "Have you ever played blox fruits with your life on line? while having A BUNCH of mangoes in your mouth? heh... well… this is called DARK MANGO PSYCHOLOGY 💀. Now in dark mango psychology you realize.. they arent just normal mangoes, they are DARK!",
-  "and hu, and hu, andu you",
-  "RHYMES WITH GRUG",
-  "67",
-  "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "get scammedddddd!!!",
-  "If you paid money for this u got scammed, edulearn and all of its services are FREE!!",
-  "UGS FILES VERY SOON!!",
-  "Frogiee1 please please please partner with us 🙏",
-  "MOTD: LOGI",
-  "Most Underrated shit ever",
-  "D- Daddy?",
-  "https://the-demonz.github.io (MOST VIBECODED SHIT EVER)",
-  "Arorua aRorua arOrua aroRua arorUa aroruA",
-  "UwU :333",
-  "Nonchalanttttt :D",
-  "Mrbeast Scam [Insert fire emoji]",
-  "pickle pickle pickle",
-  "alvin the walnut",
-  "Hello wsg mr mail",
-  "Fastify it, act smooth, make a discord bot, and caddy!",
-  "dont do frugs",
-  "That's racially motivated..",
-  "Interesting site u got there..",
-  "This is what you call.. Diddable material.",
-  "ADS ARE NOT MY FAULT (F*CK YOU BREADBB)",
-  "Shock my shells",
-  "mrbeast > mrbeast???",
-  "How many have you counted so far?",
-  "eat this!",
-  "woahh, thats a lot of quotes!",
-  "1167 effrey jepstein drive",
-  "your mom.. j20",
-  "furry femboy catgirl pls ride me uwu - my pronouns (ah)",
-  "Imagine using this when you literally told everyone it SUCKS HAHAHAHA",
-  "https://betadispensertest.vercel.app",
-  "https://chessisfornerds.netlify.app",
-  "Dylanmc math vibes",
-  "luminal LIGHTSPEED BYPASSES!!!",
-  "SOAP PHIAAAA MY GOATTTT",
-  "Keep Onn.. 20gb usb contains massive movie files.. I wonder who it belongs to..",
-  "Redragon gaming mouse, kawaii pack :3",
-  "Earthquakes? Must be daddy ash again :333",
-  "thefakesydney is BACKKKKKKKKKKKKK!!! 676767",
-  "When I was 1 year old.. I thought of edulearn",
-  "When faced when hndrew au, take him out - sun tzu",
-  "I see chungus. I slime him out - wise guy",
-  "Szvy I'm sorry you got doxxed..",
-  "Wsg therealfour",
-  "https://femboy.world :3",
-  "SLIME HIM OUT GUYSSS",
-  "20% ai slop",
-  "VIBE CODEEERR SUPREMEEEE",
-  "Wait... I don't have the VIBE CODER SUPREME ROLE?? YESSS!!!!!",
-  "Why do you vibecode? - A gong bell that I could ring",
-  "ring me daddy",
-  "This video is sponsored by Genshin Impact-",
-  "Oh fuhh naww",
-  "skibidi.men for more!",
-  "Every 5 year old has a story behind them!",
-  "unblocked and unlocked", 
-  "running on pure caffeine", 
-  "if you're reading this, do your homework",
-  "no admins allowed", 
-  ":333333333",
-  "Femboys 3DDDDDD",
-  "You are NEVER finding out what PROXIES are.. hahaha - Matthew guy whos black",
-  "Why tf do u have so many apps on a cb - Conall Sadako",
-  "It's.. soo.. cold - guy",
-  "4167💀💀",
-  "trust me bro.. it's not a virus.💀",
-  "Bro thinks this is a virus 💀",
-  "oh nah bro 💀💀💀💀💀💀 ",
-  "Skull emoji virus 💀",
-  "Skull emojis have hit this sector unfortunately..💀💀💀💀💀💀",
-  "I'm not taken over by the skull virus.. yet 💀💀",
-  "We are still safe-💀",
-  "Oops i js closed a tab💀💀",
-  "Montagem NO ONE CARES",
-  "💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀 back from 42",
-  "Control + Shift + T to reopen a tab",
-  "Github copilot being suchhh a goooood boy..",
-  "fcking NI-",
-  "security through obscurity", 
-  "ctrl + w to win instantly", 
-  "made with <3 and spaghetti code", 
-  "Set this up in alt tab to quickly escape",
-  "decode this: aHR0cHM6Ly9hbmRyZXdodWlzLmdheQ==", 
-  "If you don't use this, go-",
-  "I'm sorry j20, I can't fix the hk bugs (That's breadbb [aka genizy's] fault.)",
-  "need more blahaj", 
-  "typing this while going to class lol",
-  "How are you playing Hollow Knight at school bro?", 
-  "originally just a webview kajig", 
-  "frogiesarcade vibes", 
-  "This is where the fun begins! - Obi Wan Kenobi",
-  "vibecoded but it WORKS!", 
-  "Monkey find computer. Monkey type.", 
-  "goguardian is trash", 
-  "lightsped sytems", 
-  "go get the milk - therealfour, milk lover 67", 
-  "No matter how much it feels like it, I'm not gay I swear! - A random", 
-  "Wait.. I can have MULTIPLE TABS?!? HOLY SHI*", 
-  "If you use this and I know you're a skid, screw you lmfao",
-  "you're dumb", 
-  "I'm depressed typing this", 
-  "dont cry.. just.. cry", 
-  "gaming freedom!", 
-  "Go back of this ripoff by AH (https://bebby.w3spaces.com) [vibecoded by claude ofc] HAHAHAHAA [insert wemmbu laugh]",
-  "yall ready to play TS ALL DAY!?", 
-  "MF did not js say [It's down for maintainance]",
-  "Fun fact: This doesn't break your fast for Ramadan! :O",
-  "The ogs know of classroom.lol", 
-  "tyrone's stupid games", 
-  "I have securly for breakfast, gogaurdian for lunch, and lightsped for dinner", 
-  "educational.sbs", 
-  "I'm jobless fr", 
-  "Jobless for using AI? Really?",
-  "THIS SITE IS NOT FOR DEGENERATES. GO AWAY!!", 
-  "I should ring Alvin's gong - wise guy", 
-  "If you want to humiliate your enemies, do it in a way that doesn't waste your own time. Use AI - Sun Zu",
-  "albie was here", 
-  "UNBLOCKED GAMES IN DA BIG 26!", 
-  "If you made it this far, join the discord!", 
-  "skids being skids", 
-  "Dont slime me out..daddy",
-  "your a skid buddy", 
-  "toggle off particles for better performance", 
-  "I'll steal your code hahaha - J20", 
-  "Hella sick while typing this", 
-  "bro wtf - guy", 
-  "wow these are so old messages",
-  "There are some funny easter eggs!",
-  "Look for some!",
-  "1527 asterbell drive",
-  "I-put-a-random-quote-in-the-code-to-make-it-look-cool",
-  "Some of these quotes are real, and some maybe did not happen ;)",
-  "MANGO MANGO MANGO",
-  "tung tung sahur",
-  "I use arch btw",
-  "Tf you mean it sucks?",
-  "We beat bebby.w3spaces.com!!!",
-  "last message so far.. consider yourself lucky.",
-  "I bet you're here for the geo grind.",
-  "Hollow knight in the big 2026?",
-  "most recent update: Stuff to make Andrew Hu jealous 3/29/2026",
-  "the wifi knows what you did last night",
-  "this tab knows too much",
-  "if this loads your wifi is valid",
-  "404 motivation not found",
-  "someone somewhere is procrastinating harder than you",
-  "your teacher probably uses this site too",
-  "this page is watching you scroll",
-  "if you see this you owe me 5 dollars",
-  "every refresh creates a new timeline",
-  "your future self is judging this tab",
-  "ctrl+s your life bro",
-  "this site runs on hopes and bad javascript",
-  "another day another tab",
-  "if it works don't touch it",
-  "half the internet is duct tape and dreams",
-  "99% of coding is googling",
-  "the other 1% is suffering",
-  "your ram is crying right now",
-  "every bug has a developer somewhere crying",
-  "the server hamster is tired",
-  "please stop opening 400 tabs",
-  "this site runs on a potato",
-  "if this breaks pretend it didn't",
-  "congratulations you found another quote",
-  "somewhere someone is counting these",
-  "how long have you been scrolling",
-  "bro go drink water",
-  "touch grass challenge: impossible",
-  "achievement unlocked: reading random quotes",
-  "this message will self destruct eventually",
-  "the internet never forgets",
-  "except when the cache clears",
-  "history will remember this tab",
-  "or maybe not",
-  "loading existential crisis...",
-  "life is just a series of loading screens",
-  "respawning in 3... 2... 1...",
-  "main character energy",
-  "side quest detected",
-  "you have discovered a useless quote",
-  "the dev definitely forgot this existed",
-  "this line of text traveled thousands of miles to reach you",
-  "meanwhile you are still procrastinating",
-  "if you read this you are legally cool",
-  "your cpu approves",
-  "your gpu disagrees",
-  "your battery fears you",
-  "low battery anxiety moment",
-  "the scroll never ends",
-  "there are always more quotes",
-  "infinite quotes glitch",
-  "someone add a quote counter",
-  "someone else will fix the bugs",
-  "future me problem",
-  "ship it and pray",
-  "works on my machine",
-  "the code compiles so it's fine",
-  "do not question the code",
-  "the code questions you",
-  "if it breaks blame the intern",
-  "there is no intern",
-  "the intern is you",
-  "congrats you're hired",
-  "your salary is 0 dollars",
-  "paid in experience",
-  "experience not included",
-  "this message was typed at 3am",
-  "sleep is optional",
-  "debugging is just detective work",
-  "except the detective is stupid",
-  "every line of code is a gamble",
-  "we gambling with the production server",
-  "please dont ddos the quote generator",
-  "or do idk",
-  "this is definitely production code",
-  "totally not spaghetti",
-  "100% professional engineering",
-  "trust me bro it works",
-  "never test in production",
-  "unless you do",
-  "this quote generator has lore",
-  "someone write the lore",
-  "the lore is lost",
-  "the lore never existed",
-  "the lore is just vibes",
-  "vibes based development",
-  "powered by vibes",
-  "vibes > documentation",
-  "documentation coming soon",
-  "soon since 2022",
-  "still soon",
-  "maybe tomorrow",
-  "definitely tomorrow",
-  "ok maybe next update",
-  "update coming soon™",
-  "soon™",
-  "tm symbol intensifies",
-  "the scroll continues",
-  "you are still reading",
-  "why are you still reading",
-  "go do homework bro",
-  "seriously",
-  "close the tab",
-  "no actually close it",
-  "ok one more quote",
-  "just one more",
-  "this is the last one",
-  "just kidding",
-  "there are more",
-  "infinite scrolling technology",
-  "this quote escaped containment",
-  "if found return to developer",
-  "developer missing since last commit",
-  "last commit: 3am",
-  "commit message: fixed stuff",
-  "nothing was fixed",
-  "the bug is now a feature",
-  "feature not documented",
-  "users discovered it anyway",
-  "accidental innovation",
-  "this is peak engineering",
-  "this quote does nothing",
-  "but it looks cool",
-  "style over substance",
-  "but mostly chaos",
-  "chaos driven development",
-  "we vibecoding today",
-  "we vibecoding tomorrow",
-  "we vibecoding forever",
-  "vibecode never dies",
-  "the vibe is strong",
-  "the vibe is unstable",
-  "vibes detected",
-  "maximum vibes reached",
-  "vibe overload",
-  "too many vibes",
-  "calm the vibes",
-  "ok vibes restored",
-  "system stable",
-  "system unstable",
-  "system vibing",
-  "system confused",
-  "system thinking",
-  "system procrastinating",
-  "system scrolling",
-  "system reading quotes",
-  "system still reading quotes",
-  "bro seriously go do homework",
-  "this message is a distraction",
-  "and it worked",
-  "congrats",
-  "achievement unlocked: procrastination",
-  "new speedrun category: quote reading",
-  "wr pace",
-  "someone submit this to speedrun.com",
-  "quote percent any%",
-  "quote percent 100%",
-  "imagine reading all of these",
-  "someone probably will",
-  "that someone might be you",
-  "this quote believes in you",
-  "maybe",
-  "probably not",
-  "ok maybe a little",
-  "never give up",
-  "unless the wifi dies",
-  "then it's over",
-  "wifi down bad",
-  "router crying",
-  "packet lost",
-  "lag detected",
-  "ping 999",
-  "skill issue",
-  "massive skill issue",
-  "internet skill issue",
-  "coding skill issue",
-  "quote writing skill issue",
-  "ok that one was rude",
-  "sorry about that",
-  "anyways",
-  "Last updated: 3/29/2026",
-  "back to quotes",
-  "the quotes never end",
-  "this might be the last one",
-  "or maybe not",
-  "ok now it's the last one",
-  "final quote maybe",
-  "ok actually final quote",
-  "this time fr",
-  "no more quotes after this",
-  "unless someone adds more",
-  "they probably will",
-  "and the cycle continues",
+      // 2. Fetch settings
+      let userSettings = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+      
+      function spawnStealthWindow(win) {
+        win.document.title = userSettings.cloakTitle || "EduLearn";
+        if (userSettings.cloakIcon) {
+          let link = win.document.createElement('link');
+          link.rel = 'icon';
+          link.href = userSettings.cloakIcon;
+          win.document.head.appendChild(link);
+        }
+        win.document.body.style.margin = "0";
+        let iframe = win.document.createElement("iframe");
+        iframe.style.border = "none";
+        iframe.style.width = "100vw";
+        iframe.style.height = "100vh";
+        iframe.src = window.location.href;
+        win.document.body.appendChild(iframe);
+        
+        // Random safe redirect list
+        const panicLinks = [
+          "https://classroom.google.com",
+          "https://clever.com",
+          "https://quizlet.com",
+          "https://www.iready.com",
+          "https://infinitecampus.com",
+          "https://docs.google.com",
+          "https://drive.google.com",
+          "https://slides.google.com",
+          "https://mail.google.com",
+          "https://calendar.google.com",
+          "https://google.com",
+          "https://wikipedia.org",
+          "https://blooket.com",
+          "https://kahoot.com",
+          "https://scratch.mit.edu",
         ];
 
-        function setRandomQuote() {
-            const quoteEl = document.getElementById('dynamic-quote');
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            typeQuote(`"${randomQuote}"`, quoteEl);
-        }
+        // Pick random link
+        const randomLink = panicLinks[Math.floor(Math.random() * panicLinks.length)];
 
-        function typeQuote(text, element) {
-            element.textContent = '';
-            let i = 0;
-            const timer = setInterval(() => {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(timer);
-                    setTimeout(() => { element.style.borderRight = 'none'; }, 500);
-                }
-            }, 50);
-        }
+        // Push original tab away
+        window.location.replace(randomLink);
+      }
 
-        // --- CLOAK PRESETS DATA ---
-        const cloakPresets = {
-            "custom": { title: "EduLearn — Academic Courses & Resources", icon: "" },
-            "classroom": { title: "Classes", icon: "https://ssl.gstatic.com/classroom/favicon.png" },
-            "canvas": { title: "Dashboard", icon: "https://du11hjcvx0uqb.cloudfront.net/br/dist/images/favicon-e10d657a73.ico" },
-            "iready": { title: "i-Ready", icon: "https://login.i-ready.com/favicon.ico" },
-            "drive": { title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" },
-            "gmail": { title: "Inbox (1) - Gmail", icon: "https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" },
-            "docs": { title: "Google Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
-            "clever": { title: "Clever | Portal", icon: "https://assets.clever.com/favicons/clever/favicon.ico" }
-        };
+      // 4. Try opening instantly
+      let instantWin = window.open('about:blank', '_blank');
+      if (instantWin) {
+        spawnStealthWindow(instantWin);
+      } else {
+        // 5. If popup blocker kills it, alert and wait for their very first click anywhere on screen
+        alert("If you do not have popups enabled, please enable popups to hide this page from Securly Classroom, and your History!");
+        document.addEventListener('click', function fallbackClick(e) {
+          // Ignore if they are clicking the AB toggle switch to turn it off
+          if (e.target.closest('.switch')) return; 
 
-        function loadCloakPreset() {
-            const preset = document.getElementById('cloak-preset').value;
-            if (preset !== 'custom' && cloakPresets[preset]) {
-                document.getElementById('cloak-title').value = cloakPresets[preset].title;
-                document.getElementById('cloak-icon').value = cloakPresets[preset].icon;
-            }
-        }
+          let clickWin = window.open('about:blank', '_blank');
+          if (clickWin) {
+            spawnStealthWindow(clickWin);
+            document.removeEventListener('click', fallbackClick);
+          }
+        });
+      }
+    })();
 
-        // --- 2. SETTINGS & STATE ---
-        const defaultSettings = {
-            panicKey: 'Escape',
-            panicUrl: './f/',
-            cloakTitle: 'EduLearn — Academic Courses & Resources',
-            cloakIcon: '',
-            theme: 'default',
-            particles: true,
-            smoothUI: true,
-            announcementRead: false,
-            abEnabled: null
-        };
-
-        let savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
-        let userSettings = { ...defaultSettings, ...savedData };
-
-        function saveState() { localStorage.setItem('edulearn_settings', JSON.stringify(userSettings)); }
-
-        function initSettings() {
-            document.getElementById('panic-key').value = userSettings.panicKey;
-            document.getElementById('panic-url').value = userSettings.panicUrl;
-            document.getElementById('cloak-title').value = userSettings.cloakTitle;
-            document.getElementById('cloak-icon').value = userSettings.cloakIcon;
-            
-            document.getElementById('theme-select').value = userSettings.theme || 'default';
-            document.getElementById('particle-toggle').checked = userSettings.particles;
-            document.getElementById('smooth-toggle').checked = userSettings.smoothUI;
-            document.getElementById('ab-toggle').checked = userSettings.abEnabled || false;
-
-            document.getElementById('page-title').innerText = userSettings.cloakTitle;
-            if (userSettings.cloakIcon) document.getElementById('dynamic-favicon').href = userSettings.cloakIcon;
-
-            applyTheme(userSettings.theme || 'default');
-
-            if (!userSettings.announcementRead) {
-                document.getElementById('bell-badge').classList.add('active');
-                setTimeout(openAnnouncements, 800); 
-            }
-
-            if (userSettings.abEnabled === null) {
-                setTimeout(() => document.getElementById('ab-modal').classList.add('active'), 1000);
-            }
-        }
-
-        function applyTheme(themeName) { document.body.setAttribute('data-theme', themeName); }
-
-        function changeTheme() {
-            const newTheme = document.getElementById('theme-select').value;
-            applyTheme(newTheme);
-            userSettings.theme = newTheme;
-            saveState();
-        }
-
-        function savePanic() {
-            userSettings.panicKey = document.getElementById('panic-key').value || 'Escape';
-            userSettings.panicUrl = document.getElementById('panic-url').value || 'https://classroom.google.com';
-            saveState();
-        }
-
-        function saveCloak() {
-            userSettings.cloakTitle = document.getElementById('cloak-title').value || 'custom';
-            userSettings.cloakIcon = document.getElementById('cloak-icon').value || 'https://ssl.gstatic.com/classroom/favicon.png';
-            saveState();
-            initSettings();
-            document.getElementById('cloak-preset').value = 'custom';
-        }
-
-        function togglePreferences() {
-            userSettings.particles = document.getElementById('particle-toggle').checked;
-            userSettings.smoothUI = document.getElementById('smooth-toggle').checked;
-            saveState();
-        }
-
-        function toggleAB() {
-            const isEnabled = document.getElementById('ab-toggle').checked;
-            enableAB(isEnabled);
-        }
-
-        // Launches the CURRENT page inside an about:blank iframe
-        function launchStealth() {
-    let win = window.open('about:blank', '_blank');
-    if (!win) return;
-
-    win.opener = null;
-    win.document.title = "about:blank";
-    win.document.body.style.margin = "0";
-
-    let iframe = win.document.createElement("iframe");
-    iframe.style.width = "100vw";
-    iframe.style.height = "100vh";
-    iframe.style.border = "none";
-    iframe.src = window.location.origin + "/h/";
-
-    win.document.body.appendChild(iframe);
-
-    // Random safe redirect list
-    const panicLinks = [
-        "https://classroom.google.com",
-        "https://docs.google.com",
-        "https://drive.google.com",
-        "https://slides.google.com",
-        "https://mail.google.com",
-        "https://calendar.google.com",
-        "https://google.com",
-        "https://wikipedia.org"
+    // --- QUOTES ---
+    const quotes = [
+      "Learning is a treasure that will follow its owner everywhere.",
+      "coded by the skids, for the skids",
+      "Classroom.lol but it's actually good",
+      "This is what you call.. a vibecoded site.",
+      "Teachers hate this one simple trick to get free games",
+      "I type all ts on ARCH BTW",
+      "trust me bro.. it's not a virus.💀",
+      "ctrl+s your life bro",
+      "this site runs on hopes and bad javascript",
+      "99% of coding is googling"
     ];
 
-    // Pick random link
-    const randomLink = panicLinks[Math.floor(Math.random() * panicLinks.length)];
+    function updateQuote() {
+      const quoteEl = document.getElementById('quote-display');
+      quoteEl.textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+    }
+    updateQuote();
 
-    setTimeout(() => {
-        window.location.replace(randomLink);
-    }, 500);
-}
+    // --- SETTINGS LOGIC ---
+    let userSettings = JSON.parse(localStorage.getItem('edulearn_settings')) || {
+      panicKey: 'Escape', 
+      panicUrl: 'https://classroom.google.com', 
+      cloakTitle: 'EduLearn — Academic Courses & Resources', 
+      cloakIcon: '',
+      announcementRead: false, 
+      abEnabled: true // Defaulted to true now for auto-launch
+    };
 
-        function enableAB(enabled) {
-            userSettings.abEnabled = enabled;
-            document.getElementById('ab-toggle').checked = enabled;
-            saveState();
-            document.getElementById('ab-modal').classList.remove('active');
-            
-            if (enabled) {
-                launchStealth();
-            }
+    function saveState() { localStorage.setItem('edulearn_settings', JSON.stringify(userSettings)); }
+
+    function initSettings() {
+      document.getElementById('panic-key').value = userSettings.panicKey || 'Escape';
+      document.getElementById('panic-url').value = userSettings.panicUrl || 'https://classroom.google.com';
+      document.getElementById('cloak-title').value = userSettings.cloakTitle || 'EduLearn';
+      document.getElementById('cloak-icon').value = userSettings.cloakIcon || '';
+      
+      // Toggle syncs with actual state (defaults to checked if null)
+      document.getElementById('ab-toggle').checked = userSettings.abEnabled !== false;
+
+      // Apply Cloak immediately
+      document.getElementById('page-title').innerText = userSettings.cloakTitle || 'EduLearn';
+      if (userSettings.cloakIcon) {
+        document.getElementById('dynamic-favicon').href = userSettings.cloakIcon;
+      }
+
+      // Check announcements
+      if (!userSettings.announcementRead) {
+        document.getElementById('bell-badge').classList.add('active');
+      }
+    }
+
+    function savePanic() {
+      userSettings.panicKey = document.getElementById('panic-key').value || 'Escape';
+      userSettings.panicUrl = document.getElementById('panic-url').value || 'https://classroom.google.com';
+      saveState();
+      alert("Panic button saved successfully!");
+    }
+
+    function saveCloak() {
+      userSettings.cloakTitle = document.getElementById('cloak-title').value || 'EduLearn';
+      userSettings.cloakIcon = document.getElementById('cloak-icon').value || '';
+      saveState();
+      initSettings(); // Reload title/favicon
+    }
+
+    // Manual Toggle from settings menu
+    function toggleAB() {
+      let enabled = document.getElementById('ab-toggle').checked;
+      userSettings.abEnabled = enabled;
+      saveState();
+      
+      if (enabled && window.top === window.self && window.location.protocol !== "about:") {
+        let win = window.open('about:blank', '_blank');
+        if (win) {
+          win.document.title = userSettings.cloakTitle || "EduLearn";
+          win.document.body.style.margin = "0";
+          let iframe = win.document.createElement("iframe");
+          iframe.style.border = "none";
+          iframe.style.width = "100vw";
+          iframe.style.height = "100vh";
+          iframe.src = window.location.href;
+          win.document.body.appendChild(iframe);
+          window.location.replace("https://classroom.google.com");
         }
+      }
+    }
 
-        // --- 3. TERMINAL LOGIC ---
-        const input = document.getElementById('cmd-input');
-        const outputContainer = document.getElementById('output-container');
+    // --- MODALS LOGIC ---
+    function openModal(id) { 
+      document.getElementById(id).classList.add('active'); 
+      if (id === 'announcement-modal' && !userSettings.announcementRead) {
+        userSettings.announcementRead = true;
+        saveState();
+        document.getElementById('bell-badge').classList.remove('active');
+      }
+    }
+    
+    function closeModals() { 
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); 
+    }
+    
+    function handleBackdropClick(e) {
+      if (e.target.classList.contains('modal-overlay')) closeModals();
+    }
 
-        document.body.addEventListener('click', (e) => {
-            if (!document.querySelector('.modal-overlay.active')) {
-                input.focus();
-            }
-        });
+    // --- PANIC BUTTON ---
+    window.addEventListener('keydown', (e) => {
+      if (e.key === userSettings.panicKey && document.activeElement.tagName !== 'INPUT') {
+        window.location.replace(userSettings.panicUrl);
+      }
+      if (e.key === 'Escape') closeModals();
+    });
 
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const val = this.value.trim();
-                if (val) {
-                    appendLine(`<span style="color: var(--term-green)">root@edulearn:~$</span> <span style="color: var(--text-main)">${val}</span>`);
-                    processCommand(val);
-                }
-                this.value = '';
-                window.scrollTo(0, document.body.scrollHeight);
-            }
-        });
-
-        function processCommand(cmd) {
-            const command = cmd.toLowerCase();
-
-            // 1. Check if it's a known app
-            if (apps[command]) {
-                navigateWithTransition(apps[command].path);
-                return;
-            }
-
-            // 2. Check system commands
-            switch (command) {
-                case 'help':
-                    appendLine('--- System Commands ---', 'var(--term-green)');
-                    for (const [cmdName, desc] of Object.entries(systemCommands)) {
-                        appendLine(`  ${cmdName.padEnd(10)} - ${desc}`, 'var(--text-muted)');
-                    }
-                    appendLine('<br>--- Applications ---', 'var(--term-green)');
-                    for (const [appName, config] of Object.entries(apps)) {
-                        appendLine(`  ${appName.padEnd(10)} - ${config.desc}`, 'var(--text-muted)');
-                    }
-                    break;
-                case 'clear':
-                    outputContainer.innerHTML = '';
-                    break;
-                case 'stealth':
-                    launchStealth();
-                    break;
-                case 'settings':
-                    openSettings();
-                    break;
-                case 'updates':
-                    openAnnouncements();
-                    break;
-                case 'discord':
-                    window.open('https://discord.gg/n5AfXS5eTP', '_blank');
-                    break;
-                default:
-                    appendLine(`Command not found: ${command}. Type 'help' for a list of commands.`, 'var(--term-error)');
-                    break;
-            }
-        }
-
-        function appendLine(htmlContent, color = '') {
-            const div = document.createElement('div');
-            if (color) div.style.color = color;
-            div.innerHTML = htmlContent;
-            outputContainer.appendChild(div);
-        }
-
-        // --- 4. MODAL & NAVIGATION LOGIC ---
-        function openSettings() { document.getElementById('settings-modal').classList.add('active'); }
-        function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); input.focus(); }
-        
-        function openAnnouncements() {
-            document.getElementById('announcement-modal').classList.add('active');
-            if (!userSettings.announcementRead) {
-                userSettings.announcementRead = true;
-                saveState();
-                document.getElementById('bell-badge').classList.remove('active');
-            }
-        }
-        function closeAnnouncements() { document.getElementById('announcement-modal').classList.remove('active'); input.focus(); }
-
-        function handleBackdropClick(e) {
-            if (e.target.id === 'settings-modal') closeSettings();
-            if (e.target.id === 'announcement-modal') closeAnnouncements();
-            if (e.target.id === 'ab-modal') document.getElementById('ab-modal').classList.remove('active');
-        }
-
-        function navigateWithTransition(url) {
-            appendLine(`Loading ${url}...`, 'var(--term-green)');
-            // Create iframe overlay
-            const iframe = document.createElement('iframe');
-            iframe.src = '/index.html';
-            iframe.style.position = 'fixed';
-            iframe.style.top = '0';
-            iframe.style.left = '0';
-            iframe.style.width = '100vw';
-            iframe.style.height = '100vh';
-            iframe.style.zIndex = '9999';
-            iframe.style.border = 'none';
-            document.body.appendChild(iframe);
-            // After 2 seconds, remove iframe and navigate
-            setTimeout(() => {
-                document.body.removeChild(iframe);
-                window.location.href = url;
-            }, 2000);
-        }
-
-        // --- 5. EVENT LISTENERS ---
-        window.addEventListener('keydown', (e) => {
-            // Panic Key
-            if (e.key === userSettings.panicKey && document.activeElement.tagName !== 'INPUT') {
-                window.location.replace(userSettings.panicUrl);
-            }
-            // Escape to close modals
-            if (e.key === 'Escape') {
-                closeSettings();
-                closeAnnouncements();
-                document.getElementById('ab-modal').classList.remove('active');
-            }
-        });
-
-        // --- 6. PARTICLES (Constellations) ---
-        const canvas = document.getElementById('constellation-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 1.5 + 0.5;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw(colorStr) {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = colorStr;
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < 80; i++) particles.push(new Particle());
-
-        function animateCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (userSettings.particles) {
-                const dotColor = `rgba(150, 150, 150, 0.2)`; 
-                const lineColorBase = `rgba(150, 150, 150, `;
-
-                particles.forEach(p => {
-                    p.update();
-                    p.draw(dotColor);
-                });
-                for(let i=0; i<particles.length; i++) {
-                    for(let j=i+1; j<particles.length; j++) {
-                        let dx = particles[i].x - particles[j].x;
-                        let dy = particles[i].y - particles[j].y;
-                        let dist = Math.sqrt(dx*dx + dy*dy);
-                        if(dist < 120) {
-                            ctx.beginPath();
-                            ctx.strokeStyle = `${lineColorBase}${0.1 * (1 - dist/120)})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-            requestAnimationFrame(animateCanvas);
-        }
-        animateCanvas();
-
-        // --- 7. INITIALIZE ---
-        window.addEventListener('DOMContentLoaded', () => {
-            initSettings();
-            setRandomQuote();
-            input.focus();
-        });
-		</script>
+    // Init
+    window.addEventListener('DOMContentLoaded', initSettings);
+  </script>
 </body>
-
 </html>
