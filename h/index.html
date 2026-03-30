@@ -607,7 +607,7 @@
 							</div>
 							<div class="setting-action">
 								<select id="cloak-preset" class="dark-input" onchange="loadCloakPreset()" style="width: 130px; margin-right: 4px;">
-                                <option value="custom">Custom...</option>
+                                <option value="custom">Default</option>
                                 <option value="classroom">Google Classroom</option>
                                 <option value="canvas">Canvas</option>
                                 <option value="iready">i-Ready</option>
@@ -1089,6 +1089,7 @@
 
         // --- CLOAK PRESETS DATA ---
         const cloakPresets = {
+            "custom": { title: "EduLearn — Academic Courses & Resources", icon: "" },
             "classroom": { title: "Classes", icon: "https://ssl.gstatic.com/classroom/favicon.png" },
             "canvas": { title: "Dashboard", icon: "https://du11hjcvx0uqb.cloudfront.net/br/dist/images/favicon-e10d657a73.ico" },
             "iready": { title: "i-Ready", icon: "https://login.i-ready.com/favicon.ico" },
