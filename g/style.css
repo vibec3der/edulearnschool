@@ -1,35 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* --- EDULEARN LITE: CLEAN & BUBBLY THEME --- */
+/* --- GN-MATH: EDULEARN LITE THEME --- */
 :root {
-    /* Background Gradients */
-    --bg-gradient-1: #0f0c20;
-    --bg-gradient-2: #24143a;
-    
-    /* Primary Accents */
-    --primary: #9d4edd;
-    --primary-hover: #b062eb;
-    
-    /* Glassmorphism Elements */
-    --bubble-glass: rgba(255, 255, 255, 0.06);
-    --bubble-border: rgba(255, 255, 255, 0.12);
-    --bubble-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-    
-    /* Input & Surfaces */
-    --input-bg: rgba(0, 0, 0, 0.3);
-    --surface: rgba(20, 15, 35, 0.85);
-    
-    /* Text Colors */
+    /* Edulearn Core Colors */
+    --bg-color: #000000;
     --text-main: #ffffff;
-    --text-muted: rgba(255, 255, 255, 0.6);
-    --text-inverted: #0f0c20;
+    --text-muted: #9ca3af;
+    --modal-bg: #0a0a0a;
+    --modal-border: #222222;
+    --input-bg: #000000;
+    --input-border: #333333;
+    --pill-hover: rgba(255, 255, 255, 0.1);
+    --pill-active: #222222;
+    --accent-glow: rgba(255, 255, 255, 0.1);
     
-    /* Animation Curves */
-    --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.4);
-    --smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    /* Legacy variables for compatibility */
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --primary-light: rgba(59, 130, 246, 0.15);
+    --bg: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+    --bg-secondary: rgba(18, 18, 23, 0.85);
+    --nav-hover: rgba(255, 255, 255, 0.05);
+    --surface: #121214;
+    --surface-hover: #27272a;
+    --text: #ffffff;
+    --border: #27272a;
+    --border-light: #3f3f46;
+    --nav-border: transparent;
     
-    /* Geometry */
-    --radius: 20px;
+    /* Shadows */
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.6);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    --shadow-glow: 0 0 20px var(--accent-glow);
+    
+    --radius: 12px;
 }
 
 * { 
@@ -39,31 +43,25 @@
 }
 
 body {
-    font-family: 'Nunito', system-ui, sans-serif;
-    background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
-    background-attachment: fixed;
-    color: var(--text-main);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
 }
 
 /* --- HEADER --- */
 header {
-    background: rgba(20, 15, 35, 0.6);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-bottom: 1px solid var(--bubble-border);
+    background: var(--nav-bg); /* Use transparent or appropriate var if defined, else fallback to bg-secondary */
+    background: transparent;
+    border-bottom: 1px solid var(--nav-border);
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
 .header-content {
     max-width: 1200px;
     margin: 0 auto;
-    height: 80px;
+    height: 80px; /* Matched to Edulearn's topbar height */
     padding: 0 40px;
     display: flex;
     align-items: center;
@@ -72,254 +70,236 @@ header {
 }
 
 .logo {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Dancing Script', cursive; /* Use Edulearn's brand font */
     font-size: 32px;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--text);
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: all 0.3s var(--bounce);
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    transition: 0.2s ease;
 }
 
 .logo:hover {
-    transform: translateY(-2px) scale(1.05);
-    text-shadow: 0 0 15px var(--primary);
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
+/* Optional: Emulates the Edulearn logo glow if your logo has an icon */
 .logo i, .logo svg {
-    color: var(--primary-hover);
-    filter: drop-shadow(0 0 8px rgba(157, 78, 221, 0.4));
+    color: var(--primary);
+    filter: drop-shadow(0 0 8px var(--accent-glow));
 }
 
 /* --- SEARCH & FILTERS --- */
 .search-container {
     display: flex;
     flex: 1;
-    max-width: 600px;
+    max-width: 500px;
     gap: 0.75rem;
 }
 
 #searchBar, #sortOptions, #filterOptions {
-    padding: 10px 18px;
-    border: 2px solid var(--bubble-border);
-    border-radius: 999px; /* Pill shape */
-    background: var(--input-bg);
-    color: var(--text-main);
+    padding: 10px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px; /* Sharper radius to match Edulearn */
+    background: var(--bg); /* Input bg */
+    color: var(--text);
     font-family: inherit;
     font-size: 14px;
-    font-weight: 600;
     outline: none;
-    transition: all 0.3s var(--smooth);
-    backdrop-filter: blur(10px);
-}
-
-#searchBar { flex: 1; }
-
-#searchBar::placeholder {
-    color: var(--text-muted);
-    font-weight: 500;
+    transition: 0.2s;
 }
 
 #searchBar:focus, #sortOptions:focus, #filterOptions:focus {
-    border-color: var(--primary);
-    background: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+    border-color: var(--text); /* Focus color matches edulearn */
+    /* box-shadow removed as edulearn focuses on border color change */
 }
 
 #sortOptions option, #filterOptions option {
-    background: var(--bg-gradient-2);
-    color: var(--text-main);
-    font-weight: 600;
+    background: var(--surface);
+    color: var(--text);
 }
 
 /* --- CONTROL BUTTONS & ICONS --- */
 .control-buttons {
     display: flex;
-    gap: 10px;
+    gap: 15px; /* Matched nav-actions gap */
     align-items: center;
 }
 
 .control-buttons button {
-    background: var(--bubble-glass);
-    border: 1px solid var(--bubble-border);
-    color: var(--text-main);
+    background: transparent;
+    border: none;
+    color: var(--text); /* Main text color for icons */
     cursor: pointer;
-    width: 38px; /* Reduced from 42px */
-    height: 38px; /* Reduced from 42px */
-    border-radius: 50%;
+    padding: 10px;
+    border-radius: 50%; /* Fully rounded buttons */
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s var(--bounce);
+    transition: 0.2s ease;
+    font-size: 20px;
 }
 
-.control-buttons button svg, .control-buttons button i {
-    width: 16px !important; /* Forced smaller */
-    height: 16px !important; /* Forced smaller */
+.control-buttons button img, .control-buttons button svg {
+    max-width: 18px;
+    max-height: 18px;
+    object-fit: contain;
 }
 
 .control-buttons button:hover {
-    background: var(--primary);
-    border-color: var(--primary-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+    color: var(--text);
+    background: var(--pill-hover);
 }
 
-/* --- MAIN CONTENT & GRID --- */
+/* --- MAIN GRID --- */
 main {
     margin: 0 auto;
-    padding: 2.5rem 1rem 6rem 1rem;
+    padding: 2rem 1rem;
+    padding-bottom: 6rem;
     max-width: 1200px;
-    flex: 1;
-    width: 100%;
 }
 
 #zoneCount {
-    color: var(--text-muted);
-    font-size: 14px;
+    color: var(--text-muted); /* Changed to muted to fit better */
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-weight: 800;
-    margin-bottom: 2rem;
+    font-weight: 600; /* Adjusted weight */
+    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 #zoneCount::before {
     content: '';
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--primary);
-    box-shadow: 0 0 10px var(--primary-hover);
+    box-shadow: 0 0 8px var(--primary);
 }
 
 #container, #featuredZones {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.25rem;
 }
 
 /* --- GAME CARD (ZONE ITEM) --- */
 .zone-item {
-    background: var(--bubble-glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--bubble-border);
+    background: rgba(255, 255, 255, 0.02); /* Matches setting card bg */
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.3s var(--bounce);
+    transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: none; /* Removed sm shadow to match flatter look */
 }
 
 .zone-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--primary-hover);
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(157, 78, 221, 0.2);
-}
-
-.zone-item:active {
-    transform: scale(0.95);
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--primary);
+    background: rgba(134, 239, 172, 0.05); /* Slight mint tint on hover */
+    box-shadow: 0 8px 25px rgba(134, 239, 172, 0.3);
 }
 
 .zone-item img {
     width: 100%;
-    height: 140px;
+    height: 140px; 
     object-fit: cover;
-    background: rgba(0, 0, 0, 0.5);
-    transition: transform 0.4s var(--smooth);
-    border-bottom: 1px solid var(--bubble-border);
+    background: #000;
+    opacity: 0.9;
+    transition: 0.3s;
+    border-bottom: 1px solid var(--border);
 }
 
 .zone-item:hover img {
-    transform: scale(1.08);
+    opacity: 1;
+    transform: scale(1.05);
 }
 
 .zone-item button {
     background: transparent;
-    color: var(--text-main);
+    color: var(--text);
     border: 0;
-    padding: 1rem;
-    font-weight: 700;
-    font-size: 14px;
+    padding: 0.85rem;
+    font-weight: 500; /* Matched preset-btn font weight */
+    font-size: 13px; /* Matched preset-btn font size */
     text-align: center;
     width: 100%;
     cursor: pointer;
+    border-top: 1px solid transparent;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    transition: color 0.3s;
+    text-overflow: ellipsis; 
+    transition: 0.2s;
 }
 
 .zone-item:hover button {
-    color: var(--primary-hover);
+    /* Specific hover styling handled by parent .zone-item:hover */
+    color: var(--primary);
 }
 
-/* --- TEXT-ONLY CARD STYLING --- */
+/* --- TEXT-ONLY STYLING --- */
 .zone-item.text-only {
-    min-height: 140px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    min-height: 80px;
     justify-content: center;
     align-items: center;
-    padding: 1.5rem;
 }
 
 .zone-item.text-only button {
     font-size: 16px;
-    white-space: normal;
-    overflow: visible;
+    font-weight: 600;
+    color: var(--text);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-/* --- VIEWER MODAL (SANDBOX) --- */
+.zone-item.text-only:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-color: var(--primary);
+    box-shadow: 0 8px 25px rgba(134, 239, 172, 0.3);
+}
+
+/* --- VIEWER MODAL --- */
 #zoneViewer {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(0, 0, 0, 0.9);
     z-index: 1000;
     display: none;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
 }
 
-#zoneViewer.active { 
-    display: flex; 
-    opacity: 1; 
-}
-
-#zoneViewer .sandbox-container {
+.sandbox-container {
     display: flex;
     flex-direction: column;
     width: 90vw;
-    height: 85vh;
+    height: 90vh;
     max-width: 1200px;
-    background: var(--bg-gradient-1);
-    border: 1px solid var(--bubble-border);
-    border-radius: 24px;
+    max-height: 800px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: var(--bubble-shadow);
-    transform: scale(0.95);
-    transition: transform 0.4s var(--bounce);
-}
-
-#zoneViewer.active .sandbox-container { 
-    transform: scale(1); 
+    box-shadow: var(--shadow-lg);
 }
 
 .zone-header {
-    background: rgba(20, 15, 35, 0.9);
-    border-bottom: 1px solid var(--bubble-border);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
     padding: 0 1.5rem;
-    height: 64px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -331,226 +311,187 @@ main {
     gap: 12px;
 }
 
-#zoneName { 
-    font-size: 18px; 
-    font-weight: 800; 
-    color: var(--text-main); 
+#zoneName {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
 }
 
-#zoneAuthor { 
-    font-size: 13px; 
-    color: var(--text-muted); 
-    font-weight: 600; 
+#zoneAuthor {
+    font-size: 13px;
+    color: var(--text-muted);
 }
 
 .zone-controls button {
-    background: #ef4444;
-    border: none;
-    color: white;
+    background: transparent; /* Changed to match clean-btn */
+    border: 1px solid var(--border-light);
+    color: var(--text);
     padding: 8px 18px;
-    border-radius: 9999px;
+    border-radius: 9999px; /* Pill shape */
     cursor: pointer;
-    transition: all 0.3s var(--bounce);
+    transition: 0.2s;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
 }
 
-.zone-controls button:hover { 
-    background: #f87171; 
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+.zone-controls button:hover {
+    background: var(--pill-hover);
 }
 
 .sandbox-toolbar {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     padding: 12px;
-    background: rgba(0, 0, 0, 0.4);
-    border-bottom: 1px solid var(--bubble-border);
-    justify-content: center;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
 }
 
 .sandbox-toolbar button {
-    background: var(--bubble-glass);
-    border: 1px solid var(--bubble-border);
-    color: var(--text-main);
-    width: 38px; /* Reduced from 40px */
-    height: 38px; /* Reduced from 40px */
-    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s var(--bounce);
+    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .sandbox-toolbar button:hover {
-    background: var(--primary);
-    border-color: var(--primary-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+    background: var(--pill-hover);
+    border-color: var(--primary);
 }
 
-.sandbox-toolbar button svg, .sandbox-toolbar button i { 
-    width: 16px !important; /* Forced smaller */
-    height: 16px !important; /* Forced smaller */
+.sandbox-toolbar button svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
 }
 
-#zoneFrame { 
-    flex: 1; 
-    border: none; 
-    background: #fff; 
-    width: 100%; 
-}
-
-/* --- SETTINGS POPUP MODAL --- */
+/* --- SETTINGS POPUP --- */
 #popupOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.5); /* Matched modal-overlay */
+    backdrop-filter: blur(8px);
     z-index: 2000;
     display: none;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-#popupOverlay.active { 
-    display: flex; 
-    opacity: 1; 
 }
 
 .popup {
     background: var(--surface);
-    border: 1px solid var(--bubble-border);
-    border-radius: 24px;
+    border: 1px solid var(--border);
+    border-radius: 16px; /* Matched settings-box */
     width: 100%;
-    max-width: 450px;
-    box-shadow: var(--bubble-shadow);
+    max-width: 850px; /* Matched settings-box */
+    box-shadow: var(--shadow-lg);
     display: flex;
     flex-direction: column;
-    transform: scale(0.95);
-    transition: transform 0.4s var(--bounce);
-}
-
-#popupOverlay.active .popup { 
-    transform: scale(1); 
+    transform: scale(0.98);
+    transition: transform 0.2s ease;
+    /* When active, add transform: scale(1); in JS if desired */
 }
 
 .popup-header {
-    background: transparent;
-    border-bottom: 1px solid var(--bubble-border);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     padding: 24px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: var(--text-main);
+    color: var(--text);
     font-size: 20px;
-    font-weight: 800;
+    font-weight: 600;
+    letter-spacing: normal; /* Removed letter spacing */
 }
 
 #popupClose {
-    background: var(--bubble-glass);
-    border: 1px solid var(--bubble-border);
+    background: transparent;
+    border: none;
     color: var(--text-muted);
     cursor: pointer;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s var(--bounce);
-}
-
-#popupClose svg, #popupClose i {
-    width: 16px !important;
-    height: 16px !important;
+    font-size: 20px;
+    transition: 0.2s;
 }
 
 #popupClose:hover { 
-    color: var(--text-main); 
-    background: rgba(255, 255, 255, 0.1);
-    transform: scale(1.1) rotate(90deg); 
+    color: var(--text); 
+    transform: scale(1.1); /* Matched btn-close-icon */
 }
 
 #popupBody { 
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-#popupBody label {
-    font-size: 13px; 
-    font-weight: 700; 
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    padding: 0 32px 32px 32px; /* Matched settings-content padding */
+    padding-top: 32px; /* Add some top padding since it's the body */
 }
 
 #popupBody input[type="text"],
+#popupBody input[type="file"],
 #popupBody select {
     width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--bubble-border);
-    background: rgba(0, 0, 0, 0.3);
-    color: var(--text-main);
-    border-radius: 12px;
+    padding: 10px 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-light);
+    background: var(--bg); /* Use input bg */
+    color: var(--text);
+    border-radius: 8px;
     outline: none;
     font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    transition: all 0.3s var(--smooth);
+    font-size: 14px;
+    transition: 0.2s;
 }
 
 #popupBody input:focus, #popupBody select:focus { 
-    border-color: var(--primary);
-    background: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 15px rgba(157, 78, 221, 0.2);
+    border-color: var(--text); 
 }
 
 .settings-button {
-    width: 100%;
-    margin-top: 10px;
-    height: 48px;
-    background: var(--primary);
-    color: white;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 8px 18px;
+    background: var(--text);
+    color: var(--bg);
     border: none;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 15px;
+    border-radius: 9999px; /* Pill shape */
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s var(--bounce);
+    transition: 0.2s;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
-.settings-button:hover { 
-    background: var(--primary-hover); 
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4);
+.settings-button:hover {
+    background: var(--text-muted);
 }
 
 /* --- FOOTER --- */
 footer {
-    background: transparent;
-    padding: 2rem;
+    background: transparent; /* Clean footer matching Edulearn */
+    padding: 1.5rem;
     text-align: center;
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    border-top: 1px solid var(--bubble-border);
+    pointer-events: none; /* Allows clicking behind it if needed */
+}
+
+.footer-links {
+    pointer-events: auto; /* Re-enable clicks for links */
 }
 
 .footer-links a {
     color: var(--text-muted);
     text-decoration: none;
-    margin: 0 12px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: color 0.2s;
+    margin: 0 10px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.2s;
 }
 
-.footer-links a:hover { 
-    color: var(--primary-hover); 
-}
+.footer-links a:hover { color: var(--text); }
