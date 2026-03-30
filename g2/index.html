@@ -144,6 +144,33 @@
 
         .search-input:focus ~ .search-icon { color: var(--primary); }
 
+        /* --- PERFORMANCE BUTTON --- */
+        .performance-btn {
+            background: var(--bubble-glass);
+            border: 1px solid var(--bubble-border);
+            color: var(--text);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s var(--bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .performance-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .performance-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+        }
+
         /* --- MAIN LAYOUT --- */
         .main-container {
             padding: 40px;
@@ -245,6 +272,36 @@
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+        }
+
+        /* --- PERFORMANCE MODE OVERRIDES --- */
+        body.performance-mode .game-card {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: none !important;
+            box-shadow: none !important;
+        }
+
+        body.performance-mode .game-card:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        body.performance-mode .topbar,
+        body.performance-mode .nav,
+        body.performance-mode .settings-card,
+        body.performance-mode .message-content {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(0, 0, 0, 0.3) !important;
+        }
+
+        body.performance-mode * {
+            transition: none !important;
+            animation: none !important;
         }
 
         /* --- SANDBOX OVERLAY --- */
@@ -351,6 +408,9 @@
             <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
             <i data-lucide="search" class="search-icon"></i>
         </div>
+        <button id="performanceBtn" class="performance-btn" title="Toggle Performance Mode">
+            <i data-lucide="zap"></i>
+        </button>
     </div>
 
     <div class="main-container" id="libraryView">
@@ -403,6 +463,7 @@
 
         let currentPage = 1;
         const itemsPerPage = 50;
+        const performanceItemsPerPage = 20;
 
         function renderGames(filter = "", page = 1) {
             currentPage = page;
@@ -410,15 +471,18 @@
             const filtered = gamesList.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
             countLabel.innerText = `(${filtered.length})`;
             
+            const isPerformanceMode = document.body.classList.contains('performance-mode');
+            const currentItemsPerPage = isPerformanceMode ? performanceItemsPerPage : itemsPerPage;
+            
             if (!filtered.length) {
                 grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0; font-weight: 600;">No games found.</div>`;
                 pagination.innerHTML = "";
                 return;
             }
             
-            const totalPages = Math.ceil(filtered.length / itemsPerPage);
-            const start = (page - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
+            const totalPages = Math.ceil(filtered.length / currentItemsPerPage);
+            const start = (page - 1) * currentItemsPerPage;
+            const end = start + currentItemsPerPage;
             const pageGames = filtered.slice(start, end);
             
             const fragment = document.createDocumentFragment();
@@ -439,6 +503,9 @@
         function renderPagination(totalPages, currentPage) {
             pagination.innerHTML = "";
             if (totalPages <= 1) return;
+
+            const isPerformanceMode = document.body.classList.contains('performance-mode');
+            const currentItemsPerPage = isPerformanceMode ? performanceItemsPerPage : itemsPerPage;
 
             const prevBtn = document.createElement('button');
             prevBtn.className = 'page-btn';
@@ -556,6 +623,16 @@
             if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
 
             searchInput.addEventListener('input', (e) => renderGames(e.target.value, 1));
+            
+            // Performance Mode Toggle
+            const performanceBtn = document.getElementById('performanceBtn');
+            performanceBtn.addEventListener('click', () => {
+                document.body.classList.toggle('performance-mode');
+                performanceBtn.classList.toggle('active');
+                // Re-render to apply changes
+                renderGames(searchInput.value, currentPage);
+            });
+            
             loadGames();
         });
     </script>
