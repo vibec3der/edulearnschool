@@ -177,8 +177,8 @@
         /* --- BUBBLY GAME CARDS --- */
         .game-card {
             background: var(--bubble-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             border: 1px solid var(--bubble-border);
             border-radius: 20px;
             padding: 24px 20px;
@@ -190,6 +190,7 @@
             text-align: center;
             min-height: 80px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            will-change: transform;
         }
 
         .game-card:hover {
@@ -208,6 +209,42 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        /* --- PAGINATION --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 40px;
+        }
+
+        .page-btn {
+            background: var(--bubble-glass);
+            border: 1px solid var(--bubble-border);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s var(--bounce);
+            font-weight: 600;
+        }
+
+        .page-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* --- SANDBOX OVERLAY --- */
@@ -321,6 +358,7 @@
             <i data-lucide="gamepad-2"></i> All Games <span id="gameCount">(0)</span>
         </div>
         <div class="game-grid" id="gameGrid"></div>
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <div id="zoneViewer">
@@ -355,33 +393,110 @@
                     { title: "History Quest", url: "about:blank" }
                 ];
             }
-            renderGames();
+            renderGames("", 1);
         }
 
         const grid = document.getElementById('gameGrid');
         const searchInput = document.getElementById('searchInput');
         const countLabel = document.getElementById('gameCount');
+        const pagination = document.getElementById('pagination');
 
-        function renderGames(filter = "") {
+        let currentPage = 1;
+        const itemsPerPage = 50;
+
+        function renderGames(filter = "", page = 1) {
+            currentPage = page;
             grid.innerHTML = "";
             const filtered = gamesList.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
             countLabel.innerText = `(${filtered.length})`;
             
             if (!filtered.length) {
                 grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0; font-weight: 600;">No games found.</div>`;
+                pagination.innerHTML = "";
                 return;
             }
             
-            filtered.forEach(game => {
+            const totalPages = Math.ceil(filtered.length / itemsPerPage);
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageGames = filtered.slice(start, end);
+            
+            const fragment = document.createDocumentFragment();
+            pageGames.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
                 card.onclick = () => launchGame(game);
                 card.innerHTML = `<div class="game-name">${game.title}</div>`;
-                grid.appendChild(card);
+                fragment.appendChild(card);
             });
+            grid.appendChild(fragment);
             
+            renderPagination(totalPages, page);
             // Re-initialize icons just in case you ever inject icons into the cards
             lucide.createIcons();
+        }
+
+        function renderPagination(totalPages, currentPage) {
+            pagination.innerHTML = "";
+            if (totalPages <= 1) return;
+
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerText = 'Prev';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => renderGames(searchInput.value, currentPage - 1);
+            pagination.appendChild(prevBtn);
+
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            if (endPage - startPage + 1 < maxVisible) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.className = 'page-btn';
+                firstBtn.innerText = '1';
+                firstBtn.onclick = () => renderGames(searchInput.value, 1);
+                pagination.appendChild(firstBtn);
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.innerText = '...';
+                    dots.style.color = 'var(--text-muted)';
+                    pagination.appendChild(dots);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn';
+                if (i === currentPage) btn.classList.add('active');
+                btn.innerText = i;
+                btn.onclick = () => renderGames(searchInput.value, i);
+                pagination.appendChild(btn);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.innerText = '...';
+                    dots.style.color = 'var(--text-muted)';
+                    pagination.appendChild(dots);
+                }
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'page-btn';
+                lastBtn.innerText = totalPages;
+                lastBtn.onclick = () => renderGames(searchInput.value, totalPages);
+                pagination.appendChild(lastBtn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerText = 'Next';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => renderGames(searchInput.value, currentPage + 1);
+            pagination.appendChild(nextBtn);
         }
 
         function launchGame(game) {
@@ -440,7 +555,7 @@
             const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
             if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
 
-            searchInput.addEventListener('input', (e) => renderGames(e.target.value));
+            searchInput.addEventListener('input', (e) => renderGames(e.target.value, 1));
             loadGames();
         });
     </script>
