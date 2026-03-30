@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,20 +61,13 @@
             --accent: #0078d4;
         }
 
-        i,
-        svg,
-        [class^="fa-"],
-        [class*=" fa-"] {
+        i, svg, [class^="fa-"], [class*=" fa-"] {
             color: #ffffff !important;
             filter: brightness(1.5);
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -120,9 +112,7 @@
             text-shadow: 0 0 10px var(--accent-glow);
         }
 
-        .search-container {
-            position: relative;
-        }
+        .search-container { position: relative; }
 
         .search-input {
             background: var(--input-bg);
@@ -199,9 +189,7 @@
             box-shadow: 0 4px 20px var(--accent-glow);
         }
 
-        .game-card:active {
-            transform: scale(0.98);
-        }
+        .game-card:active { transform: scale(0.98); }
 
         .game-name {
             font-weight: 600;
@@ -227,9 +215,7 @@
             align-items: center;
         }
 
-        #zoneViewer.active {
-            display: flex;
-        }
+        #zoneViewer.active { display: flex; }
 
         .sandbox-container {
             width: 85%;
@@ -255,12 +241,7 @@
             z-index: 10000;
         }
 
-        #zoneFrame {
-            flex-grow: 1;
-            border: none;
-            width: 100%;
-            background: #fff;
-        }
+        #zoneFrame { flex-grow: 1; border: none; width: 100%; background: #fff; }
 
         .sandbox-toolbar {
             background-color: #1a2327;
@@ -283,20 +264,12 @@
             transition: background 0.2s;
         }
 
-        .sandbox-toolbar button:hover {
-            background-color: #37474f;
-        }
+        .sandbox-toolbar button:hover { background-color: #37474f; }
 
-        .sandbox-toolbar button svg {
-            width: 20px;
-            height: 20px;
-            fill: white;
-        }
+        .sandbox-toolbar button svg { width: 20px; height: 20px; fill: white; }
     </style>
 </head>
-
 <body>
-
     <div class="topbar">
         <div class="topbar-brand" onclick="window.location.href='/h/'">
             <i class="fa-solid fa-house" style="font-size: 18px; margin-right: 4px;"></i> Home
@@ -337,15 +310,11 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Apply saved theme
-            const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
-            if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
+        let gamesList = [];
 
-            // Fetch games from JSON
-            let gamesList = [];
+        async function loadGames() {
             try {
-                const response = await fetch('/games.json'); // adjust path if needed
+                const response = await fetch('/games.json');
                 if (!response.ok) throw new Error("Failed to load games JSON");
                 gamesList = await response.json();
             } catch (err) {
@@ -353,80 +322,85 @@
                 alert("Could not load games list!");
                 return;
             }
+            renderGames();
+        }
 
-            const grid = document.getElementById('gameGrid');
-            const searchInput = document.getElementById('searchInput');
-            const countLabel = document.getElementById('gameCount');
+        const grid = document.getElementById('gameGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countLabel = document.getElementById('gameCount');
 
-            function renderGames(filter = "") {
-                grid.innerHTML = "";
-                const filtered = gamesList.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
-                countLabel.innerText = `(${filtered.length})`;
-                if (!filtered.length) {
-                    grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0;">No games found.</div>`;
-                    return;
-                }
-                filtered.forEach(game => {
-                    const card = document.createElement('div');
-                    card.className = 'game-card';
-                    card.onclick = () => launchGame(game);
-                    card.innerHTML = `<div class="game-name">${game.title}</div>`;
-                    grid.appendChild(card);
-                });
+        function renderGames(filter = "") {
+            grid.innerHTML = "";
+            const filtered = gamesList.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
+            countLabel.innerText = `(${filtered.length})`;
+            if (!filtered.length) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0;">No games found.</div>`;
+                return;
             }
+            filtered.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.onclick = () => launchGame(game);
+                card.innerHTML = `<div class="game-name">${game.title}</div>`;
+                grid.appendChild(card);
+            });
+        }
 
-            function launchGame(game) {
-                const overlay = document.getElementById('zoneViewer');
-                const frame = document.getElementById('zoneFrame');
-                frame.src = game.url;
-                overlay.classList.add('active');
-            }
+        function launchGame(game) {
+            const overlay = document.getElementById('zoneViewer');
+            const frame = document.getElementById('zoneFrame');
+            frame.src = game.url;
+            overlay.classList.add('active');
+        }
 
-            function closeZone() {
-                const overlay = document.getElementById('zoneViewer');
-                const frame = document.getElementById('zoneFrame');
-                overlay.classList.remove('active');
-                frame.src = '';
-            }
+        function closeZone() {
+            const overlay = document.getElementById('zoneViewer');
+            const frame = document.getElementById('zoneFrame');
+            overlay.classList.remove('active');
+            frame.src = '';
+        }
 
-            function fullscreenZone() {
-                const frame = document.getElementById('zoneFrame');
-                if(frame.requestFullscreen) frame.requestFullscreen();
-                else if(frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
-                else if(frame.msRequestFullscreen) frame.msRequestFullscreen();
-            }
+        function fullscreenZone() {
+            const frame = document.getElementById('zoneFrame');
+            if(frame.requestFullscreen) frame.requestFullscreen();
+            else if(frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+            else if(frame.msRequestFullscreen) frame.msRequestFullscreen();
+        }
 
-            function refreshZone() {
-                const frame = document.getElementById('zoneFrame');
-                frame.src = frame.src;
-            }
+        function refreshZone() {
+            const frame = document.getElementById('zoneFrame');
+            frame.src = frame.src;
+        }
 
-            function copyLink() {
-                const frame = document.getElementById('zoneFrame');
-                navigator.clipboard.writeText(frame.src);
-                alert("Link copied!");
-            }
+        function copyLink() {
+            const frame = document.getElementById('zoneFrame');
+            navigator.clipboard.writeText(frame.src);
+            alert("Link copied!");
+        }
 
-            function openAboutBlank() {
-                const frame = document.getElementById('zoneFrame');
-                if(frame.src === "" || frame.src === "about:blank") return;
-                const win = window.open('about:blank', '_blank');
-                win.document.body.style.margin = '0';
-                win.document.body.style.height = '100vh';
-                win.document.body.style.overflow = 'hidden';
-                const iframe = document.createElement('iframe');
-                iframe.style.border='none';
-                iframe.style.width='100%';
-                iframe.style.height='100%';
-                iframe.src = frame.src;
-                win.document.body.appendChild(iframe);
-                closeZone();
-            }
+        function openAboutBlank() {
+            const frame = document.getElementById('zoneFrame');
+            if(frame.src === "" || frame.src === "about:blank") return;
+            const win = window.open('about:blank', '_blank');
+            win.document.body.style.margin = '0';
+            win.document.body.style.height = '100vh';
+            win.document.body.style.overflow = 'hidden';
+            const iframe = document.createElement('iframe');
+            iframe.style.border='none';
+            iframe.style.width='100%';
+            iframe.style.height='100%';
+            iframe.src = frame.src;
+            win.document.body.appendChild(iframe);
+            closeZone();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+            if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
 
             searchInput.addEventListener('input', (e) => renderGames(e.target.value));
-            renderGames();
+            loadGames();
         });
     </script>
 </body>
-
 </html>
