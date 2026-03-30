@@ -448,7 +448,10 @@
       if (window !== window.top || window.location.protocol === "about:") return;
 
       // 2. Fetch settings
-      let userSettings = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+      let userSettings = JSON.parse(localStorage.getItem('edulearn_settings')) || { abEnabled: true };
+      
+      // 3. Check if AB is enabled
+      if (!userSettings.abEnabled) return;
       
       function spawnStealthWindow(win) {
         win.document.title = userSettings.cloakTitle || "EduLearn";
