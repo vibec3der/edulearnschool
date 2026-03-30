@@ -4,87 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduLearn — Academic Courses & Resources</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
+    <style>
         :root {
-            --bg-color: #000000;
+            /* Clean & Bubbly Theme (Default Purple) */
+            --bg-gradient-1: #0f0c20;
+            --bg-gradient-2: #24143a;
+            --primary: #9d4edd;
+            --primary-hover: #b062eb;
+            --bubble-glass: rgba(255, 255, 255, 0.06);
+            --bubble-border: rgba(255, 255, 255, 0.12);
+            --bubble-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
             --text-main: #ffffff;
-            --text-muted: #9ca3af;
-            --modal-bg: #0a0a0a;
-            --modal-border: #222222;
-            --input-bg: #000000;
-            --input-border: #333333;
-            --pill-hover: rgba(255, 255, 255, 0.1);
-            --pill-active: #222222;
-            --accent-glow: rgba(255, 255, 255, 0.1);
-            --accent: #86efac;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.4);
+            --smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Upgraded Glassmorphism Themes */
         [data-theme="sakura"] {
-            --bg-color: #fdf6f5;
-            --text-main: #4a3b3c;
-            --text-muted: #9e8487;
-            --modal-bg: #ffffff;
-            --modal-border: #f0e4e4;
-            --input-bg: #fdf6f5;
-            --input-border: #e6d3d3;
-            --pill-hover: rgba(255, 183, 197, 0.4);
-            --accent-glow: rgba(255, 183, 197, 0.3);
-            --accent: #ffb7c5;
+            --bg-gradient-1: #2b1820;
+            --bg-gradient-2: #4a2530;
+            --primary: #ff8fa3;
+            --primary-hover: #ffb3c1;
+            --bubble-glass: rgba(255, 183, 197, 0.08);
+            --bubble-border: rgba(255, 183, 197, 0.2);
+            --text-main: #fff0f3;
+            --text-muted: rgba(255, 240, 243, 0.7);
         }
 
         [data-theme="red"] {
-            --bg-color: #0a0000;
-            --text-main: #ff4d4d;
-            --text-muted: #802b2b;
-            --modal-bg: #140000;
-            --modal-border: #330000;
-            --input-bg: #0a0000;
-            --input-border: #4d0000;
-            --pill-hover: rgba(255, 0, 0, 0.15);
-            --accent-glow: rgba(255, 77, 77, 0.2);
-            --accent: #ff4d4d;
+            --bg-gradient-1: #1a0505;
+            --bg-gradient-2: #330000;
+            --primary: #ef4444;
+            --primary-hover: #f87171;
+            --bubble-glass: rgba(255, 68, 68, 0.08);
+            --bubble-border: rgba(255, 68, 68, 0.2);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
         }
 
         [data-theme="azure"] {
-            --bg-color: #faf9f8;
-            --text-main: #323130;
-            --text-muted: #605e5c;
-            --modal-bg: #ffffff;
-            --modal-border: #edebe9;
-            --input-bg: #ffffff;
-            --input-border: #8a8886;
-            --pill-hover: #f3f2f1;
-            --accent-glow: rgba(0, 120, 212, 0.2);
-            --accent: #0078d4;
-        }
-
-        i, svg, [class^="fa-"], [class*=" fa-"] {
-            color: #ffffff !important;
-            filter: brightness(1.5);
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+            --bg-gradient-1: #0a1128;
+            --bg-gradient-2: #001f54;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bubble-glass: rgba(59, 130, 246, 0.08);
+            --bubble-border: rgba(59, 130, 246, 0.2);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
+            transition: all 0.4s var(--smooth);
         }
 
+        /* --- TOPBAR --- */
         .topbar {
-            background-color: var(--modal-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--modal-border);
+            background: rgba(20, 15, 35, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--bubble-border);
             padding: 0 40px;
             height: 80px;
             display: flex;
@@ -93,112 +85,129 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 20px var(--accent-glow);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
 
         .topbar-brand {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 22px;
+            font-weight: 800;
             color: var(--text-main);
-            letter-spacing: -0.04em;
+            letter-spacing: -0.02em;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s var(--bounce);
+        }
+
+        .topbar-brand i { color: var(--primary-hover); width: 24px; height: 24px; }
+        .topbar-brand:hover { transform: translateY(-2px); text-shadow: 0 0 15px var(--primary); }
+
+        /* --- SEARCH BAR --- */
+        .search-container { position: relative; }
+
+        .search-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--bubble-border);
+            color: var(--text-main);
+            padding: 10px 16px 10px 42px;
+            border-radius: 999px; /* Pill shape */
+            font-size: 15px;
+            font-weight: 600;
+            width: 280px;
+            transition: all 0.3s var(--smooth);
+            font-family: inherit;
+            outline: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input::placeholder { color: var(--text-muted); font-weight: 500; }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+            width: 320px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: color 0.3s;
+        }
+
+        .search-input:focus ~ .search-icon { color: var(--primary); }
+
+        /* --- MAIN LAYOUT --- */
+        .main-container {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        .category-header {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .topbar-brand:hover {
-            transform: translateY(-2px);
-            text-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        .search-container { position: relative; }
-
-        .search-input {
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            color: var(--text-main);
-            padding: 10px 16px 10px 38px;
-            border-radius: 8px;
-            font-size: 14px;
-            width: 280px;
-            transition: 0.2s;
-            font-family: inherit;
-            outline: none;
-        }
-
-        .search-input:focus {
-            border-color: var(--text-main);
-            box-shadow: 0 0 0 2px var(--accent-glow);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-        }
-
-        .main-container {
-            padding: 40px;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-            flex: 1;
-            transition: opacity 0.3s;
-        }
-
-        .category-header {
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            user-select: none;
-        }
+        .category-header i { width: 18px; height: 18px; color: var(--primary); }
 
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
             margin-bottom: 40px;
         }
 
+        /* --- BUBBLY GAME CARDS --- */
         .game-card {
-            background: var(--modal-bg);
-            border: 1px solid var(--modal-border);
-            border-radius: 12px;
-            padding: 18px;
+            background: var(--bubble-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--bubble-border);
+            border-radius: 20px;
+            padding: 24px 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s var(--bounce);
             text-align: center;
-            min-height: 60px;
+            min-height: 80px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .game-card:hover {
-            background: var(--pill-hover);
-            transform: translateY(-4px);
-            box-shadow: 0 4px 20px var(--accent-glow);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-hover);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(157, 78, 221, 0.2);
         }
 
-        .game-card:active { transform: scale(0.98); }
+        .game-card:active { transform: scale(0.95); }
 
         .game-name {
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 16px;
             color: var(--text-main);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            transition: color 0.2s;
         }
 
         /* --- SANDBOX OVERLAY --- */
@@ -208,103 +217,121 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             z-index: 9999;
             display: none;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        #zoneViewer.active { display: flex; }
+        #zoneViewer.active { display: flex; opacity: 1; }
 
         .sandbox-container {
-            width: 85%;
-            max-width: 1000px;
+            width: 90%;
+            max-width: 1200px;
             height: 85vh;
-            background: #fbf8ef;
-            border-radius: 8px;
+            background: var(--bg-gradient-1);
+            border: 1px solid var(--bubble-border);
+            border-radius: 24px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             position: relative;
+            box-shadow: var(--bubble-shadow);
+            transform: scale(0.95);
+            transition: transform 0.4s var(--bounce);
         }
+
+        #zoneViewer.active .sandbox-container { transform: scale(1); }
 
         .close-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
+            top: -15px;
+            right: -15px;
+            background: #ef4444;
             border: none;
-            color: #ff5555;
-            font-size: 28px;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             cursor: pointer;
             z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+            transition: all 0.3s var(--bounce);
         }
 
-        #zoneFrame { flex-grow: 1; border: none; width: 100%; background: #fff; }
+        .close-btn i { width: 18px; height: 18px; }
+        .close-btn:hover { background: #f87171; transform: scale(1.15); }
+
+        #zoneFrame { flex-grow: 1; border: none; width: 100%; background: #ffffff; }
 
         .sandbox-toolbar {
-            background-color: #1a2327;
-            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-top: 1px solid var(--bubble-border);
+            padding: 12px 24px;
             display: flex;
             gap: 12px;
+            justify-content: center;
         }
 
         .sandbox-toolbar button {
-            background-color: #263338;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            width: 40px;
-            height: 40px;
+            background: var(--bubble-glass);
+            color: var(--text-main);
+            border: 1px solid var(--bubble-border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background 0.2s;
+            transition: all 0.3s var(--bounce);
         }
 
-        .sandbox-toolbar button:hover { background-color: #37474f; }
-
-        .sandbox-toolbar button svg { width: 20px; height: 20px; fill: white; }
+        .sandbox-toolbar button i { width: 20px; height: 20px; }
+        
+        .sandbox-toolbar button:hover {
+            background: var(--primary);
+            border-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+        }
     </style>
 </head>
 <body>
     <div class="topbar">
         <div class="topbar-brand" onclick="window.location.href='/h/'">
-            <i class="fa-solid fa-house" style="font-size: 18px; margin-right: 4px;"></i> Home
+            <i data-lucide="home"></i> Home
         </div>
         <div class="search-container">
-            <i class="fa-solid fa-search search-icon"></i>
             <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+            <i data-lucide="search" class="search-icon"></i>
         </div>
     </div>
 
     <div class="main-container" id="libraryView">
         <div class="category-header">
-            <i class="fa-solid fa-gamepad" style="margin-right: 4px;"></i> All Games <span id="gameCount">(0)</span>
+            <i data-lucide="gamepad-2"></i> All Games <span id="gameCount">(0)</span>
         </div>
         <div class="game-grid" id="gameGrid"></div>
     </div>
 
-    <!-- SANDBOX OVERLAY -->
     <div id="zoneViewer">
         <div class="sandbox-container">
+            <button class="close-btn" onclick="closeZone()"><i data-lucide="x"></i></button>
             <iframe id="zoneFrame" title="Game Content"></iframe>
             <div class="sandbox-toolbar">
-                <button onclick="fullscreenZone()" title="Fullscreen">
-                    <i class="fa-solid fa-expand"></i>
-                </button>
-                <button onclick="refreshZone()" title="Refresh">
-                    <i class="fa-solid fa-arrows-rotate"></i>
-                </button>
-                <button onclick="copyLink()" title="Copy Link">
-                    <i class="fa-solid fa-copy"></i>
-                </button>
-                <button onclick="openAboutBlank()" title="Open in New Tab">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </button>
-                <button class="close-btn" onclick="closeZone()">✖</button>
+                <button onclick="fullscreenZone()" title="Fullscreen"><i data-lucide="maximize"></i></button>
+                <button onclick="refreshZone()" title="Refresh"><i data-lucide="refresh-cw"></i></button>
+                <button onclick="copyLink()" title="Copy Link"><i data-lucide="copy"></i></button>
+                <button onclick="openAboutBlank()" title="Open in New Tab"><i data-lucide="external-link"></i></button>
             </div>
         </div>
     </div>
@@ -314,13 +341,19 @@
 
         async function loadGames() {
             try {
+                // Keep this pointing to your games.json logic
                 const response = await fetch('/games.json');
                 if (!response.ok) throw new Error("Failed to load games JSON");
                 gamesList = await response.json();
             } catch (err) {
                 console.error(err);
-                alert("Could not load games list!");
-                return;
+                // Creating fake data so you can see the design before hooking up your real JSON
+                gamesList = [
+                    { title: "Algebra Blaster", url: "about:blank" },
+                    { title: "Physics Simulator", url: "about:blank" },
+                    { title: "Typing Tutor", url: "about:blank" },
+                    { title: "History Quest", url: "about:blank" }
+                ];
             }
             renderGames();
         }
@@ -333,10 +366,12 @@
             grid.innerHTML = "";
             const filtered = gamesList.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
             countLabel.innerText = `(${filtered.length})`;
+            
             if (!filtered.length) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0;">No games found.</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0; font-weight: 600;">No games found.</div>`;
                 return;
             }
+            
             filtered.forEach(game => {
                 const card = document.createElement('div');
                 card.className = 'game-card';
@@ -344,6 +379,9 @@
                 card.innerHTML = `<div class="game-name">${game.title}</div>`;
                 grid.appendChild(card);
             });
+            
+            // Re-initialize icons just in case you ever inject icons into the cards
+            lucide.createIcons();
         }
 
         function launchGame(game) {
@@ -357,7 +395,7 @@
             const overlay = document.getElementById('zoneViewer');
             const frame = document.getElementById('zoneFrame');
             overlay.classList.remove('active');
-            frame.src = '';
+            setTimeout(() => { frame.src = ''; }, 300); // Wait for fade-out animation before clearing src
         }
 
         function fullscreenZone() {
@@ -385,6 +423,7 @@
             win.document.body.style.margin = '0';
             win.document.body.style.height = '100vh';
             win.document.body.style.overflow = 'hidden';
+            win.document.body.style.backgroundColor = '#000'; // Match theme
             const iframe = document.createElement('iframe');
             iframe.style.border='none';
             iframe.style.width='100%';
@@ -395,6 +434,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide Icons right away
+            lucide.createIcons();
+
             const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
             if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
 
