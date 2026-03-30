@@ -146,8 +146,8 @@ header {
     border: 1px solid var(--bubble-border);
     color: var(--text-main);
     cursor: pointer;
-    width: 42px;
-    height: 42px;
+    width: 38px; /* Reduced from 42px */
+    height: 38px; /* Reduced from 42px */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -156,8 +156,8 @@ header {
 }
 
 .control-buttons button svg, .control-buttons button i {
-    width: 18px;
-    height: 18px;
+    width: 16px !important; /* Forced smaller */
+    height: 16px !important; /* Forced smaller */
 }
 
 .control-buttons button:hover {
@@ -374,8 +374,8 @@ main {
     background: var(--bubble-glass);
     border: 1px solid var(--bubble-border);
     color: var(--text-main);
-    width: 40px;
-    height: 40px;
+    width: 38px; /* Reduced from 40px */
+    height: 38px; /* Reduced from 40px */
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s var(--bounce);
@@ -392,8 +392,8 @@ main {
 }
 
 .sandbox-toolbar button svg, .sandbox-toolbar button i { 
-    width: 18px; 
-    height: 18px; 
+    width: 16px !important; /* Forced smaller */
+    height: 16px !important; /* Forced smaller */
 }
 
 #zoneFrame { 
@@ -464,6 +464,11 @@ main {
     align-items: center;
     justify-content: center;
     transition: all 0.3s var(--bounce);
+}
+
+#popupClose svg, #popupClose i {
+    width: 16px !important;
+    height: 16px !important;
 }
 
 #popupClose:hover { 
