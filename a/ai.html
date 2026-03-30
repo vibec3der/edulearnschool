@@ -1,0 +1,758 @@
+<! html>
+	<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Edulearn AI</title>
+
+		<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap"
+			rel="stylesheet">
+		<script src="https://unpkg.com/lucide@latest"></script>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+		<style>
+			:root {
+				/* Clean & Bubbly Theme */
+				--bg-gradient-1: #0f0c20;
+				--bg-gradient-2: #24143a;
+				--primary: #9d4edd;
+				--primary-hover: #b062eb;
+				--bubble-glass: rgba(255, 255, 255, 0.06);
+				--bubble-border: rgba(255, 255, 255, 0.12);
+				--bubble-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+				--text-main: #ffffff;
+				--text-muted: rgba(255, 255, 255, 0.6);
+				--bounce: cubic-bezier(0.175, 0.885, 0.32, 1.4);
+				--smooth: cubic-bezier(0.4, 0, 0.2, 1);
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Nunito', sans-serif;
+				background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+				color: var(--text-main);
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+			}
+
+			.aitainer {
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+				max-width: 900px;
+				margin: 0 auto;
+				width: 100%;
+				padding: 20px;
+			}
+
+			/* --- CHAT AREA --- */
+			.ai-msgs {
+				flex: 1;
+				overflow-y: auto;
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+				padding-right: 8px;
+				padding-bottom: 20px;
+				scroll-behavior: smooth;
+			}
+
+			.ai-msgs::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			.ai-msgs::-webkit-scrollbar-track {
+				background: transparent;
+			}
+
+			.ai-msgs::-webkit-scrollbar-thumb {
+				background: rgba(255, 255, 255, 0.15);
+				border-radius: 999px;
+			}
+
+			.ai-welcome {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				margin: auto;
+				gap: 16px;
+				animation: fadeUp 0.6s var(--bounce);
+			}
+
+			.welcome-icon {
+				width: 72px;
+				height: 72px;
+				background: var(--bubble-glass);
+				border: 1px solid var(--bubble-border);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--primary-hover);
+				box-shadow: 0 0 30px rgba(157, 78, 221, 0.3);
+			}
+
+			.welcome-icon svg {
+				width: 36px;
+				height: 36px;
+			}
+
+			.ai-welcome h1 {
+				font-size: 32px;
+				font-weight: 800;
+				background: linear-gradient(135deg, #e0aaff, #9d4edd);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			}
+
+			.ai-welcome p {
+				color: var(--text-muted);
+				font-size: 16px;
+				font-weight: 500;
+			}
+
+			/* --- MESSAGES --- */
+			.msg {
+				display: flex;
+				flex-direction: column;
+				max-width: 85%;
+				animation: fadeUp 0.4s var(--smooth) both;
+			}
+
+			.msg.user {
+				align-self: flex-end;
+				align-items: flex-end;
+			}
+
+			.msg.ai {
+				align-self: flex-start;
+				align-items: flex-start;
+			}
+
+			.msg-label {
+				font-size: 13px;
+				font-weight: 700;
+				color: var(--text-muted);
+				margin-bottom: 6px;
+				padding: 0 4px;
+			}
+
+			.msg-bubble {
+				padding: 14px 20px;
+				font-size: 15px;
+				line-height: 1.6;
+				font-weight: 500;
+				border-radius: 24px;
+				word-wrap: break-word;
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			}
+
+			.msg.user .msg-bubble {
+				background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+				color: white;
+				border-bottom-right-radius: 6px;
+			}
+
+			.msg.ai .msg-bubble {
+				background: var(--bubble-glass);
+				backdrop-filter: blur(12px);
+				-webkit-backdrop-filter: blur(12px);
+				border: 1px solid var(--bubble-border);
+				color: var(--text-main);
+				border-bottom-left-radius: 6px;
+			}
+
+			/* Markdown Styling */
+			.msg-bubble p {
+				margin-bottom: 12px;
+			}
+
+			.msg-bubble p:last-child {
+				margin: 0;
+			}
+
+			.msg-bubble code {
+				background: rgba(0, 0, 0, 0.3);
+				border-radius: 8px;
+				padding: 2px 8px;
+				font-family: monospace;
+				font-size: 14px;
+			}
+
+			.msg-bubble pre {
+				background: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				padding: 16px;
+				overflow-x: auto;
+				margin: 12px 0;
+				border: 1px solid var(--bubble-border);
+			}
+
+			.msg-bubble pre code {
+				background: none;
+				border: none;
+				padding: 0;
+			}
+
+			.msg-bubble ul,
+			.msg-bubble ol {
+				margin-left: 20px;
+				margin-bottom: 12px;
+			}
+
+			.msg-bubble strong {
+				font-weight: 800;
+				color: #fff;
+			}
+
+			/* --- LOADING STATE (Thinking) --- */
+			.thinking-container {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.thinking-text {
+				font-size: 14px;
+				font-weight: 700;
+				color: var(--primary-hover);
+				animation: pulseText 1.5s infinite;
+			}
+
+			.cool-loading-bar {
+				width: 80px;
+				height: 6px;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 999px;
+				overflow: hidden;
+				position: relative;
+			}
+
+			.cool-loading-bar::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 30%;
+				background: linear-gradient(90deg, transparent, var(--primary-hover), transparent);
+				border-radius: 999px;
+				animation: slideBar 1.2s infinite ease-in-out;
+			}
+
+			@keyframes slideBar {
+				0% {
+					left: -30%;
+				}
+
+				100% {
+					left: 100%;
+				}
+			}
+
+			@keyframes pulseText {
+
+				0%,
+				100% {
+					opacity: 0.6;
+				}
+
+				50% {
+					opacity: 1;
+				}
+			}
+
+			@keyframes fadeUp {
+				from {
+					opacity: 0;
+					transform: translateY(15px);
+				}
+
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			/* --- INPUT AREA --- */
+			.ai-input-area {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				padding-top: 10px;
+			}
+
+			.quick-actions {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+			}
+
+			.pill-btn {
+				background: var(--bubble-glass);
+				color: var(--text-main);
+				border: 1px solid var(--bubble-border);
+				padding: 8px 16px;
+				border-radius: 999px;
+				/* Pill shape */
+				font-size: 13px;
+				font-weight: 700;
+				font-family: inherit;
+				cursor: pointer;
+				transition: all 0.3s var(--bounce);
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				backdrop-filter: blur(8px);
+			}
+
+			.pill-btn:hover {
+				background: rgba(255, 255, 255, 0.15);
+				border-color: var(--primary-hover);
+				transform: translateY(-2px);
+				box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+			}
+
+			.pill-btn svg {
+				width: 14px;
+				height: 14px;
+			}
+
+			.ai-input-wpr {
+				display: flex;
+				align-items: flex-end;
+				background: rgba(0, 0, 0, 0.3);
+				border: 2px solid var(--bubble-border);
+				border-radius: 28px;
+				padding: 8px 14px;
+				backdrop-filter: blur(20px);
+				transition: all 0.3s var(--smooth);
+			}
+
+			.ai-input-wpr:focus-within {
+				border-color: var(--primary);
+				background: rgba(0, 0, 0, 0.5);
+				box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+			}
+
+			.ai-input {
+				flex: 1;
+				background: transparent;
+				border: none;
+				outline: none;
+				color: var(--text-main);
+				font-size: 15px;
+				font-weight: 600;
+				font-family: inherit;
+				resize: none;
+				max-height: 120px;
+				line-height: 1.5;
+				padding: 10px 8px;
+				align-self: center;
+			}
+
+			.ai-input::placeholder {
+				color: rgba(255, 255, 255, 0.4);
+			}
+
+			.action-btn {
+				width: 42px;
+				height: 42px;
+				border-radius: 50%;
+				border: none;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				transition: all 0.3s var(--bounce);
+				margin-bottom: 2px;
+			}
+
+			.ai-send-btn {
+				background: var(--primary);
+				color: white;
+			}
+
+			.ai-send-btn svg {
+				width: 18px;
+				height: 18px;
+				transform: translateX(-1px);
+			}
+
+			.ai-send-btn:hover {
+				background: var(--primary-hover);
+				transform: scale(1.1);
+				box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+			}
+
+			.ai-stop-btn {
+				background: #ef4444;
+				/* Red for stop */
+				color: white;
+				display: none;
+				/* Hidden by default */
+			}
+
+			.ai-stop-btn svg {
+				width: 18px;
+				height: 18px;
+				fill: white;
+			}
+
+			.ai-stop-btn:hover {
+				background: #f87171;
+				transform: scale(1.1);
+				box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+			}
+
+			/* --- MODEL SELECTOR DROPDOWN --- */
+			.model-sel {
+				position: relative;
+			}
+
+			.model-dr {
+				display: none;
+				position: absolute;
+				bottom: calc(100% + 12px);
+				left: 0;
+				background: rgba(20, 15, 35, 0.95);
+				border: 1px solid var(--bubble-border);
+				border-radius: 16px;
+				min-width: 220px;
+				box-shadow: var(--bubble-shadow);
+				backdrop-filter: blur(24px);
+				z-index: 100;
+				max-height: 300px;
+				overflow-y: auto;
+				transform-origin: bottom left;
+				animation: popIn 0.2s var(--bounce) forwards;
+			}
+
+			@keyframes popIn {
+				from {
+					opacity: 0;
+					transform: scale(0.95);
+				}
+
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.model-dr.open {
+				display: block;
+			}
+
+			.model-dr::-webkit-scrollbar {
+				width: 6px;
+			}
+
+			.model-dr::-webkit-scrollbar-thumb {
+				background: rgba(255, 255, 255, 0.2);
+				border-radius: 999px;
+			}
+
+			.model-section-title {
+				font-size: 11px;
+				text-transform: uppercase;
+				color: var(--primary-hover);
+				padding: 14px 16px 4px 16px;
+				font-weight: 800;
+				letter-spacing: 0.5px;
+			}
+
+			.model-option {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 10px 16px;
+				font-size: 13px;
+				font-weight: 600;
+				cursor: pointer;
+				transition: background 0.2s;
+			}
+
+			.model-option:hover {
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			.model-option.active {
+				color: var(--primary-hover);
+				background: rgba(157, 78, 221, 0.1);
+			}
+
+			.prov-dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.2);
+				transition: 0.2s;
+			}
+
+			.model-option.active .prov-dot {
+				background: var(--primary-hover);
+				box-shadow: 0 0 8px var(--primary-hover);
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="aitainer">
+			<div class="ai-msgs" id="aiMsgs">
+				<div class="ai-welcome">
+					<div class="welcome-icon"><i data-lucide="sparkles"></i></div>
+					<h1>Edulearn AI</h1>
+					<p>What do you want to learn today?</p>
+				</div>
+			</div>
+
+			<div class="ai-input-area">
+				<div class="quick-actions">
+					<div class="model-sel" id="modelSel">
+						<button class="pill-btn" id="modelBtn">
+                        <i data-lucide="cpu"></i>
+                        <span id="modelBadge">Gemini 3.1 Pro</span>
+                        <i data-lucide="chevron-up"></i>
+                    </button>
+						<div class="model-dr" id="modelDr">
+							<div class="model-section-title">Top Tier (2026)</div>
+							<div class="model-option active" data-model="google/gemini-3.1-pro">
+								<span class="prov-dot"></span>Gemini 3.1 Pro
+							</div>
+							<div class="model-option" data-model="anthropic/claude-opus-4.6">
+								<span class="prov-dot"></span>Claude Opus 4.6
+							</div>
+							<div class="model-option" data-model="openai/gpt-5.4">
+								<span class="prov-dot"></span>GPT-5.4
+							</div>
+							<div class="model-option" data-model="moonshotai/kimi-k2.5">
+								<span class="prov-dot"></span>Kimi K2.5
+							</div>
+
+							<div class="model-section-title">High Performance</div>
+							<div class="model-option" data-model="anthropic/claude-sonnet-4.6">
+								<span class="prov-dot"></span>Claude Sonnet 4.6
+							</div>
+							<div class="model-option" data-model="openai/gpt-5.3-codex">
+								<span class="prov-dot"></span>GPT-5.3 Codex
+							</div>
+							<div class="model-option" data-model="google/gemini-3-flash">
+								<span class="prov-dot"></span>Gemini 3 Flash
+							</div>
+						</div>
+					</div>
+
+					<button class="pill-btn" id="quizBtn">
+                    <i data-lucide="file-question"></i> Create Quiz
+                </button>
+				</div>
+
+				<div class="ai-input-wpr">
+					<textarea class="ai-input" id="aiInput" placeholder="Ask anything..." rows="1"></textarea>
+
+					<button class="action-btn ai-send-btn" id="aiSend" title="Send Message">
+                    <i data-lucide="arrow-up"></i>
+                </button>
+
+					<button class="action-btn ai-stop-btn" id="aiStop" title="Stop Generation">
+                    <i data-lucide="square"></i>
+                </button>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Initialize Icons
+        lucide.createIcons();
+
+        // DOM Elements
+        const messagesEl = document.getElementById('aiMsgs');
+        const inputEl = document.getElementById('aiInput');
+        const sendBtn = document.getElementById('aiSend');
+        const stopBtn = document.getElementById('aiStop');
+        const modelBtn = document.getElementById('modelBtn');
+        const modelDr = document.getElementById('modelDr');
+        const quizBtn = document.getElementById('quizBtn');
+
+        let convoHistory = [];
+        let currModel = 'google/gemini-3.1-pro';
+        
+        // Abort Controller for stopping generation
+        let currentAbortController = null;
+
+        // Auto-resize textarea
+        inputEl.addEventListener('input', () => {
+            inputEl.style.height = 'auto';
+            inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+        });
+
+        // Submit on Enter (without shift)
+        inputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMsg();
+            }
+        });
+
+        sendBtn.addEventListener('click', sendMsg);
+
+        // Stop Button Logic
+        stopBtn.addEventListener('click', () => {
+            if (currentAbortController) {
+                currentAbortController.abort();
+            }
+        });
+
+        // --- Quiz Helper ---
+        quizBtn.addEventListener('click', () => {
+            inputEl.value = "Please generate a 5-question multiple choice quiz about [ENTER TOPIC HERE]. Include an answer key at the bottom.";
+            inputEl.focus();
+            inputEl.setSelectionRange(52, 70); 
+        });
+
+        // --- Chat UI Logic ---
+        function appendMsg(role, text) {
+            const welcome = messagesEl.querySelector('.ai-welcome');
+            if (welcome) welcome.remove();
+            
+            const msg = document.createElement('div');
+            msg.className = `msg ${role}`;
+            
+            msg.innerHTML = `
+                <div class="msg-label">${role === 'user' ? 'You' : `Edulearn AI`}</div>
+                <div class="msg-bubble"><div class="text-content"></div></div>
+            `;
+            messagesEl.appendChild(msg);
+            
+            const textContent = msg.querySelector('.text-content');
+            textContent.innerHTML = role === 'ai' ? marked.parse(text) : text;
+            
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+            return textContent;
+        }
+
+        function showLoading() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'msg ai';
+            wrapper.id = 'loadingInd';
+            wrapper.innerHTML = `
+                <div class="msg-label">Edulearn AI</div>
+                <div class="msg-bubble">
+                    <div class="thinking-container">
+                        <span class="thinking-text">Edulearn AI is thinking...</span>
+                        <div class="cool-loading-bar"></div>
+                    </div>
+                </div>`;
+            messagesEl.appendChild(wrapper);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function removeLoading() {
+            const t = document.getElementById('loadingInd');
+            if (t) t.remove();
+        }
+
+        // --- Send Message Logic ---
+        async function sendMsg() {
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            // Setup AbortController
+            currentAbortController = new AbortController();
+            const signal = currentAbortController.signal;
+
+            // Reset UI
+            inputEl.value = '';
+            inputEl.style.height = 'auto';
+            inputEl.focus();
+            
+            // Toggle Buttons
+            sendBtn.style.display = 'none';
+            stopBtn.style.display = 'flex';
+
+            appendMsg('user', text);
+            convoHistory.push({ role: 'user', content: text });
+
+            showLoading();
+
+            try {
+                const res = await fetch('https://krypton-proxy.carbonical80.workers.dev', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    signal: signal, // Attach signal to fetch
+                    body: JSON.stringify({
+                        model: currModel,
+                        messages: [
+                            { role: 'system', content: 'You are Edulearn AI, an educational assistant. Be helpful, clear, and format your answers using markdown.' },
+                            ...convoHistory
+                        ]
+                    })
+                });
+                
+                const data = await res.json();
+                removeLoading();
+                
+                const reply = data.choices?.[0]?.message?.content || 'Error: Response payload undefined.';
+                
+                convoHistory.push({ role: 'assistant', content: reply });
+                appendMsg('ai', reply);
+                
+                lucide.createIcons(); 
+                
+            } catch (err) {
+                removeLoading();
+                
+                // Handle Abort specifically
+                if (err.name === 'AbortError') {
+                    const textContent = appendMsg('ai', '*Generation stopped by user.*');
+                    textContent.style.color = "var(--text-muted)";
+                    textContent.style.fontStyle = "italic";
+                } else {
+                    const textContent = appendMsg('ai', '');
+                    textContent.textContent = 'Failed to connect. Please check your network.';
+                    console.error(err);
+                }
+            } finally {
+                // Reset buttons regardless of success or failure
+                sendBtn.style.display = 'flex';
+                stopBtn.style.display = 'none';
+                currentAbortController = null;
+            }
+        }
+
+        // --- Model Selector Logic ---
+        modelBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            modelDr.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            modelDr.classList.remove('open');
+        });
+
+        document.querySelectorAll('.model-option').forEach(el => {
+            el.addEventListener('click', () => {
+                currModel = el.dataset.model;
+                document.getElementById('modelBadge').textContent = el.textContent.trim();
+                document.querySelectorAll('.model-option').forEach(o => o.classList.remove('active'));
+                el.classList.add('active');
+                modelDr.classList.remove('open');
+            });
+        });
+		</script>
+	</body>
+
+	</html>
