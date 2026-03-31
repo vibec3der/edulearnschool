@@ -1,1 +1,0 @@
-let _CONFIG = {"wispurl":"wss://scienceislife.bostoncareercounselor.com/wisp/","bareurl":"https://petezahgames.com/bare/"}
