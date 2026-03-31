@@ -440,7 +440,7 @@
         async function loadGames() {
             try {
                 // Keep this pointing to your games.json logic
-                const response = await fetch('/games.json');
+                const response = await fetch('/UGS.json');
                 if (!response.ok) throw new Error("Failed to load games JSON");
                 gamesList = await response.json();
             } catch (err) {
@@ -622,10 +622,14 @@
             const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
             if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
 
+            // Enable performance mode by default
+            document.body.classList.add('performance-mode');
+            const performanceBtn = document.getElementById('performanceBtn');
+            performanceBtn.classList.add('active');
+
             searchInput.addEventListener('input', (e) => renderGames(e.target.value, 1));
             
             // Performance Mode Toggle
-            const performanceBtn = document.getElementById('performanceBtn');
             performanceBtn.addEventListener('click', () => {
                 document.body.classList.toggle('performance-mode');
                 performanceBtn.classList.toggle('active');
