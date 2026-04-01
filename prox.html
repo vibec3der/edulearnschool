@@ -260,9 +260,13 @@
 <body>
 
     <div class="topbar">
+<button id="edulearn-button" class="nav-btn" title="EduLearn">
+    EduLearn
+</button>
         <button id="home-button" class="nav-btn" title="Home">
             <i class="fa-solid fa-house"></i>
         </button>
+		
         <button id="config-button" class="nav-btn">config</button>
         <button id="back-button" class="nav-btn" title="Back">
             <i class="fa-solid fa-arrow-left"></i>
@@ -360,8 +364,11 @@
 
         // Home Navigation
         document.getElementById("home-button").addEventListener("click", function() {
-            window.location.href = "/h/"; 
+            window.location.href = "/prox.html"; 
         });
+		document.getElementById("edulearn-button").addEventListener("click", function() {
+    window.location.href = "/h/";
+});
 
         // Modal Logic
         const modal = document.getElementById("settings-modal");
