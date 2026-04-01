@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+		/>
+		<title>proxy | credit</title>
+		<base href="/prox.html" />
+		<link rel="shortcut icon" content="favicon.ico" />
+		<link rel="stylesheet" href="prox.css" />
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="center">
+				<div class="logo-wrapper left-margin">
+					<h1>proxy | settings</h1>
+				</div>
+				<div class="desc left-margin">
+					<p>wisp server:</p>
+                    <input id="sj-address" type="text" placeholder="" />
+					<p>transport:</p>
+					<select class="sj-select">
+						<option value="libcurl">libcurl (slightly slower, more secure)</option>
+						<option value="epoxy">epoxy (fastest)</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<a href="/prox.html">main page</a>&nbsp;&nbsp;&nbsp;
+			<a href="credits.html">credits</a>&nbsp;&nbsp;&nbsp;
+			<a href="settings.html">settings</a>
+		</div>
+		<script>
+		const addressInput = document.getElementById("sj-address");
+		const transportSelect = document.querySelector(".sj-select");
+
+		const savedWisp = localStorage.getItem("wispUrl");
+		if (savedWisp) {
+			addressInput.placeholder = savedWisp;
+		}
+
+		let savedTransport = localStorage.getItem("transport");
+
+		if (savedTransport !== "epoxy" && savedTransport !== "libcurl") {
+			savedTransport = "libcurl";
+			localStorage.setItem("transport", savedTransport);
+		}
+
+		transportSelect.value = savedTransport;
+
+		addressInput.addEventListener("keydown", function (e) {
+			if (e.key === "Enter") {
+				let value = this.value.trim();
+
+				if (!value.startsWith("wss://")) value = "wss://" + value;
+				if (!value.endsWith("/")) value += "/";
+
+				localStorage.setItem("wispUrl", value);
+				this.placeholder = value;
+				this.value = "";
+			}
+		});
+
+		transportSelect.addEventListener("change", function () {
+			localStorage.setItem("transport", this.value);
+		});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+		/>
+		<title>proxy</title>
+
+		<link rel="shortcut icon" content="favicon.jpg" />
+	
+		<script src="/scram/scramjet.all.js"></script>
+		<script src="/baremux/index.js"></script>
+		
+		<link rel="stylesheet" href="prox.css" />
+		<script src="register-sw.js" defer></script>
+		<script src="search.js" defer></script>
+		<script src="index.js" defer></script>
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="center">
+				<h1>proxy</h1>
+				<form id="sj-form">
+					<input
+						id="sj-search-engine"
+						value="https://duckduckgo.com/?q=%s"
+						type="hidden"
+					/>
+					<input id="sj-address" type="text" placeholder="search" />
+				</form>
+			</div>
+		</div>
+
+		<div class="desc left-margin">
+			<p id="sj-error"></p>
+			<pre id="sj-error-code"></pre>
+		</div>
+
+		<div class="footer">
+			<a href="prox.html">main page</a>&nbsp;&nbsp;&nbsp;
+			<a href="credits.html">credits</a>&nbsp;&nbsp;&nbsp;
+			<a href="settings.html">settings</a>
+		</div>
+		<script>
+			if (!localStorage.getItem("wispUrl")) {
+				localStorage.setItem("wispUrl", "wss://gointospace.app/wisp/");
+			}
+
+			const transport = localStorage.getItem("transport");
+			if (transport !== "epoxy" && transport !== "libcurl") {
+				localStorage.setItem("transport", "libcurl");
+			}
+		</script>
+	</body>
+</html>
