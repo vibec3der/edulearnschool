@@ -1,68 +1,405 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
-		/>
-		
-		<title> EduLearn — Academic Courses & Resources</title>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>Scramjet</title>
+    <link rel="icon" href="favicon.webp" />
 
-		<link rel="shortcut icon" content="favicon.jpg" />
-	
-		<script src="/scram/scramjet.all.js"></script>
-		<script src="/baremux/index.js"></script>
-		
-		<link rel="stylesheet" href="prox.css" />
-		<script src="register-sw.js" defer></script>
-		<script src="search.js" defer></script>
-		<script src="index.js" defer></script>
-	</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-	<body>
-		<div class="wrapper">
-			<div class="center">
-				<img src="scramjet.png" alt="Logo" style="display:block; margin: 0 auto; width: 50%; height: 50%;">
-				<form id="sj-form">
-					<input
-						id="sj-search-engine"
-						value="https://duckduckgo.com/?q=%s"
-						type="hidden"
-					/>
-					<input id="sj-address" type="text" placeholder="search" />
-					<button type="button" id="home-button"> Home</button>
-					<div class="quick-links">
-	
+    <script src="/scram/scramjet.all.js"></script>
+    <script src="/baremux/index.js"></script>
+    <script src="register-sw.js" defer></script>
+    <script src="search.js" defer></script>
+    <script src="index.js" defer></script>
 
-				</form>
-			</div>
-		</div>
+    <style>
+        /* CSS Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-		<div class="desc left-margin">
-			<p id="sj-error"></p>
-			<pre id="sj-error-code"></pre>
-		</div>
+        body, html {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: serif; 
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-		<div class="footer">
-			<a href="/h/">main page</a>&nbsp;&nbsp;&nbsp;
-			<a href="settings.html">settings</a>
-		</div>
-		<script>
-			if (!localStorage.getItem("wispUrl")) {
-				localStorage.setItem("wispUrl", "wss://geometryislife.bostoncareercounselor.com/wisp/");
-			}
+        /* Top Bar / Omnibox Area */
+        .topbar {
+            display: flex;
+            align-items: center;
+            background-color: #000000;
+            padding: 4px;
+            gap: 4px;
+            border-bottom: 1px solid #1a1a1a;
+            font-family: sans-serif;
+        }
 
-			const transport = localStorage.getItem("transport");
-			if (transport !== "epoxy" && transport !== "libcurl") {
-				localStorage.setItem("transport", "libcurl");
-			}
-			
-    document.getElementById("home-button").addEventListener("click", function() {
-        window.location.href = "/h/"; 
-    });
-	
-	
-		</script>
-	</body>
+        .nav-btn {
+            background-color: #0a0a0a;
+            color: #e8e8e8;
+            border: 1px solid #2a2a2a;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: normal;
+            height: 26px; 
+        }
+
+        .nav-btn i {
+            font-size: 13px;
+        }
+
+        .nav-btn:hover {
+            background-color: #1a1a1a;
+        }
+
+        /* Form styling */
+        #sj-form {
+            display: flex;
+            flex-grow: 1;
+            margin: 0;
+            gap: 4px;
+        }
+
+        #sj-form input[type="text"] {
+            flex-grow: 1;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            padding: 5px 8px;
+            font-size: 12px;
+            border-radius: 2px;
+            outline: none;
+            font-family: sans-serif;
+            height: 26px;
+        }
+
+        #sj-form input[type="text"]:focus {
+            border-color: #444;
+        }
+
+        /* Version Info */
+        .version-info {
+            color: #a0a0a0;
+            font-size: 12px;
+            margin-left: 6px;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+
+        .version-info strong {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .version-hash {
+            color: #8ab4f8; 
+            text-decoration: none;
+            font-family: monospace;
+            margin-left: 4px;
+        }
+
+        /* Main Content Area */
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .content > img {
+            max-width: 300px;
+            width: 50%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 16px;
+            margin-bottom: 32px;
+            color: #ccc;
+        }
+
+        /* Real Image Quick Links Grid */
+        .quick-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .ql-btn {
+            background-color: #0a0a0a;
+            color: #ddd;
+            border: 1px solid #333;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: sans-serif;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column; /* Stack logo above text */
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            width: 105px;
+            height: 105px;
+        }
+
+        .ql-btn img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            pointer-events: none; /* Prevents image dragging ghost */
+        }
+
+        .ql-btn:hover {
+            background-color: #1a1a1a;
+            color: #fff;
+            border-color: #555;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Error & Iframe */
+        #sj-error {
+            color: #ff6666;
+            white-space: pre-wrap;
+            padding: 12px;
+        }
+
+        #sj-frame {
+            border: none;
+            width: 100%;
+            flex-grow: 1;
+            background-color: #111;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Settings Modal Popup */
+        #settings-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+        }
+
+        .modal-content {
+            width: 400px;
+            max-width: 90vw;
+            height:300px;
+            max-height: 90vh;
+            background-color: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #111;
+            border-bottom: 1px solid #333;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        #settings-iframe {
+            flex-grow: 1;
+            border: none;
+            width: 85%;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <button id="home-button" class="nav-btn" title="Home">
+            <i class="fa-solid fa-house"></i>
+        </button>
+        <button id="config-button" class="nav-btn">config</button>
+        <button id="back-button" class="nav-btn" title="Back">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <button id="forward-button" class="nav-btn" title="Forward">
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button id="reload-button" class="nav-btn" title="Reload">
+            <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        
+        <form id="sj-form">
+            <input id="sj-search-engine" value="https://duckduckgo.com/?q=%s" type="hidden" />
+            <input id="sj-address" type="text" placeholder="Type a URL..." value="https://duckduckgo.com" />
+            <button type="submit" class="nav-btn" id="open-button">open</button>
+        </form>
+        
+        <div class="version-info">
+            <strong>scramjet</strong> 2.0.0-alpha <a href="#" class="version-hash">6e85a22</a>
+        </div>
+    </div>
+
+    <div class="content" id="welcome-container">
+        <img src="scramjet.png" alt="Logo">
+        <p>Welcome to <i>Scramjet</i>! Type in a URL in the omnibox above and press enter to get started.</p>
+		<p>Original project by <i>MW</i> | Modified by <i>vibec3der</i></p>
+        
+        <div class="quick-links">
+            <button class="ql-btn" data-url="https://nowgg.fun">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Roblox_Corporation_2025_logo.svg/960px-Roblox_Corporation_2025_logo.svg.png" alt="Roblox">
+                <strong><span>Roblox</span></strong>
+            </button>
+            <button class="ql-btn" data-url="https://play.geforcenow.com">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP3EZFgdafkeS9ZarCeRwVa0vXAE-TEXB_fQ&s" alt="GeForce Now">
+                <strong><span>GeForce Now</span></strong>
+            </button>
+            <button class="ql-btn" data-url="https://youtube.com">
+                <img src="https://as2.ftcdn.net/jpg/03/04/06/01/1000_F_304060171_OUUSKIITlOLRgnDI1EFO8eSZqOHab6Iq.jpg" alt="YouTube">
+                <strong><span>YouTube</span></strong>
+            </button>
+            <button class="ql-btn" data-url="https://discord.com">
+                <img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg" alt="Discord">
+                <strong><span>Discord</span></strong>
+            </button>
+            <button class="ql-btn" data-url="https://netflix.com">
+                <img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/15844974/netflixlogo.0.0.1466448626.png?quality=90&strip=all&crop=1.2535702951444%2C0%2C97.492859409711%2C100&w=2400">
+                <strong><span>Netflix</span></strong>
+            </button>
+        </div>
+    </div>
+
+    <div id="sj-error" class="hidden"></div>
+    <pre id="sj-error-code" class="hidden"></pre>
+
+    <iframe id="sj-frame" class="hidden"></iframe>
+
+    <div id="settings-modal" class="hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Configuration</span>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <iframe id="settings-iframe" src="settings.html"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // WebSockets / LocalStorage logic
+        if (!localStorage.getItem("wispUrl")) {
+            localStorage.setItem("wispUrl", "wss://geometryislife.bostoncareercounselor.com/wisp/");
+        }
+
+        const transport = localStorage.getItem("transport");
+        if (transport !== "epoxy" && transport !== "libcurl") {
+            localStorage.setItem("transport", "libcurl");
+        }
+        
+        const iframe = document.getElementById("sj-frame");
+
+        // Hide welcome screen and show iframe when form is submitted
+        document.getElementById("sj-form").addEventListener("submit", function() {
+            document.getElementById("welcome-container").classList.add("hidden");
+            iframe.classList.remove("hidden");
+        });
+
+        // Quick Links Logic
+        document.querySelectorAll('.ql-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Set the omnibox value to the button's data-url
+                document.getElementById('sj-address').value = this.getAttribute('data-url');
+                // Programmatically click the open button so index.js catches it normally
+                document.getElementById('open-button').click();
+            });
+        });
+
+        // Home Navigation
+        document.getElementById("home-button").addEventListener("click", function() {
+            window.location.href = "/h/"; 
+        });
+
+        // Modal Logic
+        const modal = document.getElementById("settings-modal");
+        
+        document.getElementById("config-button").addEventListener("click", () => {
+            modal.classList.remove("hidden");
+        });
+
+        document.getElementById("close-modal").addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.classList.add("hidden");
+            }
+        });
+
+        // Main Window History Navigation
+        document.getElementById("back-button").addEventListener("click", () => {
+            window.history.back();
+        });
+
+        document.getElementById("forward-button").addEventListener("click", () => {
+            window.history.forward();
+        });
+
+        document.getElementById("reload-button").addEventListener("click", () => {
+            try {
+                if (iframe.contentWindow && !iframe.classList.contains("hidden")) {
+                    iframe.contentWindow.location.reload();
+                } else {
+                    window.location.reload();
+                }
+            } catch (err) {
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
 </html>
