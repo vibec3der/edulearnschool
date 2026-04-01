@@ -7,7 +7,7 @@
 			content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
 		/>
 		
-		<title>SJ</title>
+		<title>>EduLearn — Academic Courses & Resources</title>
 
 		<link rel="shortcut icon" content="favicon.jpg" />
 	
@@ -31,6 +31,10 @@
 						type="hidden"
 					/>
 					<input id="sj-address" type="text" placeholder="search" />
+					<button type="button" id="home-button"> Home</button>
+					<div class="quick-links">
+	
+
 				</form>
 			</div>
 		</div>
@@ -53,6 +57,12 @@
 			if (transport !== "epoxy" && transport !== "libcurl") {
 				localStorage.setItem("transport", "libcurl");
 			}
+			
+    document.getElementById("home-button").addEventListener("click", function() {
+        window.location.href = "/h/"; 
+    });
+	
+	
 		</script>
 	</body>
 </html>
