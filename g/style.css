@@ -7,26 +7,26 @@
     --text-main: #ffffff;
     --text-muted: #9ca3af;
     --modal-bg: #0a0a0a;
-    --modal-border: #222222;
-    --input-bg: #000000;
-    --input-border: #333333;
-    --pill-hover: rgba(255, 255, 255, 0.1);
-    --pill-active: #222222;
-    --accent-glow: rgba(255, 255, 255, 0.1);
+    --modal-border: #1f2937;
+    --input-bg: #0f172a;
+    --input-border: #334155;
+    --pill-hover: rgba(59, 130, 246, 0.08);
+    --pill-active: rgba(59, 130, 246, 0.18);
+    --accent-glow: rgba(59, 130, 246, 0.15);
     
     /* Legacy variables for compatibility */
     --primary: #3b82f6;
     --primary-hover: #60a5fa;
     --primary-light: rgba(59, 130, 246, 0.15);
-    --bg: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
-    --bg-secondary: rgba(18, 18, 23, 0.85);
-    --nav-hover: rgba(255, 255, 255, 0.05);
-    --surface: #121214;
-    --surface-hover: #27272a;
-    --text: #ffffff;
-    --border: #27272a;
-    --border-light: #3f3f46;
-    --nav-border: transparent;
+    --bg: linear-gradient(135deg, #020617 0%, #0d1325 55%, #111827 100%);
+    --bg-secondary: rgba(15, 23, 42, 0.92);
+    --nav-hover: rgba(59, 130, 246, 0.08);
+    --surface: #0f172a;
+    --surface-hover: #111827;
+    --text: #f8fafc;
+    --border: #1f2937;
+    --border-light: #334155;
+    --nav-border: rgba(96, 165, 250, 0.18);
     
     /* Shadows */
     --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.6);
@@ -105,7 +105,7 @@ header {
     padding: 10px 16px;
     border: 1px solid var(--border-light);
     border-radius: 8px; /* Sharper radius to match Edulearn */
-    background: var(--bg); /* Input bg */
+    background: var(--surface);
     color: var(--text);
     font-family: inherit;
     font-size: 14px;
@@ -114,8 +114,8 @@ header {
 }
 
 #searchBar:focus, #sortOptions:focus, #filterOptions:focus {
-    border-color: var(--text); /* Focus color matches edulearn */
-    /* box-shadow removed as edulearn focuses on border color change */
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 
 #sortOptions option, #filterOptions option {
@@ -206,8 +206,8 @@ main {
 .zone-item:hover {
     transform: translateY(-4px) scale(1.02);
     border-color: var(--primary);
-    background: rgba(134, 239, 172, 0.05); /* Slight mint tint on hover */
-    box-shadow: 0 8px 25px rgba(134, 239, 172, 0.3);
+    background: rgba(59, 130, 246, 0.08); /* Blue accent hover tint */
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
 }
 
 .zone-item img {

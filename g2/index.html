@@ -11,14 +11,14 @@
 
     <style>
         :root {
-            /* Clean & Bubbly Theme (Default Purple) */
-            --bg-gradient-1: #0f0c20;
-            --bg-gradient-2: #24143a;
-            --primary: #9d4edd;
-            --primary-hover: #b062eb;
-            --bubble-glass: rgba(255, 255, 255, 0.06);
-            --bubble-border: rgba(255, 255, 255, 0.12);
-            --bubble-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+            /* Clean & Bubbly Theme (Default Blue) */
+            --bg-gradient-1: #0c1325;
+            --bg-gradient-2: #15203d;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bubble-glass: rgba(59, 130, 246, 0.06);
+            --bubble-border: rgba(59, 130, 246, 0.15);
+            --bubble-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
             --text-main: #ffffff;
             --text-muted: rgba(255, 255, 255, 0.6);
             --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.4);
@@ -127,7 +127,7 @@
         .search-input:focus {
             border-color: var(--primary);
             background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+            box-shadow: 0 0 20px rgba(145, 199, 255, 0.22);
             width: 320px;
         }
 
@@ -169,7 +169,7 @@
         .performance-btn.active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.45);
         }
 
         /* --- MAIN LAYOUT --- */
@@ -225,7 +225,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-color: var(--primary-hover);
             transform: translateY(-6px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(157, 78, 221, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(145, 199, 255, 0.22);
         }
 
         .game-card:active { transform: scale(0.95); }
@@ -329,14 +329,14 @@
             width: 90%;
             max-width: 1200px;
             height: 85vh;
-            background: var(--bg-gradient-1);
-            border: 1px solid var(--bubble-border);
+            background: rgba(18, 20, 28, 0.98);
+            border: 1px solid rgba(145, 199, 255, 0.12);
             border-radius: 24px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: var(--bubble-shadow);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
             transform: scale(0.95);
             transition: transform 0.4s var(--bounce);
         }
@@ -347,7 +347,7 @@
             position: absolute;
             top: -15px;
             right: -15px;
-            background: #ef4444;
+            background: var(--primary);
             border: none;
             color: white;
             width: 36px;
@@ -358,18 +358,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
             transition: all 0.3s var(--bounce);
         }
 
         .close-btn i { width: 18px; height: 18px; }
-        .close-btn:hover { background: #f87171; transform: scale(1.15); }
+        .close-btn:hover { background: var(--primary-hover); transform: scale(1.15); }
 
-        #zoneFrame { flex-grow: 1; border: none; width: 100%; background: #ffffff; }
+        #zoneFrame { flex-grow: 1; border: none; width: 100%; background: #05070f; }
 
         .sandbox-toolbar {
-            background: rgba(0, 0, 0, 0.4);
-            border-top: 1px solid var(--bubble-border);
+            background: rgba(16, 18, 22, 0.92);
+            border-top: 1px solid rgba(145, 199, 255, 0.12);
             padding: 12px 24px;
             display: flex;
             gap: 12px;
@@ -396,7 +396,7 @@
             background: var(--primary);
             border-color: var(--primary-hover);
             transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
         }
     </style>
 </head>

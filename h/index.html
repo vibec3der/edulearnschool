@@ -11,14 +11,14 @@
     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
     :root {
-      --bg: #0c1d3f;
-      --bg-alt: #13254f;
-      --panel: #1c335d;
-      --text-main: #f2f7ff;
-      --text-muted: #a7b9d8;
-      --accent: #6fa8ff;
-      --border: #2e4d82;
-      --shadow: rgba(0, 0, 0, 0.25);
+      --bg: #0f1013;
+      --bg-alt: #181a1e;
+      --panel: rgba(32, 34, 40, 0.9);
+      --text-main: #eceef6;
+      --text-muted: #9fa1ab;
+      --accent: #ad9cff;
+      --border: rgba(255,255,255,0.08);
+      --shadow: rgba(0, 0, 0, 0.3);
       --transition: 0.18s ease;
     }
 
@@ -66,6 +66,23 @@
     .bg-bubble:nth-child(3) { left: 55%; width: 60px; height: 60px; animation-duration: 10s; animation-delay: 4s; }
     .bg-bubble:nth-child(4) { left: 75%; width: 150px; height: 150px; animation-duration: 20s; animation-delay: 1s; }
     .bg-bubble:nth-child(5) { left: 90%; width: 90px; height: 90px; animation-duration: 14s; animation-delay: 5s; }
+
+    .particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.85;
+      display: block;
+    }
+
+    .particle-canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10, 17, 40, 0.15), rgba(0, 31, 84, 0.35));
+      pointer-events: none;
+    }
 
     /* ================= SIMPLE NAVBAR ================= */
     .navbar {
@@ -167,19 +184,20 @@
       font-size: clamp(2.4rem, 5vw, 3.8rem);
       font-weight: 700;
       margin-bottom: 14px;
-      color: #eaf4ff;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      color: #edeefd;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
     }
 
     .quote-pill {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border);
-      padding: 10px 14px;
-      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 18px;
+      border-radius: 18px;
       color: var(--text-muted);
       font-size: 15px;
       font-weight: 600;
       max-width: 620px;
+      backdrop-filter: blur(12px);
     }
 
     /* ================= BUBBLY MODALS ================= */
@@ -330,6 +348,8 @@
 </head>
 <body>
 
+  <canvas class="particle-canvas" aria-hidden="true"></canvas>
+
   <div class="bg-bubbles">
     <div class="bg-bubble"></div>
     <div class="bg-bubble"></div>
@@ -337,29 +357,6 @@
     <div class="bg-bubble"></div>
     <div class="bg-bubble"></div>
   </div>
-
-  <nav class="navbar">
-    <a href="/h/" class="nav-brand">edulearn</a>
-    
-    <div class="nav-links">
-      <a href="/h/" class="nav-item active"><i class="fa-solid fa-house"></i> Home</a>
-      <a href="/g/" class="nav-item"><i class="fa-solid fa-gamepad"></i> Games</a>
-      <a href="/g2/" class="nav-item"><i class="fa-solid fa-dice-d20"></i> G2</a>
-      <a href="/algebra.html" class="nav-item"><i class="fa-solid fa-globe"></i> SJ!</a>
-      <a href="/a/" class="nav-item"><i class="fa-solid fa-robot"></i> AI</a>
-      <a href="/t/" class="nav-item"><i class="fa-solid fa-wrench"></i> Tools</a>
-      <a href="/e/" class="nav-item"><i class="fa-solid fa-shapes"></i> Extras</a>
-      <a onclick="openModal('settings-modal')" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
-    </div>
-
-    <div class="nav-icons">
-      <div class="nav-icon" onclick="openModal('announcement-modal')">
-        <i class="fa-solid fa-bell"></i>
-        <span id="bell-badge"></span>
-      </div>
-      <i class="fa-brands fa-discord nav-icon" onclick="window.open('https://discord.gg/n5AfXS5eTP', '_blank')"></i>
-    </div>
-  </nav>
 
   <main class="hero-container">
     <h1 class="hero-title">edulearn</h1>
@@ -379,6 +376,13 @@
             <p>Hide pages from browser history by opening in about:blank.</p>
           </div>
           <label class="switch"><input type="checkbox" id="ab-toggle" onchange="toggleAB()"><span class="slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-info">
+            <h3><i class="fa-solid fa-sparkles"></i> Particles</h3>
+            <p>Enable or disable the homepage particle background.</p>
+          </div>
+          <label class="switch"><input type="checkbox" id="particles-toggle" onchange="toggleParticles()"><span class="slider"></span></label>
         </div>
         <div class="setting-row">
           <div class="setting-info">
@@ -451,7 +455,7 @@
         win.document.body.appendChild(iframe);
         
         // Random safe redirect list
-        const paanicLinks = [
+        const panicLinks = [
           "https://classroom.google.com",
           "https://clever.com",
           "https://quizlet.com",
@@ -468,7 +472,7 @@
           "https://kahoot.com",
           "https://scratch.mit.edu",
           "https://youtube.com",
-          "https://khanacedemy.org",
+          "https://www.khanacademy.org/",
           "https://ixl.com",
           "https://www.typing.com",
           "https://www.duolingo.com",
@@ -485,19 +489,32 @@
       }
 
       // 4. Try opening instantly
-      let instantWin = window.open('about:blank', '_blank');
-      if (instantWin) {
-        spawnStealthWindow(instantWin);
-      } else {
-        // 5. If popup blocker kills it, alert and wait for their very first click anywhere on screen
-        alert("If you do not have popups enabled, please enable popups to hide this page from Securly Classroom, and your History!");
-        document.addEventListener('click', function fallbackClick(e) {
-          // Ignore if they are clicking the AB toggle switch to turn it off
-          if (e.target.closest('.switch')) return; 
+      function tryOpenAboutBlank() {
+        const win = window.open('about:blank', '_blank');
+        if (win) {
+          spawnStealthWindow(win);
+          return true;
+        }
+        return false;
+      }
 
-          let clickWin = window.open('about:blank', '_blank');
-          if (clickWin) {
-            spawnStealthWindow(clickWin);
+      function scheduleTry(delay) {
+        setTimeout(() => {
+          if (!tryOpenAboutBlank()) {
+            setTimeout(tryOpenAboutBlank, 700);
+          }
+        }, delay);
+      }
+
+      if (!tryOpenAboutBlank()) {
+        window.addEventListener('load', () => scheduleTry(100));
+        scheduleTry(50);
+
+        alert("PLEASE TAKE THE TIME AND READ THIS: If you do not have popups enabled, PLEASE enable popups to HIDE this page from SECURLY Classroom, and your HISTORY! POPUPS ARE HIGHLY RECOMMENDED!~");
+        document.addEventListener('click', function fallbackClick(e) {
+          if (e.target.closest('.switch')) return;
+
+          if (tryOpenAboutBlank()) {
             document.removeEventListener('click', fallbackClick);
           }
         });
@@ -506,6 +523,7 @@
 
     // --- QUOTES ---
     const quotes = [
+      "Andrew Hu, I know you're trying to ragebait us with dates.",
       "Learning is a treasure that will follow its owner everywhere.",
       "coded by the skids, for the skids",
       "Classroom.lol but it's actually good",
@@ -910,7 +928,8 @@
       cloakTitle: 'EduLearn — Academic Courses & Resources', 
       cloakIcon: '',
       announcementRead: false, 
-      abEnabled: true // Defaulted to true now for auto-launch
+      abEnabled: true, // Defaulted to true now for auto-launch
+      particlesEnabled: true
     };
 
     function saveState() { localStorage.setItem('edulearn_settings', JSON.stringify(userSettings)); }
@@ -923,6 +942,7 @@
       
       // Toggle syncs with actual state (defaults to checked if null)
       document.getElementById('ab-toggle').checked = userSettings.abEnabled !== false;
+      document.getElementById('particles-toggle').checked = userSettings.particlesEnabled !== false;
 
       // Apply Cloak immediately
       document.getElementById('page-title').innerText = userSettings.cloakTitle || 'EduLearn';
@@ -972,6 +992,101 @@
       }
     }
 
+    let particleCanvas = null;
+    let particleCtx = null;
+    let particleAnimationFrame = null;
+    let particleArray = [];
+
+    function createParticle() {
+      const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.35;
+      const speed = 0.4 + Math.random() * 0.9;
+      return {
+        x: Math.random() * particleCanvas.width,
+        y: Math.random() * particleCanvas.height,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        radius: 1 + Math.random() * 2.4,
+        alpha: 0.18 + Math.random() * 0.4,
+        fade: 0.001 + Math.random() * 0.0016,
+        color: ['rgba(255,255,255,0.85)', 'rgba(96,165,250,0.65)', 'rgba(59,130,246,0.55)'][Math.floor(Math.random() * 3)]
+      };
+    }
+
+    function resizeParticles() {
+      if (!particleCanvas) return;
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+    }
+
+    function stopParticles() {
+      if (particleAnimationFrame) {
+        cancelAnimationFrame(particleAnimationFrame);
+        particleAnimationFrame = null;
+      }
+      if (particleCanvas) {
+        particleCanvas.style.display = 'none';
+      }
+    }
+
+    function toggleParticles() {
+      const enabled = document.getElementById('particles-toggle').checked;
+      userSettings.particlesEnabled = enabled;
+      saveState();
+      if (enabled) {
+        if (!particleCanvas) initParticles();
+        particleCanvas.style.display = 'block';
+        if (!particleAnimationFrame) animateParticles();
+      } else {
+        stopParticles();
+      }
+    }
+
+    function initParticles() {
+      particleCanvas = document.querySelector('.particle-canvas') || document.createElement('canvas');
+      if (!particleCanvas.parentElement) document.body.prepend(particleCanvas);
+      particleCtx = particleCanvas.getContext('2d');
+      particleArray = [];
+      const particleCount = 120;
+
+      resizeParticles();
+      window.addEventListener('resize', resizeParticles);
+
+      for (let i = 0; i < particleCount; i++) particleArray.push(createParticle());
+
+      if (userSettings.particlesEnabled !== false) {
+        particleCanvas.style.display = 'block';
+        animateParticles();
+      } else {
+        particleCanvas.style.display = 'none';
+      }
+    }
+
+    function animateParticles() {
+      if (!particleCanvas || !particleCtx || !userSettings.particlesEnabled) return;
+      particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+      particleArray.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.alpha -= particle.fade;
+
+        if (particle.alpha <= 0 || particle.x > particleCanvas.width + 20 || particle.y > particleCanvas.height + 20) {
+          Object.assign(particle, createParticle());
+          particle.y = Math.random() * particleCanvas.height * 0.15 - 20;
+          particle.x = Math.random() * particleCanvas.width;
+        }
+
+        particleCtx.globalAlpha = Math.max(0, Math.min(1, particle.alpha));
+        particleCtx.fillStyle = particle.color;
+        particleCtx.beginPath();
+        particleCtx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        particleCtx.fill();
+      });
+
+      particleCtx.globalAlpha = 1;
+      particleAnimationFrame = requestAnimationFrame(animateParticles);
+    }
+
     // --- MODALS LOGIC ---
     function openModal(id) { 
       document.getElementById(id).classList.add('active'); 
@@ -999,7 +1114,11 @@
     });
 
     // Init
-    window.addEventListener('DOMContentLoaded', initSettings);
+    window.addEventListener('DOMContentLoaded', () => {
+      initSettings();
+      initParticles();
+    });
   </script>
+  <script src="/script.js" defer></script>
 </body>
 </html>

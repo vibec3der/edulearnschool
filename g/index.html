@@ -113,18 +113,33 @@
             box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
         }
 
-        #zoneViewer.active { display: flex; }
+        #zoneViewer {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            justify-content: center;
+            align-items: center;
+            z-index: 10010;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #zoneViewer.active {
+            display: flex;
+        }
 
         .sandbox-container {
             width: 85%;
             max-width: 1000px;
             height: 85vh;
-            background: #fbf8ef; /* Light cream background */
-            border-radius: 8px;
+            background: rgba(12, 19, 37, 0.96);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 18px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
             position: relative;
         }
 
@@ -269,6 +284,7 @@
 
     
 
+    <script src="/script.js" defer></script>
     <script src="script.js" defer></script>
     <script>
         // --- EDULEARN THEME SYNC ---

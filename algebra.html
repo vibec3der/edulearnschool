@@ -213,15 +213,16 @@
         }
 
         .modal-content {
-            width: 400px;
-            max-width: 90vw;
-            height:300px;
-            max-height: 90vh;
+            width: min(640px, 92vw);
+            max-width: 92vw;
+            height: min(80vh, 520px);
+            max-height: 92vh;
             background-color: #0a0a0a;
             border: 1px solid #333;
-            border-radius: 6px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
@@ -229,7 +230,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 12px;
+            padding: 10px 14px;
             background-color: #111;
             border-bottom: 1px solid #333;
             font-size: 14px;
@@ -251,18 +252,17 @@
         #settings-iframe {
             flex-grow: 1;
             border: none;
-            width: 85%;
-            border-bottom-left-radius: 6px;
-            border-bottom-right-radius: 6px;
+            width: 100%;
+            min-height: 0;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
         }
     </style>
 </head>
 <body>
 
     <div class="topbar">
-<button id="edulearn-button" class="nav-btn" title="EduLearn">
-    EduLearn
-</button>
+
         <button id="home-button" class="nav-btn" title="Home">
             <i class="fa-solid fa-house"></i>
         </button>
@@ -370,24 +370,38 @@
         document.getElementById("home-button").addEventListener("click", function() {
             window.location.href = "/algebra.html"; 
         });
-		document.getElementById("edulearn-button").addEventListener("click", function() {
-    window.location.href = "/h/";
-});
+
+        const edulearnButton = document.getElementById("edulearn-button");
+        if (edulearnButton) {
+            edulearnButton.addEventListener("click", function() {
+                window.location.href = "/h/";
+            });
+        }
 
         // Modal Logic
         const modal = document.getElementById("settings-modal");
         
-        document.getElementById("config-button").addEventListener("click", () => {
-            modal.classList.remove("hidden");
-        });
+        const configButton = document.getElementById("config-button");
+        const closeButton = document.getElementById("close-modal");
 
-        document.getElementById("close-modal").addEventListener("click", () => {
-            modal.classList.add("hidden");
-        });
+        if (configButton && modal) {
+            configButton.addEventListener("click", () => {
+                modal.classList.remove("hidden");
+                modal.style.display = "flex";
+            });
+        }
+
+        if (closeButton && modal) {
+            closeButton.addEventListener("click", () => {
+                modal.classList.add("hidden");
+                modal.style.display = "none";
+            });
+        }
 
         modal.addEventListener("click", (e) => {
             if (e.target === modal) {
                 modal.classList.add("hidden");
+                modal.style.display = "none";
             }
         });
 
@@ -412,5 +426,6 @@
             }
         });
     </script>
+    <script src="/script.js" defer></script>
 </body>
 </html>

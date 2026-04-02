@@ -344,7 +344,9 @@ function openZone(file) {
             zoneFrame.dataset.currentZoneId = file.id;
 
             // Show the Sandbox Overlay!
+            zoneViewer.style.display = 'flex';
             zoneViewer.classList.add('active');
+            document.body.style.overflow = 'hidden';
 
         }).catch(error => alert("Failed to load zone: " + error));
     }
@@ -374,6 +376,8 @@ function aboutBlank() {
 
 function closeZone() {
     zoneViewer.classList.remove('active');
+    zoneViewer.style.display = 'none';
+    document.body.style.overflow = '';
     
     // Clear iframe to stop audio/game process from running in the background
     zoneFrame = document.getElementById('zoneFrame');
