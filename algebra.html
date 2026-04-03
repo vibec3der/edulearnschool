@@ -278,6 +278,8 @@
             <i class="fa-solid fa-rotate-right"></i>
         </button>
         
+        <button id="devtools-button" class="nav-btn" title="DevTools">devtools</button>
+        
         <form id="sj-form">
             <input id="sj-search-engine" value="https://duckduckgo.com/?q=%s" type="hidden" />
             <input id="sj-address" type="text" placeholder="Type a URL..." value="https://duckduckgo.com" />
@@ -423,6 +425,24 @@
                 }
             } catch (err) {
                 window.location.reload();
+            }
+        });
+
+        // DevTools Button
+        document.getElementById("devtools-button").addEventListener("click", () => {
+            if (window.eruda) {
+                if (window.eruda._isInit) {
+                    window.eruda.destroy();
+                } else {
+                    window.eruda.init();
+                }
+            } else {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+                script.onload = () => {
+                    window.eruda.init();
+                };
+                document.head.appendChild(script);
             }
         });
     </script>
