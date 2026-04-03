@@ -5,7 +5,7 @@ if (!localStorage.getItem(EDULEARN_WISP_KEY)) {
 
 (function globalEduNav() {
 	const path = window.location.pathname.toLowerCase();
-	if (path === '/' || path === '/index.html' || path.includes('/login') || path.endsWith('login.html')) return;
+	if (path === '/' || path === '/index.html' || path.includes('/login') || path.endsWith('login.html') || path.startsWith('/g2games/')) return;
 	if (document.querySelector('#edulearn-global-navbar')) return;
 
 	function ensureFontAwesome() {
@@ -20,6 +20,7 @@ if (!localStorage.getItem(EDULEARN_WISP_KEY)) {
 
 	const nav = document.createElement('nav');
 	nav.id = 'edulearn-global-navbar';
+	nav.className = 'navbar';
 	nav.innerHTML = `
 		<div class="nav-ring">
 			<a class="nav-item" href="/h/" title="Home"><i class="fa-solid fa-house"></i><span>Home</span></a>
