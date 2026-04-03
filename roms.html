@@ -1,23 +1,28 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edulearn | Retro ROMs</title>
+    <title>EduLearn— Academic Courses & Resources</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+
         /* --- IMPORTED THEME SYSTEM FROM EDULEARN LITE --- */
         :root {
+            /* Default: Midnight Indigo / Mint */
             --bg-color: #09090b;
-            --bg-toolbar: rgba(18, 18, 23, 0.85);
+            --bg-toolbar: rgba(9, 9, 11, 0.85);
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
-            --accent: #6366f1;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --accent-glow: rgba(99, 102, 241, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.03);
+            --accent: #86efac;
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --card-hover: rgba(134, 239, 172, 0.05);
+            --border-color: #27272a;
+            --border-hover: #3f3f46;
+            --accent-glow: rgba(134, 239, 172, 0.15);
+            --grid-color: rgba(255, 255, 255, 0.02);
         }
 
         body.theme-mocha {
@@ -26,10 +31,12 @@
             --text-main: #cdd6f4;
             --text-muted: #a6adc8;
             --accent: #cba6f7;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --card-hover: rgba(203, 166, 247, 0.05);
+            --border-color: #313244;
+            --border-hover: #45475a;
             --accent-glow: rgba(203, 166, 247, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.04);
+            --grid-color: rgba(255, 255, 255, 0.02);
         }
 
         body.theme-inverted {
@@ -38,16 +45,18 @@
             --text-main: #18181b;
             --text-muted: #52525b;
             --accent: #4f46e5;
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --border-color: rgba(0, 0, 0, 0.08);
+            --card-bg: rgba(0, 0, 0, 0.02);
+            --card-hover: rgba(79, 70, 229, 0.05);
+            --border-color: #e4e4e7;
+            --border-hover: #d4d4d8;
             --accent-glow: rgba(79, 70, 229, 0.15);
-            --grid-color: rgba(0, 0, 0, 0.04);
+            --grid-color: rgba(0, 0, 0, 0.03);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             height: 100vh;
@@ -55,25 +64,26 @@
             display: flex;
             flex-direction: column;
             transition: background-color 0.3s ease, color 0.3s ease;
-            background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
+            
+            /* Background Grid */
+            background-image: 
+                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
-
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.6; }
 
         #library-view { padding: 40px; overflow-y: auto; height: 100%; position: relative; z-index: 10; }
         .container { max-width: 900px; margin: 0 auto; }
 
-        header { margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
-        h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 5px; }
-        h1 i { color: var(--accent); margin-right: 10px; }
-        .subtitle { color: var(--text-muted); font-size: 14px; }
+        header { margin-bottom: 40px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 36px; font-weight: 700; letter-spacing: 1px; margin: 0; text-transform: lowercase; }
+        .subtitle { color: var(--text-muted); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-left: auto; }
 
         /* --- DIRECTORY LIST STYLES --- */
         .directory-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .dir-row {
@@ -82,30 +92,32 @@
             justify-content: space-between;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px 20px;
+            border-radius: 12px;
+            padding: 20px 24px;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
 
         .dir-row:hover {
             border-color: var(--accent);
-            background: var(--accent-glow);
+            background: var(--card-hover);
             transform: translateX(4px);
-            box-shadow: -4px 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .dir-info {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 20px;
         }
 
         .dir-icon {
             font-size: 24px;
             color: var(--text-muted);
             transition: color 0.2s;
+            width: 30px;
+            text-align: center;
         }
 
         .dir-row:hover .dir-icon {
@@ -119,73 +131,81 @@
 
         .dir-title {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .dir-desc {
             font-size: 13px;
             color: var(--text-muted);
-            margin-top: 4px;
+            margin-top: 6px;
+            line-height: 1.5;
         }
 
         .sys-badge {
-            font-size: 10px;
-            background: rgba(128, 128, 128, 0.1);
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-color);
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
             color: var(--accent);
-            font-weight: 800;
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .dir-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn-list {
-            background: var(--bg-toolbar);
+            background: transparent;
             color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 8px 14px;
-            border-radius: 6px;
+            border: 1px solid var(--border-hover);
+            padding: 8px 18px;
+            border-radius: 9999px; /* Pill Shape */
             cursor: pointer;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
             transition: 0.2s;
+            font-family: inherit;
         }
 
         .btn-list:hover {
-            background: var(--accent);
-            color: #ffffff;
-            border-color: var(--accent);
+            background: var(--text-main);
+            color: var(--bg-color);
+            border-color: var(--text-main);
         }
 
+        /* Responsive */
         @media (max-width: 600px) {
-            .dir-row { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .dir-row { flex-direction: column; align-items: flex-start; gap: 20px; }
             .dir-actions { width: 100%; justify-content: flex-start; }
             .btn-list { flex: 1; justify-content: center; }
         }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
     </style>
 </head>
 
 <body>
 
-    <canvas id="particles-js"></canvas>
-
     <div id="library-view">
         <div class="container">
             <header>
-                <h1><i class="fa-solid fa-folder-open"></i>ROM Directory</h1>
-                <p class="subtitle">Download zipped files to launch inside your local emulator.</p>
+                <h1>rom directory</h1>
+                <p class="subtitle">Emulator Files</p>
             </header>
             
             <div id="rom-container" class="directory-list">
@@ -243,7 +263,7 @@
                     <div class="dir-text">
                         <div class="dir-title">
                             ${rom.title} 
-                            <span class="sys-badge">${rom.core.toUpperCase()}</span>
+                            <span class="sys-badge">${rom.core}</span>
                         </div>
                         <div class="dir-desc">${rom.desc}</div>
                     </div>
@@ -274,51 +294,36 @@
             downloadRom(url);
         }
 
-        // --- PARTICLES & THEME SYNC ---
-        const canvas = document.getElementById('particles-js');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas); resizeCanvas();
-
-        class SquareParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 8 + 3; this.speedX = Math.random() * 0.4 - 0.2; this.speedY = Math.random() * 0.4 - 0.2;
-                this.opacity = Math.random() * 0.4 + 0.05; this.angle = Math.random() * 360; this.spin = Math.random() * 0.02 - 0.01;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY; this.angle += this.spin;
-                if (this.x < -20) this.x = canvas.width + 20; if (this.x > canvas.width + 20) this.x = -20;
-                if (this.y < -20) this.y = canvas.height + 20; if (this.y > canvas.height + 20) this.y = -20;
-            }
-            draw() {
-                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle); ctx.globalAlpha = this.opacity;
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted').trim() || '#ffffff';
-                ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2); ctx.restore();
-            }
-        }
-
-        function initParticles() { particlesArray = []; for (let i = 0; i < 45; i++) particlesArray.push(new SquareParticle()); animateParticles(); }
-        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particlesArray.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
-        initParticles();
-
+        // --- THEME SYNC ---
         function syncEdulearnTheme() {
             try {
                 const savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
                 document.body.className = savedSettings.theme === 'default' ? '' : `theme-${savedSettings.theme}`;
+                
                 if (savedSettings.bgUrl) {
                     document.body.style.backgroundImage = `url('${savedSettings.bgUrl}')`;
-                    document.body.style.backgroundSize = 'cover'; document.body.style.backgroundPosition = 'center'; document.body.style.backgroundAttachment = 'fixed';
+                    document.body.style.backgroundSize = 'cover'; 
+                    document.body.style.backgroundPosition = 'center'; 
+                    document.body.style.backgroundAttachment = 'fixed';
                 } else {
-                    document.body.style.backgroundImage = `linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)`;
-                    document.body.style.backgroundSize = '30px 30px';
+                    document.body.style.backgroundImage = `
+                        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px)
+                    `;
+                    document.body.style.backgroundSize = '40px 40px';
                 }
-            } catch (err) {}
+            } catch (err) {
+                console.error("Theme sync failed:", err);
+            }
         }
+        
         syncEdulearnTheme();
-        window.addEventListener('storage', (e) => { if (e.key === 'el_settings') syncEdulearnTheme(); });
+        window.addEventListener('storage', (e) => { 
+            if (e.key === 'el_settings') syncEdulearnTheme(); 
+        });
     </script>
 </body>
 </html>
+
+
+

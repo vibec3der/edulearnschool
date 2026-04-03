@@ -1,27 +1,18 @@
-# Edulearn V5.3.0 (Beta Channel)
+# Edulearn
+![Edulearn V2](./imgs/example2.png)
 
-![Edulearn OS V5.3.0](./imgs/example.png)
-
-*Edulearn V5.3.0 - The best unblocked "OS" with many features.* ![Edulearn Lite V6](./imgs/example2.png)
-
-*Edulearn Lite V6 - The Best Gaming Site.*
+*Edulearn - The Best Gaming Site.*
 
 ---
 
-## What's New in V5
-
-- **Dual Architecture:** A brand new entry point allowing you to choose between **Edulearn Lite** (Streamlined for Gaming) and **EdulearnOS** (Built for Productivity).
-- **Extras Hub:** A new integrated dashboard in Lite mode allowing you to launch tools like the Graphing Calculator and Music Player without leaving your current session.
-- **Midnight Theme:** A complete visual overhaul featuring deep black backgrounds (`#050505`), crisp white accents, Inter typography, and ambient particle backgrounds.
-- **RNG Launcher:** Can't decide? Use the new **"Pick one for me"** button on the selection screen to launch a random environment.
-- **Smart Navigation:** Intelligent history handling—going "Back" from the OS or tools returns you to the selection screen instead of kicking you out.
-- **Enhanced Info Center:** A beautiful, glassmorphism-based info page with version tracking and visual counters.
+## What's New
+**Splash like look** 
 
 ---
 
 ## Deployment Options
 
-You can deploy Edulearn V5 on multiple static hosting platforms:
+You can deploy Edulearn V2 on multiple static hosting platforms:
 
 [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/new/clone?repository-url=https://github.com/POX-dev/edulearnschool)  
 [![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://app.netlify.com/start/deploy?repository=https://github.com/POX-dev/edulearnschool)  
@@ -42,9 +33,7 @@ Join our community for support, updates, and discussions:
 
 ## Modes & Features
 
-**Edulearn V5** is split into two distinct experiences to suit your needs:
-
-### ⚡ Edulearn Lite (Default)
+### ⚡ Edulearn
 *Built for speed, gaming, and quick access tools.*
 - **Fullscreen Focus:** No distractions, edge-to-edge content.
 - **Extras Hub:** A built-in launcher for utility apps:
@@ -52,26 +41,6 @@ Join our community for support, updates, and discussions:
     - **Music Player:** "Only Lofi-Tunes" & local file support.
     - **Gallery:** Manage saved images and screenshots.
 - **Performance:** Optimized for lower-end Chromebooks.
-- **Live Counters:** Real-time online user tracking.
-
-### 🖥️ EdulearnOS (Beta)
-*Built for multitasking and desktop simulation.*
-- **Windowed Interface:** Run multiple apps at once in a desktop environment.
-- **Taskbar Navigation:** Classic OS-style start menu and window management.
-- **Dual Proxies:** Ultraviolet & Scramjet integration.
-
----
-
-## Usage
-
-1. **Login:** Search for **"vibecoded"** (case-sensitive) in the fake ClassLink search bar.
-   - *Note: Misspelling the password redirects you to the actual ClassLink search page to fool IT staff.*
-2. **Select Mode:**
-   - Click **Edulearn Lite** for games and tools.
-   - Click **EdulearnOS** for the desktop experience.
-   - Click **"Pick one for me"** if you're feeling lucky.
-3. **Navigation:** Use the sidebar in Lite mode to switch between Home, Games, Extras, and Settings.
-4. **Cloaking:** Use the Settings gear icon to change the Tab Title and Favicon (About:Blank cloaking included).
 
 ---
 
@@ -87,13 +56,14 @@ Join our community for support, updates, and discussions:
 
 ## Credits
 
-- **Neo** – Lead Developer & Creator  
+- **Vibec3der** – Lead Developer & Creator  
 - **Claude, ChatGPT, Gemini** – AI Assistance & Refactoring
 - **Conall Sadako** – Main Site Fixer  
 - **genizy/breadbb** – GN-Math Library Developer  
 - **RHW** – Scramjet-static Integration  
 - **Albie** – Main Domain Provider
-- **Night Network / AmplifyDev** - CSS taken from popular site service "[Space](https://gointospace.app)"
+- **Ultimate games stash** - some games
+- **Splash proxy** - CSS taken from site service "[Splash](https://splash.best)"
 
 *If we missed you in the credits, feel free to contact vibec3der at `fernproxys3@proton.me`*
 

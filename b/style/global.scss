@@ -1,0 +1,263 @@
+@use "variables" as *;
+
+/* Import Inter & Dancing Script Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Edulearn Default Theme (Midnight Indigo / Mint) */
+  --bg-dark: #09090b;
+  --sidebar-bg: rgba(9, 9, 11, 0.95);
+  --surface: #121214;
+  --surface-hover: #27272a;
+  --border: #27272a;
+  --border-light: #3f3f46;
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+  --accent: #86efac;
+  --accent-selected: rgba(134, 239, 172, 0.1);
+  --accent-glow: rgba(134, 239, 172, 0.15);
+  --input-bg: #09090b;
+}
+
+body.theme-edulearn {
+  --bg-dark: #09090b;
+  --sidebar-bg: rgba(9, 9, 11, 0.95);
+  --surface: #121214;
+  --surface-hover: #27272a;
+  --border: #27272a;
+  --border-light: #3f3f46;
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+  --accent: #86efac;
+  --accent-selected: rgba(134, 239, 172, 0.1);
+  --accent-glow: rgba(134, 239, 172, 0.15);
+  --input-bg: #09090b;
+}
+
+body.theme-mocha {
+  --bg-dark: #1e1e2e;
+  --sidebar-bg: rgba(30, 30, 46, 0.95);
+  --surface: #11111b;
+  --surface-hover: #313244;
+  --border: #313244;
+  --border-light: #45475a;
+  --text-main: #cdd6f4;
+  --text-muted: #a6adc8;
+  --accent: #cba6f7;
+  --accent-selected: rgba(203, 166, 247, 0.12);
+  --accent-glow: rgba(203, 166, 247, 0.15);
+  --input-bg: #1e1e2e;
+}
+
+body.theme-inverted {
+  --bg-dark: #f4f4f5;
+  --sidebar-bg: rgba(244, 244, 245, 0.95);
+  --surface: #ffffff;
+  --surface-hover: #e4e4e7;
+  --border: #e4e4e7;
+  --border-light: #d4d4d8;
+  --text-main: #18181b;
+  --text-muted: #52525b;
+  --accent: #4f46e5;
+  --accent-selected: rgba(79, 70, 229, 0.12);
+  --accent-glow: rgba(79, 70, 229, 0.15);
+  --input-bg: #f4f4f5;
+}
+
+/* Optional: Keep Good Timing if needed, otherwise Inter is default */
+@font-face {
+  font-family: "Good Timing Rg";
+  src: url("/_a/font/good-timing-bd.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background-color: var(--bg-dark);
+  /* Edulearn Subtle Grid */
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: "Inter", system-ui, sans-serif;
+  text-align: center;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+nav {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+li {
+  margin: 15px 0;
+}
+
+a {
+  color: var(--text-main);
+  text-decoration: none;
+  transition: 0.2s;
+  
+  &:hover {
+    color: var(--accent);
+  }
+}
+
+button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-main);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: 1px solid var(--border-light);
+  border-radius: 9999px; /* Pill shape */
+  transition: 0.2s ease;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--bg-dark);
+    background-color: var(--text-main);
+    border-color: var(--text-main);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.flex-horiz {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.flex-vert {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--text-muted);
+  }
+}
+
+.greenCircle {
+  height: 15px;
+  width: 15px;
+  background-color: var(--accent);
+  border-radius: 100%;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+#logo {
+  width: 20%;
+  filter: none; /* Removed grayscale/brightness to allow native logo colors */
+}
+
+.title {
+  font-family: "Dancing Script", cursive;
+  font-size: 50px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: lowercase;
+  margin: 0;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 15px 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  pointer-events: none;
+  
+  * {
+    pointer-events: auto;
+  }
+}
+
+.gridContainer {
+  width: calc(100% - 100px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  margin-left: 65px;
+
+  .item {
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    transition: 0.2s;
+    
+    &:hover {
+      background: rgba(134, 239, 172, 0.05); /* Slight mint tint on hover */
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+  }
+}

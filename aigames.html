@@ -1,48 +1,30 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Games</title>
+    <title>EduLearn— Academic Courses & Resources</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+
         /* --- IMPORTED THEME SYSTEM FROM EDULEARN LITE --- */
         :root {
-            /* Default: Midnight Indigo */
-            --bg-color: #09090b;
-            --bg-toolbar: rgba(18, 18, 23, 0.85);
-            --text-main: #ffffff;
-            --text-muted: #a1a1aa;
-            --accent: #6366f1;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            /* Navbar-style theme */
+            --bg-color: rgba(16, 18, 22, 0.94);
+            --bg-toolbar: rgba(16, 18, 22, 0.94);
+            --text-main: #f6f3ff;
+            --text-muted: rgba(255, 255, 255, 0.72);
+            --accent: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(255, 255, 255, 0.14);
             --border-color: rgba(255, 255, 255, 0.08);
-            --accent-glow: rgba(99, 102, 241, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.03);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            --accent-glow: rgba(255, 255, 255, 0.15);
+            --grid-color: rgba(255, 255, 255, 0.02);
         }
 
-        body.theme-mocha {
-            --bg-color: #1e1e2e;
-            --bg-toolbar: rgba(30, 30, 46, 0.85);
-            --text-main: #cdd6f4;
-            --text-muted: #a6adc8;
-            --accent: #cba6f7;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --accent-glow: rgba(203, 166, 247, 0.15);
-            --grid-color: rgba(255, 255, 255, 0.04);
-        }
-
-        body.theme-inverted {
-            --bg-color: #f4f4f5;
-            --bg-toolbar: rgba(244, 244, 245, 0.85);
-            --text-main: #18181b;
-            --text-muted: #52525b;
-            --accent: #4f46e5;
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --accent-glow: rgba(79, 70, 229, 0.15);
-            --grid-color: rgba(0, 0, 0, 0.04);
         }
 
         * {
@@ -52,7 +34,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             height: 100vh;
@@ -60,24 +42,8 @@
             display: flex;
             flex-direction: column;
             transition: background-color 0.3s ease, color 0.3s ease;
-            
-            /* The Static Background Grid */
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-
-        /* --- SQUARE PARTICLES --- */
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.6;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         /* --- GAME LIST VIEW --- */
@@ -91,32 +57,34 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         header {
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         h1 {
+            font-family: 'Dancing Script', cursive;
             font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: lowercase;
             color: var(--text-main);
-            margin-bottom: 5px;
-        }
-
-        h1 i {
-            color: var(--accent);
-            margin-right: 10px;
+            margin: 0;
         }
 
         .subtitle {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: auto;
         }
 
         .game-grid {
@@ -128,10 +96,10 @@
         .game-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -142,22 +110,26 @@
         .game-card:hover {
             transform: translateY(-4px);
             border-color: var(--accent);
-            box-shadow: 0 10px 30px -10px var(--accent-glow);
-            background: var(--accent-glow);
+            background: var(--card-hover);
         }
 
         .card-body {
-            padding: 20px;
+            padding: 24px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
         .game-title {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 600;
             margin-bottom: 8px;
             color: var(--text-main);
+            transition: color 0.2s;
+        }
+
+        .game-card:hover .game-title {
+            color: var(--accent);
         }
 
         .game-desc {
@@ -165,7 +137,7 @@
             color: var(--text-muted);
             line-height: 1.5;
             flex: 1;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .game-tags {
@@ -176,37 +148,15 @@
         }
 
         .tag {
-            font-size: 10px;
-            background: var(--bg-toolbar);
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-color);
             padding: 4px 8px;
             border-radius: 4px;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 500;
             text-transform: uppercase;
-        }
-
-        .play-btn-overlay {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: var(--accent);
-            color: var(--bg-color);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: 0.2s;
-            box-shadow: 0 4px 15px var(--accent-glow);
-        }
-
-        .game-card:hover .play-btn-overlay {
-            opacity: 1;
-            transform: scale(1);
+            letter-spacing: 0.5px;
         }
 
         /* --- GAMEPLAY VIEW --- */
@@ -220,62 +170,65 @@
         }
 
         .toolbar {
-            height: 50px;
+            height: 60px;
             background: var(--bg-toolbar);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 30px;
             justify-content: space-between;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         .toolbar-left {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .btn-back {
             background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 6px 12px;
-            border-radius: 6px;
+            border: 1px solid var(--border-hover);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 9999px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             transition: 0.2s;
+            font-family: inherit;
         }
 
         .btn-back:hover {
-            background: var(--card-bg);
-            border-color: var(--accent);
-            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .current-game-title {
-            font-weight: 700;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 16px;
             color: var(--text-main);
         }
 
         .controls-hint {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-muted);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .key-badge {
-            background: var(--card-bg);
+            background: rgba(134, 239, 172, 0.05);
             border: 1px solid var(--border-color);
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
             font-family: monospace;
-            color: var(--text-muted);
+            color: var(--accent);
+            font-size: 11px;
         }
 
         iframe {
@@ -297,21 +250,156 @@
                 transform: translateY(0);
             }
         }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-hover);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Navbar CSS */
+        #edulearn-global-navbar {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: min(100%, 980px);
+            width: auto;
+            padding: 12px 16px;
+            background: rgba(16, 18, 22, 0.94);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 999px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            z-index: 10000;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        #edulearn-global-navbar.collapsed {
+            transform: translate(-50%, -120%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #edulearn-global-navbar .nav-ring {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #edulearn-global-navbar .nav-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            border: 1px solid transparent;
+            background: rgba(255,255,255,0.08);
+            color: #f6f3ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+
+        #edulearn-global-navbar .nav-item i {
+            font-size: 16px;
+        }
+
+        #edulearn-global-navbar .nav-item span {
+            white-space: nowrap;
+        }
+
+        #edulearn-global-navbar .nav-item:hover,
+        #edulearn-global-navbar .nav-item.active {
+            background: rgba(255,255,255,0.14);
+            border-color: rgba(255,255,255,0.16);
+            transform: translateY(-2px);
+            color: #ffffff;
+        }
+
+        #edulearn-global-navbar .nav-icon {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            background: rgba(255,255,255,0.08);
+            color: #f6f3ff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+
+        #edulearn-global-navbar .nav-icon:hover,
+        #edulearn-global-navbar .nav-icon.active {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+
+        #edulearn-navbar-collapse {
+            width: 40px;
+            height: 40px;
+            font-size: 15px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        #edulearn-navbar-mini {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 38px;
+            height: 30px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.16);
+            color: #f7f3ff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10001;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+            font-size: 18px;
+            padding: 0;
+        }
+
+        #edulearn-navbar-mini:hover {
+            transform: translate(-50%, -1px);
+        }
     </style>
 </head>
 
 <body>
 
-    <canvas id="particles-js"></canvas>
-
     <div id="library-view">
         <div class="container">
             <header>
-                <h1><i class="fa-solid fa-robot"></i>AI Games</h1>
-                <p class="subtitle">Curated selection of lightweight HTML5 games.</p>
+                <h1>Games that couldn't be added, recreated by AI</h1>
+                <p class="subtitle">Curated HTML5 Selection</p>
             </header>
             <div id="game-container" class="game-grid">
-            </div>
+                </div>
         </div>
     </div>
 
@@ -330,88 +418,20 @@
     </div>
 
     <script>
-        // --- COOL SPINNING SQUARES ANIMATION ---
-        const canvas = document.getElementById('particles-js');
-        const ctx = canvas.getContext('2d');
-        let particlesArray = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class SquareParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 8 + 3; // Random sizes
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
-                this.opacity = Math.random() * 0.4 + 0.05;
-                this.angle = Math.random() * 360;
-                this.spin = Math.random() * 0.02 - 0.01; // Rotation speed
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.angle += this.spin;
-                
-                // Wrap around edges seamlessly
-                if (this.x < -20) this.x = canvas.width + 20;
-                if (this.x > canvas.width + 20) this.x = -20;
-                if (this.y < -20) this.y = canvas.height + 20;
-                if (this.y > canvas.height + 20) this.y = -20;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                ctx.globalAlpha = this.opacity;
-                // Grab the current text-muted color for the squares so it matches themes
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-muted').trim() || '#ffffff';
-                // Draw square centered on coordinates
-                ctx.fillRect(-this.size, -this.size, this.size * 2, this.size * 2);
-                ctx.restore();
-            }
-        }
-
-        function initParticles() {
-            particlesArray = [];
-            const count = 45; // Amount of squares floating
-            for (let i = 0; i < count; i++) {
-                particlesArray.push(new SquareParticle());
-            }
-            animateParticles();
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-
-
         // --- CONFIGURATION: ADD GAMES HERE ---
         const gamesList = [
             {
                 title: "Ballistic 2D",
                 url: "./aigames/ballistic2d.html",
                 desc: "A retro jetpack shooter that never ends. Survive as long as you can.",
-                controls: "WASD to Move, Space to Fly, Mouse to Aim/Shoot, R to reload, 1-4 for weapons",
+                controls: "WASD, Space, Mouse, R",
                 tags: ["Shooter", "Action"]
             },
             {
                 title: "Space Invaders",
                 url: "./aigames/spaceinvaders.html",
                 desc: "Defend Earth from the alien wave in this classic arcade adaptation.",
-                controls: "Arrow Keys to Move, Space to Shoot",
+                controls: "Arrow Keys, Space",
                 tags: ["Arcade", "Classic"]
             },
             {
@@ -425,14 +445,14 @@
                 title: "Cyber Detention 2026",
                 url: "./aigames/cyberdetention.html",
                 desc: "Avoid Teachers in this gemini-made game and don't get caught!",
-                controls: "left and right arrow keys, space to hide what you're doing.",
-                tags: ["Arcade", "Strategy", "Memes"]
+                controls: "Arrow Keys, Space",
+                tags: ["Arcade", "Memes"]
             },
             {
                 title: "Neon glide",
                 url: "./aigames/neonglide.html",
                 desc: "Glide through obstacles. Made by gemini",
-                controls: "cursor or left and right arrow keys. P to pause.",
+                controls: "Arrow Keys, P",
                 tags: ["Arcade", "Speed"]
             }
         ];
@@ -463,7 +483,6 @@
                         <div class="game-desc">${game.desc}</div>
                         <div class="game-tags">${tagsHtml}</div>
                     </div>
-                    <div class="play-btn-overlay"><i class="fa-solid fa-play"></i></div>
                 `;
                 container.appendChild(card);
             });
@@ -483,9 +502,6 @@
             } else {
                 activeControls.innerHTML = '';
             }
-
-            // Hide the particles
-            canvas.style.display = 'none';
         }
 
         // 3. Close Game
@@ -493,55 +509,15 @@
             gameFrame.src = 'about:blank'; // Stop game execution
             gameView.style.display = 'none';
             libraryView.style.display = 'block';
-            
-            // Bring back the particles
-            canvas.style.display = 'block';
         }
 
         // Initialize Library on Load
         window.onload = renderLibrary;
 
-        // --- EDULEARN THEME SYNC ---
-        function syncEdulearnTheme() {
-            try {
-                // Fetch settings from local storage
-                const savedSettings = JSON.parse(localStorage.getItem('el_settings')) || {};
-                const theme = savedSettings.theme || 'default';
-                const bgUrl = savedSettings.bgUrl || '';
-
-                // Apply correct theme class
-                document.body.className = theme === 'default' ? '' : `theme-${theme}`;
-
-                // Apply custom background image if set
-                if (bgUrl) {
-                    document.body.style.backgroundImage = `url('${bgUrl}')`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
-                } else {
-                    // Reset to grid pattern if no custom background is applied
-                    document.body.style.backgroundImage = `
-                        linear-gradient(var(--grid-color) 1px, transparent 1px),
-                        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)
-                    `;
-                    document.body.style.backgroundSize = '30px 30px';
-                }
-            } catch (err) {
-                console.error("Theme sync failed:", err);
-            }
-        }
-
-        // Run theme sync immediately 
-        syncEdulearnTheme();
-
-        // Listen for changes across other pages/frames
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'el_settings') {
-                syncEdulearnTheme();
-            }
-        });
-
     </script>
 </body>
 
 </html>
+
+
+

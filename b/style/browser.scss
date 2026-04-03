@@ -1,0 +1,459 @@
+/* Import Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* --- THEME VARIABLES --- */
+:root {
+    /* Edulearn Default Theme (Midnight Indigo / Mint) */
+    --bg-dark: #09090b;
+    --sidebar-bg: rgba(9, 9, 11, 0.95);
+    --surface: #121214;
+    --surface-hover: #27272a;
+    --border: #27272a;
+    --border-light: #3f3f46;
+    --text-main: #ffffff;
+    --text-muted: #a1a1aa;
+    --accent: #86efac;
+    --accent-selected: rgba(134, 239, 172, 0.1);
+    --accent-glow: rgba(134, 239, 172, 0.15);
+    --input-bg: #09090b;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--text-main);
+    margin: 0;
+    overflow: hidden;
+}
+
+.hover-focus1 {
+    transition: .2s ease-in-out;
+}
+
+.hover-focus1:hover:not(.selectedTab) {
+    background-color: var(--surface-hover) !important;
+}
+
+.hover-focus2 {
+    transition: .2s ease-in-out;
+}
+
+.hover-focus2:hover:not(.selectedTab) {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.sidebar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20vw;
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: var(--bg-dark);
+    /* Edulearn Subtle Grid */
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.sidebar-container header {
+    display: flex;
+    width: 20vw;
+    height: 99vh;
+    margin: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    transition: .2s ease-in-out;
+    background: transparent;
+}
+
+.sidebar-container header.closed {
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.sidebar-container header.closed:not(:hover):not(.hovered) {
+    transform: translateX(-100%);
+}
+
+.sidebar-container header .page-data {
+    width: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.sidebar-container header .page-data #controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sidebar-container header .page-data #controls button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+}
+
+.sidebar-container header .page-data #controls button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-container header .page-data #controls button .tooltip {
+    padding: 6px 10px;
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    background: var(--surface);
+    color: var(--text-main);
+    visibility: hidden;
+    opacity: 0;
+    transition: .2s ease;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border-light);
+    white-space: nowrap;
+    z-index: 200;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-container header .page-data #controls button:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    top: 45px;
+}
+
+.logo-name {
+    font-size: 16px;
+    color: var(--text-main);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.sidebar-container header .page-data #controls button .icon {
+    font-size: 1.1rem;
+}
+
+.sidebar-container header .page-data #controls button svg {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-container header .page-data #url-form {
+    padding: 0 0 1rem 0;
+    border-bottom: 1px solid var(--border);
+    width: 100%;
+}
+
+.sidebar-container header .page-data #url-form input {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-light);
+    outline: none;
+    color: var(--text-main);
+    font-family: inherit;
+    padding: 10px 14px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    font-size: 13px;
+    width: 100%;
+    transition: 0.2s;
+}
+
+.sidebar-container header .page-data #url-form input:focus {
+    border-color: var(--text-main);
+}
+
+.sidebar-container header .page-data #new-tab {
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 8px;
+    background-color: transparent;
+    border: 1px dashed var(--border-light);
+    outline: none;
+    color: var(--text-muted);
+    font: inherit;
+    font-weight: 500;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 13px;
+}
+
+.sidebar-container header .page-data #new-tab:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-main);
+    border-color: var(--text-main);
+}
+
+@keyframes slide-in-from-top {
+    0% { transform: translateY(-10px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-out-from-bottom {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-10px); opacity: 0; }
+}
+
+.r-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: auto;
+    padding: 12px 20px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    transition: transform .2s ease;
+    z-index: 3000;
+    color: var(--text-main);
+    backdrop-filter: blur(12px);
+    font-family: inherit;
+}
+
+.r-alert p {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+header #tab-list {
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+}
+
+header #tab-list .tab-item {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    border-radius: 8px;
+    background: var(--surface);
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    outline: none;
+    padding: 10px 12px;
+    font-family: inherit;
+    color: var(--text-muted);
+    font-size: 13px;
+    animation: slide-in-from-top .2s ease;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+header #tab-list .tab-item:hover {
+    color: var(--text-main);
+    background-color: var(--surface-hover);
+    border-color: var(--border-light);
+}
+
+header #tab-list .tab-item img {
+    height: 16px;
+    width: 16px;
+    border-radius: 2px;
+}
+
+header #tab-list .tab-item span {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 40px);
+    text-align: left;
+}
+
+header #tab-list .tab-item .close {
+    position: absolute;
+    right: 8px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    transition: .2s ease;
+    opacity: 0;
+}
+
+header #tab-list .tab-item:hover .close {
+    opacity: 1;
+}
+
+header #tab-list .tab-item .close:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #f87171;
+}
+
+header #tab-list .tab-item .close .close-icon {
+    font-size: 14px;
+    color: inherit;
+}
+
+header #tab-list .tab-item.selectedTab {
+    background: var(--accent-selected);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+header #tab-list .tab-item.selectedTab .close {
+    opacity: 1;
+    color: var(--accent);
+}
+
+#tab-view {
+    width: 80vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: #000;
+}
+
+#tab-view.full-width {
+    width: 100vw;
+}
+
+#tab-view .tab-frame {
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff; /* Typically white for rendering proxy content properly */
+    border: none;
+    outline: none;
+}
+
+#small-screen-overlay {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    text-align: center;
+    z-index: 4000;
+    backdrop-filter: blur(10px);
+}
+
+#small-screen-overlay p {
+    margin: 0 auto;
+    width: 80%;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+@media(max-width: 768px) {
+    #small-screen-overlay {
+        display: flex;
+    }
+}
+
+#menu-overlay {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 20vw;
+    min-width: 250px;
+    height: calc(100% - 60px);
+    background-color: var(--surface);
+    transform: translateX(-100%);
+    transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+    border-right: 1px solid var(--border);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+#menu-overlay.active {
+    transform: translateX(0);
+}
+
+.option {
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    cursor: pointer;
+    padding: 10px 14px;
+    background: transparent;
+    transition: .2s ease;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+.option:hover {
+    background: var(--surface-hover);
+    color: var(--text-main);
+    border-color: var(--border-light);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-light);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}

@@ -1,0 +1,645 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduLearn — Academic Courses & Resources</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/script.js" defer></script>
+
+    <style>
+        :root {
+            /* Clean & Bubbly Theme (Default Blue) */
+            --bg-gradient-1: #0c1325;
+            --bg-gradient-2: #15203d;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bubble-glass: rgba(59, 130, 246, 0.06);
+            --bubble-border: rgba(59, 130, 246, 0.15);
+            --bubble-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --bounce: cubic-bezier(0.175, 0.885, 0.32, 1.4);
+            --smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Upgraded Glassmorphism Themes */
+        [data-theme="sakura"] {
+            --bg-gradient-1: #2b1820;
+            --bg-gradient-2: #4a2530;
+            --primary: #ff8fa3;
+            --primary-hover: #ffb3c1;
+            --bubble-glass: rgba(255, 183, 197, 0.08);
+            --bubble-border: rgba(255, 183, 197, 0.2);
+            --text-main: #fff0f3;
+            --text-muted: rgba(255, 240, 243, 0.7);
+        }
+
+        [data-theme="red"] {
+            --bg-gradient-1: #1a0505;
+            --bg-gradient-2: #330000;
+            --primary: #ef4444;
+            --primary-hover: #f87171;
+            --bubble-glass: rgba(255, 68, 68, 0.08);
+            --bubble-border: rgba(255, 68, 68, 0.2);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        [data-theme="azure"] {
+            --bg-gradient-1: #0a1128;
+            --bg-gradient-2: #001f54;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bubble-glass: rgba(59, 130, 246, 0.08);
+            --bubble-border: rgba(59, 130, 246, 0.2);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: all 0.4s var(--smooth);
+        }
+
+        /* --- TOPBAR --- */
+        .topbar {
+            background: rgba(20, 15, 35, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--bubble-border);
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .topbar-brand {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s var(--bounce);
+        }
+
+        .topbar-brand i { color: var(--primary-hover); width: 24px; height: 24px; }
+        .topbar-brand:hover { transform: translateY(-2px); text-shadow: 0 0 15px var(--primary); }
+
+        /* --- SEARCH BAR --- */
+        .search-container { position: relative; }
+
+        .search-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--bubble-border);
+            color: var(--text-main);
+            padding: 10px 16px 10px 42px;
+            border-radius: 999px; /* Pill shape */
+            font-size: 15px;
+            font-weight: 600;
+            width: 280px;
+            transition: all 0.3s var(--smooth);
+            font-family: inherit;
+            outline: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input::placeholder { color: var(--text-muted); font-weight: 500; }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(145, 199, 255, 0.22);
+            width: 320px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: color 0.3s;
+        }
+
+        .search-input:focus ~ .search-icon { color: var(--primary); }
+
+        /* --- PERFORMANCE BUTTON --- */
+        .performance-btn {
+            background: var(--bubble-glass);
+            border: 1px solid var(--bubble-border);
+            color: var(--text);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s var(--bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .performance-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .performance-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.45);
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .main-container {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        .category-header {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-header i { width: 18px; height: 18px; color: var(--primary); }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* --- BUBBLY GAME CARDS --- */
+        .game-card {
+            background: var(--bubble-glass);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid var(--bubble-border);
+            border-radius: 20px;
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s var(--bounce);
+            text-align: center;
+            min-height: 80px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            will-change: transform;
+        }
+
+        .game-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-hover);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(145, 199, 255, 0.22);
+        }
+
+        .game-card:active { transform: scale(0.95); }
+
+        .game-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* --- PAGINATION --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 40px;
+        }
+
+        .page-btn {
+            background: var(--bubble-glass);
+            border: 1px solid var(--bubble-border);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s var(--bounce);
+            font-weight: 600;
+        }
+
+        .page-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* --- PERFORMANCE MODE OVERRIDES --- */
+        body.performance-mode .game-card {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: none !important;
+            box-shadow: none !important;
+        }
+
+        body.performance-mode .game-card:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        body.performance-mode .topbar,
+        body.performance-mode .nav,
+        body.performance-mode .settings-card,
+        body.performance-mode .message-content {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(0, 0, 0, 0.3) !important;
+        }
+
+        body.performance-mode * {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        /* --- SANDBOX OVERLAY --- */
+        #zoneViewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #zoneViewer.active { display: flex; opacity: 1; }
+
+        .sandbox-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: rgba(18, 20, 28, 0.98);
+            border: 1px solid rgba(145, 199, 255, 0.12);
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+            transform: scale(0.95);
+            transition: transform 0.4s var(--bounce);
+        }
+
+        #zoneViewer.active .sandbox-container { transform: scale(1); }
+
+        .close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: var(--primary);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s var(--bounce);
+        }
+
+        .close-btn i { width: 18px; height: 18px; }
+        .close-btn:hover { background: var(--primary-hover); transform: scale(1.15); }
+
+        #zoneFrame { flex-grow: 1; border: none; width: 100%; background: #05070f; }
+
+        .sandbox-toolbar {
+            background: rgba(16, 18, 22, 0.92);
+            border-top: 1px solid rgba(145, 199, 255, 0.12);
+            padding: 12px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .sandbox-toolbar button {
+            background: var(--bubble-glass);
+            color: var(--text-main);
+            border: 1px solid var(--bubble-border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s var(--bounce);
+        }
+
+        .sandbox-toolbar button i { width: 20px; height: 20px; }
+        
+        .sandbox-toolbar button:hover {
+            background: var(--primary);
+            border-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="topbar-brand" onclick="window.location.href='/h/'">
+            <i data-lucide="home"></i> Home
+        </div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+            <i data-lucide="search" class="search-icon"></i>
+        </div>
+        <button id="performanceBtn" class="performance-btn" title="Toggle Performance Mode">
+            <i data-lucide="zap"></i>
+        </button>
+    </div>
+
+    <div class="main-container" id="libraryView">
+        <div class="category-header">
+            <i data-lucide="gamepad-2"></i> All Games <span id="gameCount">(0)</span>
+        </div>
+        <div class="game-grid" id="gameGrid"></div>
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <div id="zoneViewer">
+        <div class="sandbox-container">
+            <button class="close-btn" onclick="closeZone()"><i data-lucide="x"></i></button>
+            <iframe id="zoneFrame" title="Game Content"></iframe>
+            <div class="sandbox-toolbar">
+                <button onclick="fullscreenZone()" title="Fullscreen"><i data-lucide="maximize"></i></button>
+                <button onclick="refreshZone()" title="Refresh"><i data-lucide="refresh-cw"></i></button>
+                <button onclick="copyLink()" title="Copy Link"><i data-lucide="copy"></i></button>
+                <button onclick="openAboutBlank()" title="Open in New Tab"><i data-lucide="external-link"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let gamesList = [];
+
+        async function loadGames() {
+            try {
+                // Keep this pointing to your games.json logic
+                const response = await fetch('/UGS.json');
+                if (!response.ok) throw new Error("Failed to load games JSON");
+                gamesList = await response.json();
+            } catch (err) {
+                console.error(err);
+                // Creating fake data so you can see the design before hooking up your real JSON
+                gamesList = [
+                    { title: "Algebra Blaster", url: "about:blank" },
+                    { title: "Physics Simulator", url: "about:blank" },
+                    { title: "Typing Tutor", url: "about:blank" },
+                    { title: "History Quest", url: "about:blank" }
+                ];
+            }
+            renderGames("", 1);
+        }
+
+        const grid = document.getElementById('gameGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countLabel = document.getElementById('gameCount');
+        const pagination = document.getElementById('pagination');
+
+        let currentPage = 1;
+        const itemsPerPage = 50;
+        const performanceItemsPerPage = 20;
+
+        function renderGames(filter = "", page = 1) {
+            currentPage = page;
+            grid.innerHTML = "";
+            const filtered = gamesList.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
+            countLabel.innerText = `(${filtered.length})`;
+            
+            const isPerformanceMode = document.body.classList.contains('performance-mode');
+            const currentItemsPerPage = isPerformanceMode ? performanceItemsPerPage : itemsPerPage;
+            
+            if (!filtered.length) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); text-align:center; padding:40px 0; font-weight: 600;">No games found.</div>`;
+                pagination.innerHTML = "";
+                return;
+            }
+            
+            const totalPages = Math.ceil(filtered.length / currentItemsPerPage);
+            const start = (page - 1) * currentItemsPerPage;
+            const end = start + currentItemsPerPage;
+            const pageGames = filtered.slice(start, end);
+            
+            const fragment = document.createDocumentFragment();
+            pageGames.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.onclick = () => launchGame(game);
+                card.innerHTML = `<div class="game-name">${game.title}</div>`;
+                fragment.appendChild(card);
+            });
+            grid.appendChild(fragment);
+            
+            renderPagination(totalPages, page);
+            // Re-initialize icons just in case you ever inject icons into the cards
+            lucide.createIcons();
+        }
+
+        function renderPagination(totalPages, currentPage) {
+            pagination.innerHTML = "";
+            if (totalPages <= 1) return;
+
+            const isPerformanceMode = document.body.classList.contains('performance-mode');
+            const currentItemsPerPage = isPerformanceMode ? performanceItemsPerPage : itemsPerPage;
+
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerText = 'Prev';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => renderGames(searchInput.value, currentPage - 1);
+            pagination.appendChild(prevBtn);
+
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            if (endPage - startPage + 1 < maxVisible) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.className = 'page-btn';
+                firstBtn.innerText = '1';
+                firstBtn.onclick = () => renderGames(searchInput.value, 1);
+                pagination.appendChild(firstBtn);
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.innerText = '...';
+                    dots.style.color = 'var(--text-muted)';
+                    pagination.appendChild(dots);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn';
+                if (i === currentPage) btn.classList.add('active');
+                btn.innerText = i;
+                btn.onclick = () => renderGames(searchInput.value, i);
+                pagination.appendChild(btn);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.innerText = '...';
+                    dots.style.color = 'var(--text-muted)';
+                    pagination.appendChild(dots);
+                }
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'page-btn';
+                lastBtn.innerText = totalPages;
+                lastBtn.onclick = () => renderGames(searchInput.value, totalPages);
+                pagination.appendChild(lastBtn);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerText = 'Next';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => renderGames(searchInput.value, currentPage + 1);
+            pagination.appendChild(nextBtn);
+        }
+
+        function launchGame(game) {
+            const overlay = document.getElementById('zoneViewer');
+            const frame = document.getElementById('zoneFrame');
+            frame.src = game.url;
+            overlay.classList.add('active');
+        }
+
+        function closeZone() {
+            const overlay = document.getElementById('zoneViewer');
+            const frame = document.getElementById('zoneFrame');
+            overlay.classList.remove('active');
+            setTimeout(() => { frame.src = ''; }, 300); // Wait for fade-out animation before clearing src
+        }
+
+        function fullscreenZone() {
+            const frame = document.getElementById('zoneFrame');
+            if(frame.requestFullscreen) frame.requestFullscreen();
+            else if(frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+            else if(frame.msRequestFullscreen) frame.msRequestFullscreen();
+        }
+
+        function refreshZone() {
+            const frame = document.getElementById('zoneFrame');
+            frame.src = frame.src;
+        }
+
+        function copyLink() {
+            const frame = document.getElementById('zoneFrame');
+            navigator.clipboard.writeText(frame.src);
+            alert("Link copied!");
+        }
+
+        function openAboutBlank() {
+            const frame = document.getElementById('zoneFrame');
+            if(frame.src === "" || frame.src === "about:blank") return;
+            const win = window.open('about:blank', '_blank');
+            win.document.body.style.margin = '0';
+            win.document.body.style.height = '100vh';
+            win.document.body.style.overflow = 'hidden';
+            win.document.body.style.backgroundColor = '#000'; // Match theme
+            const iframe = document.createElement('iframe');
+            iframe.style.border='none';
+            iframe.style.width='100%';
+            iframe.style.height='100%';
+            iframe.src = frame.src;
+            win.document.body.appendChild(iframe);
+            closeZone();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide Icons right away
+            lucide.createIcons();
+
+            const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+            if (savedData.theme) document.body.setAttribute('data-theme', savedData.theme);
+
+            // Enable performance mode by default
+            document.body.classList.add('performance-mode');
+            const performanceBtn = document.getElementById('performanceBtn');
+            performanceBtn.classList.add('active');
+
+            searchInput.addEventListener('input', (e) => renderGames(e.target.value, 1));
+            
+            // Performance Mode Toggle
+            performanceBtn.addEventListener('click', () => {
+                document.body.classList.toggle('performance-mode');
+                performanceBtn.classList.toggle('active');
+                // Re-render to apply changes
+                renderGames(searchInput.value, currentPage);
+            });
+            
+            loadGames();
+        });
+    </script>
+</body>
+</html>

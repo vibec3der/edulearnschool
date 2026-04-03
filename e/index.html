@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>EduLearn — Academic Courses & Resources</title>
+
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap"
+		rel="stylesheet">
+	<script src="https://unpkg.com/lucide@latest"></script>
+	<script src="/script.js" defer></script>
+
+	<style>
+		:root {
+            /* --- CLEAN & BUBBLY THEME (Default Blue) --- */
+            --bg-gradient-1: #0a1128;
+            --bg-gradient-2: #001f54;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bubble-glass: rgba(59, 130, 246, 0.08);
+            --bubble-border: rgba(59, 130, 246, 0.15);
+            --bubble-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+			--text-muted: rgba(255, 255, 255, 0.6);
+			--bounce: cubic-bezier(0.175, 0.885, 0.32, 1.4);
+			--smooth: cubic-bezier(0.4, 0, 0.2, 1);
+		}
+
+		/* --- GLASSMORPHISM THEMES --- */
+		[data-theme="sakura"] {
+			--bg-gradient-1: #2b1820;
+			--bg-gradient-2: #4a2530;
+			--primary: #ff8fa3;
+			--primary-hover: #ffb3c1;
+			--bubble-glass: rgba(255, 183, 197, 0.08);
+			--bubble-border: rgba(255, 183, 197, 0.2);
+			--text-main: #fff0f3;
+			--text-muted: rgba(255, 240, 243, 0.7);
+		}
+
+		[data-theme="red"] {
+			--bg-gradient-1: #1a0505;
+			--bg-gradient-2: #330000;
+			--primary: #ef4444;
+			--primary-hover: #f87171;
+			--bubble-glass: rgba(255, 68, 68, 0.08);
+			--bubble-border: rgba(255, 68, 68, 0.2);
+			--text-main: #ffffff;
+			--text-muted: rgba(255, 255, 255, 0.6);
+		}
+
+		[data-theme="azure"] {
+			--bg-gradient-1: #0a1128;
+			--bg-gradient-2: #001f54;
+			--primary: #3b82f6;
+			--primary-hover: #60a5fa;
+			--bubble-glass: rgba(59, 130, 246, 0.08);
+			--bubble-border: rgba(59, 130, 246, 0.2);
+			--text-main: #ffffff;
+			--text-muted: rgba(255, 255, 255, 0.6);
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Nunito', sans-serif;
+			background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+			background-attachment: fixed;
+			color: var(--text-main);
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			overflow-x: hidden;
+			transition: all 0.4s var(--smooth);
+		}
+
+		/* --- TOP BAR --- */
+		.topbar {
+			background: rgba(20, 15, 35, 0.6);
+			backdrop-filter: blur(24px);
+			-webkit-backdrop-filter: blur(24px);
+			border-bottom: 1px solid var(--bubble-border);
+			padding: 0 40px;
+			height: 80px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+		}
+
+		.topbar-brand {
+			font-size: 22px;
+			font-weight: 800;
+			color: var(--text-main);
+			letter-spacing: -0.02em;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			transition: all 0.3s var(--bounce);
+		}
+
+		.topbar-brand i,
+		.topbar-brand svg {
+			color: var(--primary-hover);
+			width: 24px;
+			height: 24px;
+		}
+
+		.topbar-brand:hover {
+			transform: translateY(-2px);
+			text-shadow: 0 0 15px var(--primary);
+		}
+
+		/* --- SEARCH BAR --- */
+		.search-container {
+			position: relative;
+		}
+
+		.search-input {
+			background: rgba(0, 0, 0, 0.3);
+			border: 2px solid var(--bubble-border);
+			color: var(--text-main);
+			padding: 10px 16px 10px 42px;
+			border-radius: 999px;
+			/* Pill shape */
+			font-size: 15px;
+			font-weight: 600;
+			width: 280px;
+			transition: all 0.3s var(--smooth);
+			font-family: inherit;
+			outline: none;
+			backdrop-filter: blur(10px);
+		}
+
+		.search-input::placeholder {
+			color: var(--text-muted);
+			font-weight: 500;
+		}
+
+		.search-input:focus {
+			border-color: var(--primary);
+			background: rgba(0, 0, 0, 0.5);
+			box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+			width: 320px;
+		}
+
+		.search-icon {
+			position: absolute;
+			left: 16px;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 18px;
+			height: 18px;
+			color: var(--text-muted);
+			pointer-events: none;
+			transition: color 0.3s;
+		}
+
+		.search-input:focus~.search-icon {
+			color: var(--primary);
+		}
+
+		/* --- MAIN CONTENT --- */
+		.main-container {
+			padding: 40px;
+			max-width: 1400px;
+			margin: 0 auto;
+			width: 100%;
+			flex: 1;
+		}
+
+		.category-header {
+			font-size: 14px;
+			font-weight: 800;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: var(--text-muted);
+			margin-bottom: 24px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.category-header i,
+		.category-header svg {
+			width: 18px;
+			height: 18px;
+			color: var(--primary);
+		}
+
+		/* --- GRID & CARDS --- */
+		.extras-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+			gap: 20px;
+			margin-bottom: 40px;
+		}
+
+		.extra-card {
+			background: var(--bubble-glass);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border: 1px solid var(--bubble-border);
+			border-radius: 20px;
+			padding: 24px 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: all 0.3s var(--bounce);
+			text-align: center;
+			min-height: 80px;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		.extra-card:hover {
+			background: rgba(255, 255, 255, 0.1);
+			border-color: var(--primary-hover);
+			transform: translateY(-6px);
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(157, 78, 221, 0.2);
+		}
+
+		.extra-card:active {
+			transform: scale(0.95);
+		}
+
+		.extra-name {
+			font-weight: 700;
+			font-size: 16px;
+			color: var(--text-main);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		/* --- APP OVERLAY (IFRAME VIEW) --- */
+		.app-view-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+			z-index: 2000;
+			display: none;
+			flex-direction: column;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+
+		.app-view-overlay.active {
+			display: flex;
+			opacity: 1;
+		}
+
+		.app-header-bar {
+			height: 64px;
+			background: rgba(20, 15, 35, 0.6);
+			backdrop-filter: blur(24px);
+			-webkit-backdrop-filter: blur(24px);
+			border-bottom: 1px solid var(--bubble-border);
+			display: flex;
+			align-items: center;
+			padding: 0 30px;
+			gap: 20px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		}
+
+		.btn-back {
+			background: var(--bubble-glass);
+			border: 1px solid var(--bubble-border);
+			color: var(--text-main);
+			padding: 8px 18px;
+			border-radius: 9999px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 14px;
+			font-weight: 700;
+			transition: all 0.3s var(--bounce);
+			font-family: inherit;
+		}
+
+		.btn-back i,
+		.btn-back svg {
+			width: 16px;
+			height: 16px;
+		}
+
+		.btn-back:hover {
+			background: var(--primary);
+			border-color: var(--primary-hover);
+			transform: translateX(-4px);
+			/* Bounce left slightly */
+			box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4);
+		}
+
+		.app-title {
+			color: var(--text-main);
+			font-size: 18px;
+			font-weight: 800;
+		}
+
+		.app-frame {
+			flex: 1;
+			width: 100%;
+			border: none;
+			background: #ffffff;
+			/* Typically apps need a white background */
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="topbar">
+		<div class="topbar-brand" onclick="window.location.href='/h/'">
+			<i data-lucide="home"></i> Home
+		</div>
+		<div class="search-container">
+			<input type="text" id="searchInput" class="search-input" placeholder="Search extras...">
+			<i data-lucide="search" class="search-icon"></i>
+		</div>
+	</div>
+
+	<div class="main-container" id="mainContainer">
+		<div class="category-header">
+			<i data-lucide="star"></i> All Extras <span id="extraCount">(0)</span>
+		</div>
+
+		<div class="extras-grid" id="extrasGrid"></div>
+	</div>
+
+	<div id="appOverlay" class="app-view-overlay">
+		<div class="app-header-bar">
+			<button class="btn-back" onclick="closeApp()">
+                <i data-lucide="arrow-left"></i> Back
+            </button>
+			<div class="app-title" id="appTitle">Application</div>
+		</div>
+		<iframe id="appFrame" class="app-frame" src=""></iframe>
+	</div>
+
+	<script>
+		// Apply theme from local storage automatically and initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            const savedData = JSON.parse(localStorage.getItem('edulearn_settings')) || {};
+            if (savedData.theme) {
+                document.body.setAttribute('data-theme', savedData.theme);
+            }
+        });
+
+        // Data Configuration
+        const extras = [
+            
+            { name: "Image Gallery", url: "/images.html" },
+            { name: "AI Games", url: "/aigames.html" },
+            { name: "More links (highlight with cursor)", url: "/linklist.txt" }
+        ];
+
+        const grid = document.getElementById('extrasGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countLabel = document.getElementById('extraCount');
+
+        // Render Cards
+        function renderExtras(filter = "") {
+            grid.innerHTML = "";
+            const filtered = extras.filter(e => 
+                e.name.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            countLabel.innerText = `(${filtered.length})`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); font-size: 15px; font-weight: 600; text-align: center; padding: 40px 0;">No extras found.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'extra-card';
+                card.onclick = () => openApp(item.url, item.name);
+                card.title = 'Click to open';
+                
+                card.innerHTML = `<div class="extra-name">${item.name}</div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        // Open App Logic
+        function openApp(url, title) {
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
+            const appTitle = document.getElementById('appTitle');
+            
+            appTitle.innerText = title;
+            frame.src = url;
+            overlay.classList.add('active');
+        }
+
+        // Close App Logic
+        function closeApp() {
+            const overlay = document.getElementById('appOverlay');
+            const frame = document.getElementById('appFrame');
+            
+            overlay.classList.remove('active');
+            setTimeout(() => { frame.src = "about:blank"; }, 300); // Wait for fade out
+        }
+
+        // Search Listener
+        searchInput.addEventListener('input', (e) => {
+            renderExtras(e.target.value);
+        });
+
+        // Initial Load
+        renderExtras();
+	</script>
+</body>
+
+</html>

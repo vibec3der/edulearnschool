@@ -1,0 +1,497 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- GN-MATH: EDULEARN LITE THEME --- */
+:root {
+    /* Edulearn Core Colors */
+    --bg-color: #000000;
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;
+    --modal-bg: #0a0a0a;
+    --modal-border: #1f2937;
+    --input-bg: #0f172a;
+    --input-border: #334155;
+    --pill-hover: rgba(59, 130, 246, 0.08);
+    --pill-active: rgba(59, 130, 246, 0.18);
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    
+    /* Legacy variables for compatibility */
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --primary-light: rgba(59, 130, 246, 0.15);
+    --bg: linear-gradient(135deg, #020617 0%, #0d1325 55%, #111827 100%);
+    --bg-secondary: rgba(15, 23, 42, 0.92);
+    --nav-hover: rgba(59, 130, 246, 0.08);
+    --surface: #0f172a;
+    --surface-hover: #111827;
+    --text: #f8fafc;
+    --border: #1f2937;
+    --border-light: #334155;
+    --nav-border: rgba(96, 165, 250, 0.18);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.6);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    --shadow-glow: 0 0 20px var(--accent-glow);
+    
+    --radius: 12px;
+}
+
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* --- HEADER --- */
+header {
+    background: var(--nav-bg); /* Use transparent or appropriate var if defined, else fallback to bg-secondary */
+    background: transparent;
+    border-bottom: 1px solid var(--nav-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 80px; /* Matched to Edulearn's topbar height */
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.logo {
+    font-family: 'Dancing Script', cursive; /* Use Edulearn's brand font */
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    transition: 0.2s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Optional: Emulates the Edulearn logo glow if your logo has an icon */
+.logo i, .logo svg {
+    color: var(--primary);
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+/* --- SEARCH & FILTERS --- */
+.search-container {
+    display: flex;
+    flex: 1;
+    max-width: 500px;
+    gap: 0.75rem;
+}
+
+#searchBar, #sortOptions, #filterOptions {
+    padding: 10px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px; /* Sharper radius to match Edulearn */
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+#searchBar:focus, #sortOptions:focus, #filterOptions:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+#sortOptions option, #filterOptions option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* --- CONTROL BUTTONS & ICONS --- */
+.control-buttons {
+    display: flex;
+    gap: 15px; /* Matched nav-actions gap */
+    align-items: center;
+}
+
+.control-buttons button {
+    background: transparent;
+    border: none;
+    color: var(--text); /* Main text color for icons */
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%; /* Fully rounded buttons */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    font-size: 20px;
+}
+
+.control-buttons button img, .control-buttons button svg {
+    max-width: 18px;
+    max-height: 18px;
+    object-fit: contain;
+}
+
+.control-buttons button:hover {
+    color: var(--text);
+    background: var(--pill-hover);
+}
+
+/* --- MAIN GRID --- */
+main {
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    padding-bottom: 6rem;
+    max-width: 1200px;
+}
+
+#zoneCount {
+    color: var(--text-muted); /* Changed to muted to fit better */
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600; /* Adjusted weight */
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#zoneCount::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+}
+
+#container, #featuredZones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.25rem;
+}
+
+/* --- GAME CARD (ZONE ITEM) --- */
+.zone-item {
+    background: rgba(255, 255, 255, 0.02); /* Matches setting card bg */
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: none; /* Removed sm shadow to match flatter look */
+}
+
+.zone-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--primary);
+    background: rgba(59, 130, 246, 0.08); /* Blue accent hover tint */
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.25);
+}
+
+.zone-item img {
+    width: 100%;
+    height: 140px; 
+    object-fit: cover;
+    background: #000;
+    opacity: 0.9;
+    transition: 0.3s;
+    border-bottom: 1px solid var(--border);
+}
+
+.zone-item:hover img {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.zone-item button {
+    background: transparent;
+    color: var(--text);
+    border: 0;
+    padding: 0.85rem;
+    font-weight: 500; /* Matched preset-btn font weight */
+    font-size: 13px; /* Matched preset-btn font size */
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+    border-top: 1px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    transition: 0.2s;
+}
+
+.zone-item:hover button {
+    /* Specific hover styling handled by parent .zone-item:hover */
+    color: var(--primary);
+}
+
+/* --- TEXT-ONLY STYLING --- */
+.zone-item.text-only {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    min-height: 80px;
+    justify-content: center;
+    align-items: center;
+}
+
+.zone-item.text-only button {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.zone-item.text-only:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-color: var(--primary);
+    box-shadow: 0 8px 25px rgba(134, 239, 172, 0.3);
+}
+
+/* --- VIEWER MODAL --- */
+#zoneViewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.sandbox-container {
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    height: 90vh;
+    max-width: 1200px;
+    max-height: 800px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.zone-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    padding: 0 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.zone-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+#zoneName {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+#zoneAuthor {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.zone-controls button {
+    background: transparent; /* Changed to match clean-btn */
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 8px 18px;
+    border-radius: 9999px; /* Pill shape */
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.zone-controls button:hover {
+    background: var(--pill-hover);
+}
+
+.sandbox-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.sandbox-toolbar button {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sandbox-toolbar button:hover {
+    background: var(--pill-hover);
+    border-color: var(--primary);
+}
+
+.sandbox-toolbar button svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+/* --- SETTINGS POPUP --- */
+#popupOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); /* Matched modal-overlay */
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; /* Matched settings-box */
+    width: 100%;
+    max-width: 850px; /* Matched settings-box */
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.98);
+    transition: transform 0.2s ease;
+    /* When active, add transform: scale(1); in JS if desired */
+}
+
+.popup-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: normal; /* Removed letter spacing */
+}
+
+#popupClose {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.2s;
+}
+
+#popupClose:hover { 
+    color: var(--text); 
+    transform: scale(1.1); /* Matched btn-close-icon */
+}
+
+#popupBody { 
+    padding: 0 32px 32px 32px; /* Matched settings-content padding */
+    padding-top: 32px; /* Add some top padding since it's the body */
+}
+
+#popupBody input[type="text"],
+#popupBody input[type="file"],
+#popupBody select {
+    width: 100%;
+    padding: 10px 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-light);
+    background: var(--bg); /* Use input bg */
+    color: var(--text);
+    border-radius: 8px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+#popupBody input:focus, #popupBody select:focus { 
+    border-color: var(--text); 
+}
+
+.settings-button {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 8px 18px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: 9999px; /* Pill shape */
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.settings-button:hover {
+    background: var(--text-muted);
+}
+
+/* --- FOOTER --- */
+footer {
+    background: transparent; /* Clean footer matching Edulearn */
+    padding: 1.5rem;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    pointer-events: none; /* Allows clicking behind it if needed */
+}
+
+.footer-links {
+    pointer-events: auto; /* Re-enable clicks for links */
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.footer-links a:hover { color: var(--text); }
