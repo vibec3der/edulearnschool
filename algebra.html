@@ -430,19 +430,39 @@
 
         // DevTools Button
         document.getElementById("devtools-button").addEventListener("click", () => {
-            if (window.eruda) {
-                if (window.eruda._isInit) {
-                    window.eruda.destroy();
+            const iframe = document.getElementById("sj-frame");
+            if (!iframe.classList.contains("hidden")) {
+                // Target the iframe's content
+                if (iframe.contentWindow && iframe.contentWindow.eruda) {
+                    if (iframe.contentWindow.eruda._isInit) {
+                        iframe.contentWindow.eruda.destroy();
+                    } else {
+                        iframe.contentWindow.eruda.init();
+                    }
                 } else {
-                    window.eruda.init();
+                    const script = iframe.contentDocument.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+                    script.onload = () => {
+                        iframe.contentWindow.eruda.init();
+                    };
+                    iframe.contentDocument.head.appendChild(script);
                 }
             } else {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-                script.onload = () => {
-                    window.eruda.init();
-                };
-                document.head.appendChild(script);
+                // Target the main window
+                if (window.eruda) {
+                    if (window.eruda._isInit) {
+                        window.eruda.destroy();
+                    } else {
+                        window.eruda.init();
+                    }
+                } else {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+                    script.onload = () => {
+                        window.eruda.init();
+                    };
+                    document.head.appendChild(script);
+                }
             }
         });
     </script>
