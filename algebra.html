@@ -25,11 +25,13 @@
         body, html {
             background-color: #000000;
             color: #ffffff;
-            font-family: serif; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Top Bar / Omnibox Area */
@@ -40,7 +42,11 @@
             padding: 4px;
             gap: 4px;
             border-bottom: 1px solid #1a1a1a;
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: geometricPrecision;
         }
 
         .nav-btn {
@@ -56,7 +62,12 @@
             align-items: center;
             justify-content: center;
             line-height: normal;
-            height: 26px; 
+            height: 26px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: geometricPrecision;
         }
 
         .nav-btn i {
@@ -213,9 +224,9 @@
         }
 
         .modal-content {
-            width: min(640px, 92vw);
+            width: min(380px, 92vw);
             max-width: 92vw;
-            height: min(80vh, 520px);
+            height: auto;
             max-height: 92vh;
             background-color: #0a0a0a;
             border: 1px solid #333;
@@ -224,6 +235,12 @@
             flex-direction: column;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .modal-content.expanded {
+            width: min(680px, 92vw);
+            height: min(520px, 92vh);
         }
 
         .modal-header {
@@ -256,6 +273,72 @@
             min-height: 0;
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.6s ease-out;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: #ff9900;
+            border-radius: 50%;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -329,6 +412,16 @@
 
     <iframe id="sj-frame" class="hidden"></iframe>
 
+    <div id="loading-screen" class="hidden">
+        <div class="loading-container">
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="settings-modal" class="hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -351,11 +444,30 @@
         }
         
         const iframe = document.getElementById("sj-frame");
+        const loadingScreen = document.getElementById("loading-screen");
 
         // Hide welcome screen and show iframe when form is submitted
         document.getElementById("sj-form").addEventListener("submit", function() {
             document.getElementById("welcome-container").classList.add("hidden");
             iframe.classList.remove("hidden");
+            
+            // Show loading screen
+            loadingScreen.classList.remove("hidden");
+            
+            // Hide loading screen after animation or iframe load
+            iframe.addEventListener("load", function hideLoadingOnce() {
+                setTimeout(() => {
+                    loadingScreen.classList.add("hidden");
+                }, 500);
+                iframe.removeEventListener("load", hideLoadingOnce);
+            }, { once: true });
+            
+            // Fallback: hide after 4 seconds (animation duration + buffer)
+            setTimeout(() => {
+                if (!loadingScreen.classList.contains("hidden")) {
+                    loadingScreen.classList.add("hidden");
+                }
+            }, 4000);
         });
 
         // Quick Links Logic
@@ -382,14 +494,59 @@
 
         // Modal Logic
         const modal = document.getElementById("settings-modal");
+        const modalContent = document.querySelector(".modal-content");
         
         const configButton = document.getElementById("config-button");
         const closeButton = document.getElementById("close-modal");
+
+        // Function to check and expand/shrink modal based on content
+        function checkModalHeight() {
+            if (modal.classList.contains("hidden")) return;
+            
+            try {
+                const settingsFrame = document.getElementById("settings-iframe");
+                const frameDoc = settingsFrame.contentDocument || settingsFrame.contentWindow.document;
+                if (frameDoc) {
+                    const scrollHeight = frameDoc.body.scrollHeight;
+                    const address = frameDoc.getElementById("sj-address");
+                    const content = address ? address.value : "";
+                    
+                    // Expand if content is long (> 60 chars) or if scrollHeight is large
+                    if (content.length > 60 || scrollHeight > 300) {
+                        modalContent.classList.add("expanded");
+                    } else {
+                        modalContent.classList.remove("expanded");
+                    }
+                }
+            } catch (e) {
+                // Silent fail if we can't access iframe content
+            }
+        }
 
         if (configButton && modal) {
             configButton.addEventListener("click", () => {
                 modal.classList.remove("hidden");
                 modal.style.display = "flex";
+                
+                // Check modal size after iframe loads
+                setTimeout(() => {
+                    checkModalHeight();
+                    
+                    // Listen for changes in the settings iframe
+                    try {
+                        const settingsFrame = document.getElementById("settings-iframe");
+                        const frameDoc = settingsFrame.contentDocument || settingsFrame.contentWindow.document;
+                        if (frameDoc) {
+                            const addressInput = frameDoc.getElementById("sj-address");
+                            if (addressInput) {
+                                addressInput.addEventListener("input", checkModalHeight);
+                                addressInput.addEventListener("change", checkModalHeight);
+                            }
+                        }
+                    } catch (e) {
+                        // Silent fail
+                    }
+                }, 300);
             });
         }
 
@@ -438,12 +595,14 @@
                         iframe.contentWindow.eruda.destroy();
                     } else {
                         iframe.contentWindow.eruda.init();
+                        alert("Successfully injected devtools! Press the icon in the bottom-left corner to activate!");
                     }
                 } else {
                     const script = iframe.contentDocument.createElement('script');
                     script.src = 'https://cdn.jsdelivr.net/npm/eruda';
                     script.onload = () => {
                         iframe.contentWindow.eruda.init();
+                        alert("Successfully injected devtools! Press the icon in the bottom-left corner to activate!");
                     };
                     iframe.contentDocument.head.appendChild(script);
                 }
@@ -454,12 +613,14 @@
                         window.eruda.destroy();
                     } else {
                         window.eruda.init();
+                        alert("Successfully injected devtools! Press the icon in the bottom-left corner to activate!");
                     }
                 } else {
                     const script = document.createElement('script');
                     script.src = 'https://cdn.jsdelivr.net/npm/eruda';
                     script.onload = () => {
                         window.eruda.init();
+                        alert("Successfully injected devtools! Press the icon in the bottom-left corner to activate!");
                     };
                     document.head.appendChild(script);
                 }
