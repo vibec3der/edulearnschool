@@ -5,8 +5,14 @@ if (!localStorage.getItem(EDULEARN_WISP_KEY)) {
 
 (function globalEduNav() {
 	const path = window.location.pathname.toLowerCase();
-	if (path === '/' || path === '/index.html' || path.includes('/login') || path.endsWith('login.html') || path.startsWith('/g2games/')) return;
+	if (path === '/' || path === '/index.html' || path.includes('/login') || path.endsWith('login.html')) return;
 	if (document.querySelector('#edulearn-global-navbar')) return;
+
+	// For pages that have their own topbar/toolbar home/settings buttons, hide those duplicates
+	// so Home + Settings are always consolidated into the generated global navbar.
+	document.querySelectorAll('.topbar .topbar-brand, .topbar #home-button, .topbar #config-button, #home-button, #config-button').forEach(el => {
+		el.style.display = 'none';
+	});
 
 	function ensureFontAwesome() {
 		if (document.querySelector('link[href*="font-awesome"]')) return;
@@ -20,7 +26,7 @@ if (!localStorage.getItem(EDULEARN_WISP_KEY)) {
 
 	const nav = document.createElement('nav');
 	nav.id = 'edulearn-global-navbar';
-	nav.className = 'navbar';
+	nav.className = 'edulearn-global-navbar';
 	nav.innerHTML = `
 		<div class="nav-ring">
 			<a class="nav-item" href="/h/" title="Home"><i class="fa-solid fa-house"></i><span>Home</span></a>
@@ -75,12 +81,14 @@ if (!localStorage.getItem(EDULEARN_WISP_KEY)) {
 		}
 	});
 
-	const settingsButton = document.createElement('button');
+	const settingsButton = document.createElement('a');
 	settingsButton.className = 'nav-item';
-	settingsButton.type = 'button';
+	settingsButton.href = '#';
+	settingsButton.id = 'edulearn-settings-link';
 	settingsButton.title = 'Settings';
 	settingsButton.innerHTML = '<i class="fa-solid fa-gear"></i><span>Settings</span>';
-	settingsButton.addEventListener('click', () => {
+	settingsButton.addEventListener('click', (e) => {
+		e.preventDefault();
 		if (typeof openModal === 'function') {
 			openModal('settings-modal');
 		} else {
@@ -119,7 +127,7 @@ if (!localStorage.getItem(EDULEARN_WISP_KEY)) {
 			align-items: center;
 			gap: 10px;
 			z-index: 10000;
-			box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+			box-shadow: 0 8px 16px rgba(0,0,0,0.25);
 			transition: transform 0.25s ease, opacity 0.25s ease;
 		}
 
@@ -133,8 +141,14 @@ if (!localStorage.getItem(EDULEARN_WISP_KEY)) {
 			display: inline-flex;
 			align-items: center;
 			gap: 10px;
+			padding: 0;
+			border: none;
+			background: transparent;
+			border-radius: 999px;
+			width: 100%;
+			height: 100%;
+			justify-content: center;
 		}
-
 		#edulearn-global-navbar .nav-item {
 			display: inline-flex;
 			align-items: center;

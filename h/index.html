@@ -400,6 +400,38 @@
         </div>
         <div class="setting-row">
           <div class="setting-info">
+            <h3><i class="fa-solid fa-palette"></i> Theme</h3>
+            <p>Pick a base color theme or define a custom theme for homepage visuals.</p>
+          </div>
+          <div style="display:flex; gap:8px; align-items: center;">
+            <select id="theme-select" class="dark-input" style="width: 160px;">
+              <option value="default">Default (Blue)</option>
+              <option value="cosmos">Cosmos (Purple)</option>
+              <option value="forest">Forest (Green)</option>
+              <option value="sunset">Sunset (Warm)</option>
+              <option value="matrix">Matrix (Dark Green)</option>
+              <option value="custom">Custom</option>
+            </select>
+            <button class="clean-btn" onclick="applyTheme(document.getElementById('theme-select').value)">Apply</button>
+          </div>
+        </div>
+
+        <div class="setting-row" id="custom-theme-row" style="display: none; gap: 10px; flex-wrap: wrap;">
+          <div class="setting-info" style="flex:1;">
+            <h3><i class="fa-solid fa-swatchbook"></i> Custom Theme</h3>
+            <p>Set your own primary and accent colors (hex values).</p>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap: wrap;">
+            <input type="color" id="custom-bg" value="#0f1013" title="Background color">
+            <input type="color" id="custom-bg-alt" value="#181a1e" title="Panel/Alt color">
+            <input type="color" id="custom-text" value="#eceef6" title="Text color">
+            <input type="color" id="custom-accent" value="#ad9cff" title="Accent color">
+            <button class="clean-btn" onclick="saveCustomTheme()">Save Custom</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
             <h3><i class="fa-solid fa-mask"></i> Tab Cloak</h3>
             <p>Disguise the current tab title and icon.</p>
           </div>
@@ -513,7 +545,7 @@
         window.addEventListener('load', () => scheduleTry(100));
         scheduleTry(50);
 
-        alert("PLEASE TAKE THE TIME AND READ THIS: If you do not have popups enabled, PLEASE enable popups to HIDE this page from SECURLY Classroom, and your HISTORY! POPUPS ARE HIGHLY RECOMMENDED!~");
+        alert("PLEASE TAKE THE TIME AND READ THIS: If you do not have popups enabled, PLEASE enable popups to HIDE this page from SECURLY Classroom, and your HISTORY! POPUPS ARE HIGHLY RECOMMENDED! and can be ENABLED from the TOP RIGHT corner of your screen, next to the bookmarks star theres a small icon. SET THAT TO ALWAYS ALLOW~");
         document.addEventListener('click', function fallbackClick(e) {
           if (e.target.closest('.switch')) return;
 
@@ -932,7 +964,14 @@
       cloakIcon: '',
       announcementRead: false, 
       abEnabled: true, // Defaulted to true now for auto-launch
-      particlesEnabled: true
+      particlesEnabled: true,
+      theme: 'default',
+      customTheme: {
+        bg: '#0f1013',
+        bgAlt: '#181a1e',
+        text: '#eceef6',
+        accent: '#ad9cff'
+      }
     };
 
     function saveState() { localStorage.setItem('edulearn_settings', JSON.stringify(userSettings)); }
@@ -946,6 +985,15 @@
       // Toggle syncs with actual state (defaults to checked if null)
       document.getElementById('ab-toggle').checked = userSettings.abEnabled !== false;
       document.getElementById('particles-toggle').checked = userSettings.particlesEnabled !== false;
+
+      document.getElementById('theme-select').value = userSettings.theme || 'default';
+      document.getElementById('custom-bg').value = userSettings.customTheme?.bg || '#0f1013';
+      document.getElementById('custom-bg-alt').value = userSettings.customTheme?.bgAlt || '#181a1e';
+      document.getElementById('custom-text').value = userSettings.customTheme?.text || '#eceef6';
+      document.getElementById('custom-accent').value = userSettings.customTheme?.accent || '#ad9cff';
+
+      // Apply theme (including custom if selected)
+      applyTheme(userSettings.theme || 'default');
 
       // Apply Cloak immediately
       document.getElementById('page-title').innerText = userSettings.cloakTitle || 'EduLearn';
@@ -971,6 +1019,102 @@
       userSettings.cloakIcon = document.getElementById('cloak-icon').value || '';
       saveState();
       initSettings(); // Reload title/favicon
+    }
+
+    const TEMPLATED_THEMES = {
+      default: {
+        bg: '#0f1013',
+        bgAlt: '#181a1e',
+        text: '#eceef6',
+        accent: '#ad9cff',
+        panel: 'rgba(32, 34, 40, 0.9)',
+        border: 'rgba(255,255,255,0.08)',
+        shadow: 'rgba(0,0,0,0.3)'
+      },
+      cosmos: {
+        bg: '#120936',
+        bgAlt: '#1d1d3c',
+        text: '#f7f2ff',
+        accent: '#b488ff',
+        panel: 'rgba(34, 21, 54, 0.9)',
+        border: 'rgba(140,97,229,0.25)',
+        shadow: 'rgba(19, 7, 49, 0.6)'
+      },
+      forest: {
+        bg: '#0a1410',
+        bgAlt: '#152e22',
+        text: '#e6f7e8',
+        accent: '#7ad29e',
+        panel: 'rgba(10, 26, 16, 0.88)',
+        border: 'rgba(90, 188, 135, 0.28)',
+        shadow: 'rgba(2, 13, 8, 0.4)'
+      },
+      sunset: {
+        bg: '#2b0c07',
+        bgAlt: '#4f2310',
+        text: '#ffe8da',
+        accent: '#ffb86c',
+        panel: 'rgba(60, 25, 14, 0.9)',
+        border: 'rgba(255,150,100,0.28)',
+        shadow: 'rgba(35, 12, 6, 0.5)'
+      },
+      matrix: {
+        bg: '#041803',
+        bgAlt: '#0b2b05',
+        text: '#a3f8a4',
+        accent: '#55ff5c',
+        panel: 'rgba(2, 25, 8, 0.87)',
+        border: 'rgba(80,230,90,0.25)',
+        shadow: 'rgba(5, 17, 5, 0.45)'
+      }
+    };
+
+    function setThemeVars(vars) {
+      document.documentElement.style.setProperty('--bg', vars.bg);
+      document.documentElement.style.setProperty('--bg-alt', vars.bgAlt);
+      document.documentElement.style.setProperty('--text-main', vars.text);
+      document.documentElement.style.setProperty('--accent', vars.accent);
+      document.documentElement.style.setProperty('--panel', vars.panel || 'rgba(32, 34, 40, 0.9)');
+      document.documentElement.style.setProperty('--border', vars.border || 'rgba(255,255,255,0.08)');
+      document.documentElement.style.setProperty('--shadow', vars.shadow || 'rgba(0,0,0,0.3)');
+    }
+
+    function applyTheme(themeName) {
+      userSettings.theme = themeName;
+      if (themeName === 'custom') {
+        setThemeVars({
+          bg: userSettings.customTheme.bg,
+          bgAlt: userSettings.customTheme.bgAlt,
+          text: userSettings.customTheme.text,
+          accent: userSettings.customTheme.accent,
+          panel: 'rgba(32, 34, 40, 0.9)',
+          border: 'rgba(255,255,255,0.08)',
+          shadow: 'rgba(0,0,0,0.3)'
+        });
+        document.getElementById('custom-theme-row').style.display = 'flex';
+      } else {
+        document.getElementById('custom-theme-row').style.display = 'none';
+        if (TEMPLATED_THEMES[themeName]) {
+          setThemeVars(TEMPLATED_THEMES[themeName]);
+        } else {
+          setThemeVars(TEMPLATED_THEMES['default']);
+          userSettings.theme = 'default';
+        }
+      }
+      saveState();
+      document.getElementById('theme-select').value = userSettings.theme;
+    }
+
+    function saveCustomTheme() {
+      const bg = document.getElementById('custom-bg').value;
+      const bgAlt = document.getElementById('custom-bg-alt').value;
+      const text = document.getElementById('custom-text').value;
+      const accent = document.getElementById('custom-accent').value;
+      userSettings.customTheme = { bg, bgAlt, text, accent };
+      userSettings.theme = 'custom';
+      saveState();
+      applyTheme('custom');
+      alert('Custom theme saved!');
     }
 
     // Manual Toggle from settings menu
@@ -1116,8 +1260,21 @@
       if (e.key === 'Escape') closeModals();
     });
 
-    // Init
-    window.addEventListener('DOMContentLoaded', () => {
+    // Theme selector events + init
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeSelect = document.getElementById('theme-select');
+      if (themeSelect) {
+        themeSelect.addEventListener('change', (e) => {
+          const selected = e.target.value;
+          if (selected === 'custom') {
+            document.getElementById('custom-theme-row').style.display = 'flex';
+          } else {
+            document.getElementById('custom-theme-row').style.display = 'none';
+          }
+          applyTheme(selected);
+        });
+      }
+
       initSettings();
       initParticles();
     });
